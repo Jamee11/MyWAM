@@ -1,0 +1,26 @@
+# Local C joint experiment on the audited wrist-near=0.02 Aloha Clean replay.
+defaults:
+  - train_ea_lite_4gpu
+  - _self_
+
+model:
+  architecture:
+    ea_lite:
+      stage: joint
+      action_conditioning: true
+dataloader:
+  manifest_path: ${oc.env:EA_WRIST020_MANIFEST,outputs/ea_lite/wrist020_clean50_20261015/data/manifest.ready.json}
+  startup_mode: prepared
+  auxiliary: true
+  color_jitter:
+    enabled: true
+training:
+  batch_size: 64
+  gradient_accumulation_steps: 1
+  num_epochs: 5
+  max_steps: null
+  learning_rate: 1e-4
+  action_lr: 1e-4
+  video_lr: 1e-4
+  save_steps: 2000
+  output_path: outputs/ea_lite/wrist020_clean50_C_joint_bs64_5epochs

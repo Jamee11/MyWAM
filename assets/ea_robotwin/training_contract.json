@@ -1,0 +1,145 @@
+{
+  "conversion_schema_version": 5,
+  "raw_root": "/remote-home/jinminghao/datasets/robotwin2_ea_rsig_v3_clean50_v6_raw_20260921/adjust_bottle/demo_clean",
+  "episodes": 50,
+  "frames": 7134,
+  "fps": 30.0,
+  "source_image_size_wh": [
+    320,
+    240
+  ],
+  "fallback_task_level_instructions": 0,
+  "action_contract": "next observed 14D qpos; terminal repeats final qpos",
+  "action_horizon": 40,
+  "video_supervision_indices": [
+    0,
+    10,
+    20,
+    30,
+    40
+  ],
+  "plan_horizon_fractions": [
+    0.25,
+    0.5,
+    1.0
+  ],
+  "plan_horizon_steps": [
+    10,
+    20,
+    40
+  ],
+  "plan_horizon_seconds": [
+    0.3333333333333333,
+    0.6666666666666666,
+    1.3333333333333333
+  ],
+  "deployable_context_dim": 22,
+  "deployable_effector_contract": "qpos drive-target to URDF child-link FK plus gripper_bias; identical to closed-loop evaluation",
+  "oracle_target_dim": 130,
+  "interaction_tracks": 2,
+  "grounding": "visible actor-segmentation bboxes are auxiliary-only; virtual goals have no bbox",
+  "policy_oracle_inputs": false,
+  "base_delta_ee_backup": {
+    "path": "backup_actions/urdf_child_link6_v2/episode_XXXXXX.npz",
+    "array_key": "action",
+    "shape": [
+      "T",
+      14
+    ],
+    "layout": "[left dx,dy,dz,rotvec xyz,gripper,right dx,dy,dz,rotvec xyz,gripper]",
+    "action_contract": "base-frame spatial delta EE: per arm [dx,dy,dz,rotvec_x,rotvec_y,rotvec_z,gripper]; nonterminal target is source next-qpos EE pose; terminal motion delta is zero",
+    "kinematics_version": "urdf_child_link6_v2",
+    "kinematics_target_links": [
+      "fl_link6",
+      "fr_link6"
+    ],
+    "urdf": "/remote-home/jinminghao/DiT4DiT/.external/RoboTwin/assets/embodiments/aloha-agilex/urdf/arx5_description_isaac.urdf",
+    "urdf_sha256": "097c59fb19a7b482249c6097df8319586ea7cfd268c015516f103b289a7e761a",
+    "reconstruction_position_max_abs_error": 0.0,
+    "reconstruction_rotation_matrix_max_abs_error": 1.2212453270876722e-15
+  },
+  "collection_manifest": {
+    "schema_version": 6,
+    "task": "adjust_bottle",
+    "task_config": "demo_clean",
+    "episodes": 50,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13,
+      14,
+      15,
+      16,
+      18,
+      19,
+      21,
+      23,
+      26,
+      27,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      37,
+      38,
+      39,
+      40,
+      42,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      54,
+      55,
+      56,
+      57,
+      58,
+      61,
+      62,
+      63,
+      64,
+      65
+    ],
+    "seed_sha256": "8a3d2a420f90f84e919ff875ea5397a6f032ac30e9cb8749633f53110dd73082",
+    "seed_protocol": "official_success_scan_resumed_or_replayed",
+    "robotwin_commit": "248266bee01e4bfa9be38be9055a9cd5b4281821",
+    "task_config_sha256": "8ee5d0d07daecf7599b8d89b44776b700c7c60da24cd6317e176e6798d8cb11e",
+    "oracle_contract": "ea_rsig_v3_dual_track_articulation_safe_goal_valid_v6",
+    "clean_domain_randomization": {
+      "random_background": false,
+      "cluttered_table": false,
+      "random_head_camera_dis": 0,
+      "random_table_height": 0,
+      "random_light": false
+    },
+    "replay_bootstrap": {
+      "source_root": "/remote-home/jinminghao/datasets/robotwin2_ea_rsig_v3_clean50_raw_20260920",
+      "episodes": 50,
+      "seed_and_trajectory_sha256": "e600258f11a4e7d72ba69c112a5e75c8c6091951f6e3cf97f84d985a61968248"
+    }
+  },
+  "goal_supervision_contract": "goal proximity is supervised for visible or task-inferable Goals; per-episode random Goals absent from deployable inputs are masked",
+  "unobservable_random_goal_tasks": [
+    "blocks_ranking_rgb",
+    "blocks_ranking_size"
+  ],
+  "goal_proximity_supervision_masked": false,
+  "rgb_contract": "robotwin_rgb_source_cv2_bgr_jpeg_corrected_v1",
+  "rgb_source_kind": "clean",
+  "rgb_source_note": "Official raw preview MP4 is RGB; official HDF5 JPEG used cv2.imencode on RGB bytes, so imdecode returns original RGB channel order."
+}

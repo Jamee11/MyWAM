@@ -1,0 +1,29 @@
+defaults:
+  - train
+  - override model: dual_system_ea_rsig_lite
+  - override dataloader: ea_rsig_lite
+  - _self_
+
+training:
+  batch_size: 1
+  gradient_accumulation_steps: 8
+  mixed_precision: bf16
+  zero_stage: 2
+  use_gradient_checkpointing: true
+  initialize_model_on_cpu: true
+  adam_foreach: false
+  adam_fused: true
+  learning_rate: 1e-4
+  action_lr: 1e-4
+  video_lr: 1e-4
+  dataset_num_workers: 4
+  max_steps: 160  # 20 optimizer steps at accumulation=8, NOT 160 updates
+  num_epochs: null
+  save_steps: 40  # every 5 optimizer steps
+  save_full_states_for_resume: true
+  keep_final_resume_state: true
+  keep_last_k_ckpts: 2
+  output_path: outputs/ea_lite/debug
+project:
+  wandb:
+    project: null

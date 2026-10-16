@@ -1,0 +1,16 @@
+type: ea_rsig_v3
+dataset_dirs: ${oc.decode:${oc.env:EA_DATASET_DIRS}}
+action_space: qpos
+action_mode: joint
+unify_action: false
+normalize_mode: min-max
+action_horizon: 40
+video_anchors: [0, 10, 20, 30, 40]
+target_dim: 130
+num_frames: 41
+video_stride: 10
+height: 384
+width: 320
+multiview: true
+camera_layout: [head_camera, left_camera, right_camera]
+stats_path: null
