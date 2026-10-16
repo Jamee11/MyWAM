@@ -1,6 +1,8 @@
 """Optional EA metrics preserve the baseline reduction contract."""
 from types import SimpleNamespace
+
 import torch
+
 from openwam.train.utils.training_utils import reduce_step_metrics
 
 

@@ -1,19 +1,19 @@
 """Read existing schema-5 EA datasets without rewriting data or privileged labels."""
-from bisect import bisect_right
-from functools import lru_cache
 import hashlib
 import json
 import os
+from bisect import bisect_right
+from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
 import pyarrow.parquet as pq
 import torch
+from PIL import Image
 
 from openwam.dataloader.bases import BaseDataset
-from openwam.dataloader.utils.video_io import decode_video_frames
 from openwam.dataloader.transforms.multiview import format_prompt_for_inference
+from openwam.dataloader.utils.video_io import decode_video_frames
 from openwam.model.modules.ea_rsig_v3 import validate_ea_rsig_v3_video_plan_alignment
 
 

@@ -7,9 +7,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / 'scripts'))
-import torch
-import train as entry
-from openwam.train.openwam_trainer import OpenWAMTrainer
+import torch  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+import train as entry  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+
+from openwam.train.openwam_trainer import OpenWAMTrainer  # noqa: E402 -- source-tree imports follow sys.path bootstrap
 
 # Preserve every parameter and AdamW hyperparameter; bound ZeRO flat buffers.
 if os.environ.get('EA_BENCH_GROUP_ELEMENTS'):

@@ -182,3 +182,8 @@ NVML当前Unknown Error：/dev/nvidiactl/nvidia0/nvidia-uvm对新进程open返�
 ### 2026-10-16T03:17:18.137160+00:00：按用户要求绘制当前 EA-RSIG-Lite 架构图
 
 参考用户提供的docs/image.png与实际Lite bridge、V3 core及forward/loss实现，新增docs/figures/OpenWAM_alpha_EA_RSIG_Lite_architecture_20261016.svg及3600x2600 PNG、图注说明、绘图脚本与imagegen提示词记录。图中明确当前干净首帧VAE+patch输入、EA Ground/Relation/Progress/Plan、15x512 tokens、block0后的Action-only Q/KV交叉注意力及零初始化残差，以及训练专用130D标签/loss隔离。先用内置image_gen生成视觉参考，因连线歧义，最终使用独立SVG脚本固定拓扑；resvg-py仅安装在/tmp独立绘图环境，未修改训练.venv。原始docs/image.png保留。最终SVG XML和PNG尺寸/完整性检查通过，并人工查看连接方向；这只是现有实现的架构说明，不新增模型/数据/训练策略或训练结论，不启动或停止实验。
+
+
+### 2026-10-16T09:09:45.620044+00:00：MyWAM备份CI兼容性修复（独立分支）
+
+用户要求检查推送后run failed。确认两次旧版备份CI的真实失败为107项lint债务及Transformers最新版/torch2.7.1的hf_storage收集错误。独立工作树只作等价排版/import清理、测试lambda等价def，并新增CPU-CI约束5.19.0/0.41.0/Ruff0.11.9，feature/fix分支也触发CI；不跳过原测试、不取消lint。源训练工作树和环境保持。Ruff通过，AST排除imports后仅测试lambda存在差异；远端复验待run结果。详见docs/CI_FAILURE_ANALYSIS_20261016.md。

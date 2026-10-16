@@ -1,6 +1,12 @@
-import torch
 import pytest
-from openwam.model.modules.ea_rsig_v3 import (EARSIGV3Module, ea_rsig_v3_plan_horizon_steps, split_ea_rsig_v3_state, validate_ea_rsig_v3_video_plan_alignment)
+import torch
+
+from openwam.model.modules.ea_rsig_v3 import (
+    EARSIGV3Module,
+    ea_rsig_v3_plan_horizon_steps,
+    split_ea_rsig_v3_state,
+    validate_ea_rsig_v3_video_plan_alignment,
+)
 
 
 def test_plan_horizons_are_fixed_quarter_half_full_video_anchors():

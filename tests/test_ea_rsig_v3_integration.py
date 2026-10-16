@@ -1,19 +1,19 @@
 """CPU checks on real Wan blocks; these are not foundation or rollout evidence."""
 from types import SimpleNamespace
 
+import numpy as np
 import pytest
 import torch
 from safetensors.torch import save_file
 
+from openwam.dataloader.ea_rsig_v3 import EARSIGV3Dataset
+from openwam.dataloader.transforms.normalize import Normalizer
 from openwam.model.architectures.base import BaseWAMArchitecture
 from openwam.model.architectures.dual_system.ea_rsig_v3 import EARSIGV3Architecture
 from openwam.model.architectures.dual_system.joint_self_attn import DualSystemSelfAttnArchitecture
 from openwam.model.video_backbone.wan.models.dit import WanModel
 from openwam.model.video_backbone.wan.shared.diffusion.flow_match import FlowMatchScheduler
 from openwam.model.video_backbone.wan_backbone import Wan22Ti2v
-from openwam.dataloader.ea_rsig_v3 import EARSIGV3Dataset
-from openwam.dataloader.transforms.normalize import Normalizer
-import numpy as np
 
 
 @pytest.fixture

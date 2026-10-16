@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Real-data CPU contract audit and view/bbox preview; no model/GPU inference."""
+
 import argparse
 import json
-from pathlib import Path
 import random
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -14,9 +15,11 @@ def audit(manifest_path, output_dir):
     import h5py
     import numpy as np
     from PIL import ImageDraw
-    from openwam.dataloader.ea_rsig_lite import EARSIGLiteDataset, CAMERAS
-    from openwam.ea_lite_contract import tcp_context_from_eef20
+
     from benchmarks.robotwin.openwam2robotwin_interface import _extract_eef_proprio
+    from openwam.dataloader.ea_rsig_lite import EARSIGLiteDataset
+    from openwam.ea_lite_contract import tcp_context_from_eef20
+
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     dataset = EARSIGLiteDataset(manifest_path)
@@ -39,17 +42,28 @@ def audit(manifest_path, output_dir):
             decoded = reader.denormalize_action(sample["action"].numpy())
             np.testing.assert_allclose(decoded, expected, atol=3e-6)
             np.testing.assert_allclose(tcp_context_from_eef20(raw[0]), sample["ea_effectors"], atol=1e-6)
-            source = {key: file[f"endpose/{key}"][row] for key in (
-                "left_endpose", "right_endpose", "left_gripper", "right_gripper")}
+            source = {
+                key: file[f"endpose/{key}"][row]
+                for key in ("left_endpose", "right_endpose", "left_gripper", "right_gripper")
+            }
             client = _extract_eef_proprio({"endpose": source}, "wxyz")
             np.testing.assert_allclose(client, raw[0], atol=1e-6)
             np.testing.assert_allclose(tcp_context_from_eef20(client), sample["ea_effectors"], atol=1e-6)
-        checks.append(dict(index=index, task=sample["task_name"], episode=sample["episode_path"],
-                           row=sample["start_frame"], valid_actions=int(sample["action_mask"].any(dim=-1).sum())))
+        checks.append(
+            dict(
+                index=index,
+                task=sample["task_name"],
+                episode=sample["episode_path"],
+                row=sample["start_frame"],
+                valid_actions=int(sample["action_mask"].any(dim=-1).sum()),
+            )
+        )
     # Match the A reader to the C reader exactly, including sampled seen instruction.
     baseline = EARSIGLiteDataset(manifest_path, tasks=[dataset.task_names[0]], auxiliary=False)
-    random.seed(123); a = baseline[0]
-    random.seed(123); c = dataset[0]
+    random.seed(123)
+    a = baseline[0]
+    random.seed(123)
+    c = dataset[0]
     for key in ("action", "proprio", "action_mask", "proprio_mask", "video_mask"):
         np.testing.assert_array_equal(a[key].numpy(), c[key].numpy())
     assert a["prompt"] == c["prompt"]
@@ -66,17 +80,25 @@ def audit(manifest_path, output_dir):
             draw.line((left + cell * width / 14, top, left + cell * width / 14, top + height), fill=(100, 100, 100))
             draw.line((left, top + cell * height / 14, left + width, top + cell * height / 14), fill=(100, 100, 100))
         for role, color in enumerate(("red", "yellow", "cyan", "magenta")):
-            if valid[role, view] <= .5:
+            if valid[role, view] <= 0.5:
                 continue
             box = boxes[role, view] * np.array([width, height, width, height]) + [left, top, left, top]
             draw.rectangle(tuple(box), outline=color, width=2)
             draw.text((box[0], box[1]), f"r{role}", fill=color)
     canvas.save(output_dir / "camera_bbox_grid.png")
-    result = dict(status="passed", tasks=len(dataset.readers), windows=len(dataset),
-                  samples=checks, alpha_actions="32x80, absolute EEF t+1..t+32", video_frames=9,
-                  plan_steps=[8, 16, 32], train_client_context_equal=True,
-                  baseline_conditional_samples_equal=True, source_data="read_only",
-                  scope="all episode inventory + regenerated labels; decoded sample windows, not all RGB frames")
+    result = dict(
+        status="passed",
+        tasks=len(dataset.readers),
+        windows=len(dataset),
+        samples=checks,
+        alpha_actions="32x80, absolute EEF t+1..t+32",
+        video_frames=9,
+        plan_steps=[8, 16, 32],
+        train_client_context_equal=True,
+        baseline_conditional_samples_equal=True,
+        source_data="read_only",
+        scope="all episode inventory + regenerated labels; decoded sample windows, not all RGB frames",
+    )
     (output_dir / "data_audit.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2), flush=True)
     return result

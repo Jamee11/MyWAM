@@ -1,5 +1,6 @@
 """GPU selection/parser gates with fake NVML text; no hardware execution."""
 import pytest
+
 from scripts.preflight_ea_lite import check_four_gpus, check_gpus
 
 
