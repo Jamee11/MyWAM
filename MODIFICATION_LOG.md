@@ -187,3 +187,7 @@ NVML当前Unknown Error：/dev/nvidiactl/nvidia0/nvidia-uvm对新进程open返�
 ### 2026-10-16T09:09:45.620044+00:00：MyWAM备份CI兼容性修复（独立分支）
 
 用户要求检查推送后run failed。确认两次旧版备份CI的真实失败为107项lint债务及Transformers最新版/torch2.7.1的hf_storage收集错误。独立工作树只作等价排版/import清理、测试lambda等价def，并新增CPU-CI约束5.19.0/0.41.0/Ruff0.11.9，feature/fix分支也触发CI；不跳过原测试、不取消lint。源训练工作树和环境保持。Ruff通过，AST排除imports后仅测试lambda存在差异；远端复验待run结果。详见docs/CI_FAILURE_ANALYSIS_20261016.md。
+
+
+### 2026-10-16 UTC：CI第二轮可迁移性修复
+原因与证据：远端38878693936的两个失败。将旧Aloha FK配置从服务器绝对路径改为仓库相对路径，在共享AlohaEEF入口定位；增加异cwd验证。修正旧BF16测试fixture的Tensor类型判断。无策略数学/权重/动作合同改变，原始备份保留。详见docs/CI_FAILURE_ANALYSIS_20261016.md。

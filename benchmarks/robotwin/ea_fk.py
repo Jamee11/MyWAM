@@ -77,8 +77,12 @@ class AlohaBaseKinematics:
 class AlohaEEF:
     """Same unnormalized 20D FK features as the schema-5 converter."""
     def __init__(self, urdf, config, conversion_summary):
-        urdf = Path(urdf)
-        summary = json.loads(Path(conversion_summary).read_text())
+        root = Path(__file__).resolve().parents[2]
+        # Shipped paths are repo-relative; an absolute user override stays absolute.
+        urdf = root / urdf
+        config = root / config
+        conversion_summary = root / conversion_summary
+        summary = json.loads(conversion_summary.read_text())
         if "drive-target" not in summary.get("deployable_effector_contract", ""):
             raise ValueError("This client requires drive-target EEF labels; actual-joint FK needs its own sensor adapter")
         expected = summary["base_delta_ee_backup"]

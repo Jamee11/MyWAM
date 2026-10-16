@@ -441,7 +441,10 @@ def test_cpu_bf16_zero_init_and_inference_identity(model_factory):
     for module in (model, baseline):
         module.set_dtype_device(torch.bfloat16, torch.device("cpu"))
         module.eval()
-    x = {k: v.to(torch.bfloat16) if v.is_floating_point() else v for k, v in inputs().items()}
+    x = {
+        k: v.to(torch.bfloat16) if isinstance(v, torch.Tensor) and v.is_floating_point() else v
+        for k, v in inputs().items()
+    }
     actions, time = torch.randn(1, 32, 80, dtype=torch.bfloat16), torch.ones(1, dtype=torch.bfloat16)
     with torch.inference_mode():
         expected = baseline(actions, time, **{k: v for k, v in x.items() if not k.startswith("ea_")})
