@@ -1,0 +1,23 @@
+defaults:
+  - dual_system
+  - _self_
+
+architecture:
+  variant: joint_self_attn_relational_sidecar
+  action_dim: 80
+  state_dim: 80
+  relational_sidecar:
+    enabled: true
+    foundation_warmstart: true
+    stage: warmup  # warmup | action_only (Video frozen) | joint
+    tap_blocks: [7, 15, 23]  # zero based, AFTER the original mixed block
+    latent_dim: 512
+    num_ea_tokens: 15
+    heads: 8
+    read_gate_init: 0.01
+    write_gate_init: 0.0
+    action_conditioning: true
+    ground_weight: 0.025
+    relation_weight: 0.01
+    plan_weight: 0.05
+    deep_supervision: 0.1  # stage1 Ground + stage2 Relation; final all heads

@@ -182,3 +182,12 @@ NVML当前Unknown Error：/dev/nvidiactl/nvidia0/nvidia-uvm对新进程open返�
 ### 2026-10-16T03:17:18.137160+00:00：按用户要求绘制当前 EA-RSIG-Lite 架构图
 
 参考用户提供的docs/image.png与实际Lite bridge、V3 core及forward/loss实现，新增docs/figures/OpenWAM_alpha_EA_RSIG_Lite_architecture_20261016.svg及3600x2600 PNG、图注说明、绘图脚本与imagegen提示词记录。图中明确当前干净首帧VAE+patch输入、EA Ground/Relation/Progress/Plan、15x512 tokens、block0后的Action-only Q/KV交叉注意力及零初始化残差，以及训练专用130D标签/loss隔离。先用内置image_gen生成视觉参考，因连线歧义，最终使用独立SVG脚本固定拓扑；resvg-py仅安装在/tmp独立绘图环境，未修改训练.venv。原始docs/image.png保留。最终SVG XML和PNG尺寸/完整性检查通过，并人工查看连接方向；这只是现有实现的架构说明，不新增模型/数据/训练策略或训练结论，不启动或停止实验。
+
+
+### 2026-10-16T08:37:31.209655+00:00：用户授权 Multi-Layer Relational Sidecar 独立框架搭建（进行中）
+
+原因：旧 block0/clean patch Lite 保留供已有训练验证，新方案需要在原MoT block7/15/23后读取受保护当前帧，跨层维护15×512关系状态并分层写回Action。用户已明确授权实现和MyWAM备份，不另改旧训练或评估作业。
+
+新增模块 relational_sidecar.py（模块与架构分别独立文件）、独立model/data/train/deploy配置、离线Aloha准备入口及20-update诊断启动器。原主干FM只增加默认不使用的显式 forward_fn 参数，EA输出在一次loss调用内局部返回，避免模型级缓存；旧Lite/module/launcher不覆盖。加入registry导入。标签从用户指定4350集合的raw/aloha重建，保持绝对EEF80D/32动作/9视频/8-16-32和wxyz边界，goal grounding同时mask goal_valid。运行时H×W直接对应L形画布；beta零、projection非零初始化；warmup/action_only/joint显式区分；compile/cache关闭。
+
+改动范围含模型、辅助监督数据构建、配置、启动/部署和测试。实现决策及未完成验收见 docs/RELATIONAL_SIDECAR_IMPLEMENTATION_20261016.md 与原规划第9节。旧版代码本地压缩快照已完成，远端分批上传进行中；CPU结构测试、源数据重建进行中，当前不宣称通过或效果提升。四卡A100/ZeRO2容量吞吐、完整Foundation新模块训练与闭环尚待硬件验证。

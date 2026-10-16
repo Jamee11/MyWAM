@@ -1,0 +1,16 @@
+policy_name: openwam2robotwin_interface
+task_name: null
+task_config: null
+ckpt_setting: null
+seed: null
+instruction_type: unseen
+host: 127.0.0.1
+port: 8849
+send_state: true
+state_dim: 20
+request_timeout: 300
+action_type: ee
+ea_context: null
+source_quaternion_order: wxyz
+debug: false
+debug_dir: ./debug_images
