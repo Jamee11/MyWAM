@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Real Foundation CPU warmstart gate; no training or GPU claim."""
+
 import argparse
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -19,7 +20,9 @@ def main():
         raise ValueError("Set CUDA_VISIBLE_DEVICES='' for this CPU gate")
     import torch
     from hydra import compose, initialize_config_dir
+
     from openwam.train.utils.ckpt_model_loader import build_architecture_from_ckpt_dir
+
     torch.set_num_threads(4)
     with initialize_config_dir(version_base=None, config_dir=str(ROOT / "configs")):
         cfg = compose(config_name="train_relational_sidecar_4gpu")
@@ -34,11 +37,17 @@ def main():
     assert all(s.write.beta == 0 and s.write.projection.weight.count_nonzero() > 0 for s in model.sidecar.stages)
     assert all(not p.requires_grad for n, p in model.named_parameters() if not n.startswith("sidecar."))
     assert model.foundation_load_report["reset_policy_heads"] == []
-    report = dict(status="passed", scope="real Foundation CPU warmstart only", warmstart=model.foundation_load_report,
-                  total_parameters=sum(p.numel() for p in model.parameters()),
-                  sidecar_parameters=sum(p.numel() for p in model.sidecar.parameters()),
-                  trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),
-                  tap_blocks=model.tap_blocks, gpu_capacity="not_tested", closed_loop="not_tested")
+    report = dict(
+        status="passed",
+        scope="real Foundation CPU warmstart only",
+        warmstart=model.foundation_load_report,
+        total_parameters=sum(p.numel() for p in model.parameters()),
+        sidecar_parameters=sum(p.numel() for p in model.sidecar.parameters()),
+        trainable_parameters=sum(p.numel() for p in model.parameters() if p.requires_grad),
+        tap_blocks=model.tap_blocks,
+        gpu_capacity="not_tested",
+        closed_loop="not_tested",
+    )
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2), flush=True)

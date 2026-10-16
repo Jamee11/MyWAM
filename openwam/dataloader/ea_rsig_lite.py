@@ -2,16 +2,15 @@
 
 Source HDF5s are read-only. No legacy 10/20/40 target is interpolated or reused.
 """
+import hashlib
+import json
 from bisect import bisect_right
 from functools import lru_cache
-import json
-import hashlib
 from pathlib import Path
 
-import h5py
 import numpy as np
-from scipy.spatial.transform import Rotation
 import torch
+from scipy.spatial.transform import Rotation
 
 from openwam.dataloader.bases import BaseDataset
 from openwam.dataloader.robotwin import RoboTwinDataset

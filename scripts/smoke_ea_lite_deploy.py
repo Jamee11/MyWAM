@@ -6,9 +6,9 @@ This is offline inference, never a robot command or a closed-loop success test.
 import argparse
 import json
 import os
-from pathlib import Path
 import sys
 import time
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -19,6 +19,7 @@ def check(checkpoint, manifest_path, report, device="cpu"):
     import numpy as np
     import torch
     from omegaconf import OmegaConf
+
     from openwam.dataloader.ea_rsig_lite import LiteRoboTwinSource
     from openwam.dataloader.transforms.multiview import format_prompt_for_inference
     from openwam.deploy.engine import JointInferenceEngine

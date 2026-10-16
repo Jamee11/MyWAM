@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Prepare the requested dataset's Aloha raw EEF/EA data once, outside training."""
+
 import argparse
 import json
 from pathlib import Path
 
-from prepare_ea_lite_data import prepare, sha256
 from cache_ea_lite_startup import prepare as cache_startup
+from prepare_ea_lite_data import prepare, sha256
 
 
 def main():
@@ -20,6 +21,7 @@ def main():
         raise FileNotFoundError(raw)
     import h5py
     import numpy as np
+
     # This reader follows RoboTwin's legacy RGB-JPEG convention; reject a mixed codec.
     paths = sorted(raw.glob("*/demo_clean/data/episode*.hdf5"))
     if not paths:
@@ -46,10 +48,13 @@ def main():
             valid[:, 3] *= targets[:, 15:16]
             np.savez_compressed(path, **labels)
             episode["labels_sha256"] = sha256(path)
-    manifest.update(source_dataset_root=str(args.dataset_root.resolve()), embodiment="aloha",
-                    rgb_contract="RoboTwin legacy RGB passed to cv2.imencode; decode without BGR swap",
-                    rgb_codec_check="first and last frame, all three cameras, every episode; not every JPEG",
-                    goal_grounding_mask="ground_bbox_valid AND goal_valid")
+    manifest.update(
+        source_dataset_root=str(args.dataset_root.resolve()),
+        embodiment="aloha",
+        rgb_contract="RoboTwin legacy RGB passed to cv2.imencode; decode without BGR swap",
+        rgb_codec_check="first and last frame, all three cameras, every episode; not every JPEG",
+        goal_grounding_mask="ground_bbox_valid AND goal_valid",
+    )
     source = args.output_dir / "manifest.json"
     source.write_text(json.dumps(manifest, indent=2) + "\n")
     print(json.dumps(cache_startup(source, args.output_dir / "manifest.ready.json")), flush=True)

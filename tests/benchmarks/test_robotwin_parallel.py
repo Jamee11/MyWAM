@@ -1,10 +1,10 @@
 """Exercise the exact shared endpoint methods with real policy/executor buffers on CPU."""
 import ast
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from types import SimpleNamespace
-import threading
-import time
 
 import numpy as np
 

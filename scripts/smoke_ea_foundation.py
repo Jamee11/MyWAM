@@ -3,8 +3,8 @@
 import argparse
 import json
 import os
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
@@ -13,10 +13,14 @@ os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import torch
-from hydra import compose, initialize_config_dir
-from openwam.train.utils.ckpt_model_loader import build_architecture_from_ckpt_dir, copy_ckpt_artifacts
-from openwam.dataloader import build_dataset
+import torch  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+from hydra import compose, initialize_config_dir  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+
+from openwam.dataloader import build_dataset  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+from openwam.train.utils.ckpt_model_loader import (  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+    build_architecture_from_ckpt_dir,
+    copy_ckpt_artifacts,
+)
 
 
 def main():
@@ -101,8 +105,9 @@ def main():
         del optimizer
     if a.roundtrip:
         from omegaconf import OmegaConf
-        from openwam.deploy.model_loader import load_from_checkpoint_dir
+
         from openwam.deploy.denoise_schedule import make_schedule
+        from openwam.deploy.model_loader import load_from_checkpoint_dir
         output = a.roundtrip_dir
         output.mkdir(parents=True, exist_ok=True)
         saved = output / "checkpoint_step_1.safetensors"

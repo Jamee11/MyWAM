@@ -52,3 +52,24 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 CHECK_ONLY=0 EA_STAGE=action_only \
 ## 验收状态
 
 实施与测试进行中；最终数字和证据路径完成后补在本节。CPU tiny检查不能替代全量Foundation BF16、四卡ZeRO保存恢复或闭环验证。当前既有GPU评测作业不操作。
+
+旧版远端备份：`https://github.com/Jamee11/MyWAM/tree/backup/ea-rsig-lite-pre-sidecar-20261016`，commit `cb37290f6d5c80ba3434b0d4f1c345d1ee4f9392`。远端tree回读645个文件（含初始化provenance）；本地完整代码归档644个普通文件，路径 `outputs/sidecar/backups/pre_sidecar_complete_20261016.tar.gz`，旁置SHA256。新版在独立 `feature/multilayer-relational-sidecar` 分支，main暂保留旧版。Git CLI读远端成功；写入使用已连接GitHub工具，本机VS Code旧凭据socket仍不可用，公开仓库不会自动给予Git CLI推送凭据。
+
+只读源清点确认Aloha50任务、2500原始HDF5、35,417,456,051 bytes，所有任务均50轨迹，见 `outputs/sidecar/source_inventory.json`。此数字是文件清点，不代表本次EEF/标签重建已经通过。11个旧Lite模型/配置/启动文件已与备份逐字节相等，见 `outputs/sidecar/old_lite_preservation.json`。
+
+首轮CPU测试因输入mask形状失败：原主干 `_proprio_sample_mask` 内部接受 `[B,1,80]`，测试与初版部署传了 `[B,80]`。已修正fixture和新架构的路由形状，保留维度mask用于Z编码；原主干不改。首轮日志 `/tmp/openwam-sidecar-tests.log`，复测 `/tmp/openwam-sidecar-tests-v2.log`。首次依赖冷加载受共享文件系统I/O拖慢，不能把该等待时间当训练步时或新增模块计算耗时。
+
+限制与后续比较：受保护首帧在各层始终只含当前RGB/Text/Proprio。多层读取增加表示深度，并不自动提供历史速度、真实未来轨迹或准确接触状态；Plan仍依赖监督学习，效果须做配对闭环验证。alpha=0只停止Z从该层新增视觉信息，Refine仍变换Z，空间grounding head仍需该层视觉keys。跨训练阶段应以weights finetune重新建立optimizer；full-state resume要求相同训练阶段与参数组，不能直接把warmup的optimizer状态套到action_only。
+
+
+## 2026-10-16 工程调试进展（追加证据）
+
+真实Foundation CPU warmstart已通过：继承2089个tensor、没有重置原80D policy heads；新增140个EA tensor、24,290,323个Sidecar参数。完整模型12,431,044,415参数含冻结编码器，warmup仅训练Sidecar。证据：docs/evidence/relational_sidecar_20261016/foundation_cpu.json。此结果只验证加载，不验证GPU训练容量。
+
+最新CPU组合回归40 passed、1 failed（921.03s）。新版Sidecar全部用例已通过：FP32/BF16与checkpointing开关的零写入恒等、五种独立因果扰动、三阶段完整loss/两次optimizer更新、梯度、严格权重加载、真实tiny generate以及CPU Accelerate完整状态/RNG恢复。失败是旧Lite BF16 fixture对bool调用is_floating_point；已添加Tensor类型判断，新版模型不受此fixture错误影响，远端完整复验待结果。冷依赖导入等待不当作训练耗时。
+
+指定新集合的Aloha准备已完成：50任务、2500轨迹、552275帧、549775训练窗口，labels/stats与manifest.ready.json均位于outputs/sidecar/aloha_4350。实际reader抽查每任务首/中/末150窗口，80D EEF动作/当前state与原始endpose归一化往返通过；九帧视频、掩码及8/16/32时间锚一致。A与C在相同随机种子下的增强图像/动作/文本逐元素相同。证据：docs/evidence/relational_sidecar_20261016/data_reader_audit.json；完整样本清单保留在outputs/sidecar/data_reader_audit.json。这不代表逐帧视觉质量或闭环效果通过。
+
+原始代码字节保存在不可变backup分支和完整tar归档。工作目录随后集成了CI排版/import清理、旧FK资产路径可迁移性修复及旧BF16测试fixture修复，因此先前11文件逐字节相等只描述CI清理前的快照，不能当当前目录字节一致证明；模型/动作/标签数学保留。备份最终commit为364a95f44660420cb30e0ed0a4bba8482a248281，包含Cosmos gitlink。
+
+用户要求不再纠结Actions。CI修复已存fix分支，主任务转为真实GPU调试：现场仅5/6两张A100-80GB完全空闲，已启动独立两卡warmup短测（bs1/acc1/2 optimizer updates/第2步完整状态保存）。日志/tmp/openwam-sidecar-2gpu.log，输出outputs/sidecar/smoke_2gpu_warmup_20261016。未占用其他卡，不操作已有作业。当前仅通过GPU空闲预检，未把启动/加载当更新成功；四卡20步/吞吐和闭环仍待验证。

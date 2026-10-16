@@ -6,8 +6,8 @@ Writes only output-dir; original RGB/actions/oracle files are never modified.
 import argparse
 import hashlib
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -20,12 +20,14 @@ def sha256(path):
 def prepare(raw_root, output_dir, tasks=None):
     import h5py
     import numpy as np
-    from openwam.dataloader.ea_rsig_lite import targets_from_oracle, CAMERAS, LiteRoboTwinSource
-    from openwam.ea_lite_contract import tcp_context_from_eef20
-    from openwam.dataloader.robotwin import RoboTwinDataset, ROBOTWIN_ALL_TASKS
+
+    from openwam.dataloader.ea_rsig_lite import CAMERAS, LiteRoboTwinSource, targets_from_oracle
+    from openwam.dataloader.robotwin import ROBOTWIN_ALL_TASKS, RoboTwinDataset
     from openwam.dataloader.utils.stats_computation.robotwin_stats_computation import (
-        _ModeAccumulator, _pin_eef_rot6d_identity, _read_eef_actions,
+        _ModeAccumulator,
+        _pin_eef_rot6d_identity,
     )
+    from openwam.ea_lite_contract import tcp_context_from_eef20
     raw_root, output_dir = Path(raw_root).resolve(), Path(output_dir).resolve()
     if output_dir == raw_root or raw_root in output_dir.parents:
         raise ValueError("Output must be outside source data")

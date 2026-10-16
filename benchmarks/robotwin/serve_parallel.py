@@ -9,7 +9,6 @@ import os
 import signal
 import sys
 import threading
-import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -27,8 +26,9 @@ def main():
     if args.slots < 1 or not 1 <= args.port <= args.port + args.slots - 1 <= 65535:
         parser.error("invalid port range")
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
-    from omegaconf import OmegaConf
     import torch
+    from omegaconf import OmegaConf
+
     from openwam.deploy.server import PolicyServer, build_server_from_config
 
     config = ROOT / "configs/deploy.yaml"

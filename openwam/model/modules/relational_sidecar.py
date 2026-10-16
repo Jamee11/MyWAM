@@ -1,4 +1,5 @@
 """Persistent observation-only relation tokens, outside the checkpointed MoT blocks."""
+
 from types import SimpleNamespace
 
 import torch
@@ -10,9 +11,12 @@ from .ea_rsig_v3 import EARSIGV3Module
 
 def canvas_geometry(height, width, device):
     """Cell centres in the actual L-shaped head/left/right canvas (no resampling)."""
-    y, x = torch.meshgrid((torch.arange(height, device=device) + .5) / height,
-                          (torch.arange(width, device=device) + .5) / width, indexing="ij")
-    view = torch.where(y < 2 / 3, 0, torch.where(x < .5, 1, 2))
+    y, x = torch.meshgrid(
+        (torch.arange(height, device=device) + 0.5) / height,
+        (torch.arange(width, device=device) + 0.5) / width,
+        indexing="ij",
+    )
+    view = torch.where(y < 2 / 3, 0, torch.where(x < 0.5, 1, 2))
     return x, y, view
 
 
@@ -20,8 +24,8 @@ def canvas_bbox_targets(boxes, valid, height, width):
     """View-normalized xyxy -> full runtime canvas Gaussian, masked within each view."""
     boxes, valid = boxes.float(), valid.float()
     x, y, view = canvas_geometry(height, width, boxes.device)
-    offset = boxes.new_tensor([[0, 0], [0, 2 / 3], [.5, 2 / 3]])
-    scale = boxes.new_tensor([[1, 2 / 3], [.5, 1 / 3], [.5, 1 / 3]])
+    offset = boxes.new_tensor([[0, 0], [0, 2 / 3], [0.5, 2 / 3]])
+    scale = boxes.new_tensor([[1, 2 / 3], [0.5, 1 / 3], [0.5, 1 / 3]])
     lo = boxes[..., :2] * scale + offset
     hi = boxes[..., 2:] * scale + offset
     centre = (lo + hi) / 2
@@ -29,7 +33,7 @@ def canvas_bbox_targets(boxes, valid, height, width):
     distance = ((x - centre[..., 0, None, None]) / sigma[..., 0, None, None]).square()
     distance = distance + ((y - centre[..., 1, None, None]) / sigma[..., 1, None, None]).square()
     region = view[None, None] == torch.arange(3, device=boxes.device)[None, None, :, None, None]
-    density = (torch.exp(-.5 * distance) * region * valid[..., None, None]).sum(2, keepdim=True)
+    density = (torch.exp(-0.5 * distance) * region * valid[..., None, None]).sum(2, keepdim=True)
     return density / density.sum((-3, -2, -1), keepdim=True).clamp_min(1e-8)
 
 
@@ -45,8 +49,7 @@ class ActionWriteAdapter(nn.Module):
 
     def forward(self, actions, tokens, valid):
         kv = self.norm(tokens)
-        residual = self.attention(self.query(actions), kv, kv, key_padding_mask=~valid,
-                                  need_weights=False)[0]
+        residual = self.attention(self.query(actions), kv, kv, key_padding_mask=~valid, need_weights=False)[0]
         return actions + self.beta.to(actions.dtype) * self.projection(residual)
 
 
@@ -60,8 +63,7 @@ class SidecarStage(nn.Module):
         self.alpha = nn.Parameter(torch.tensor(float(read_gate_init)))
         self.refine_norm = nn.LayerNorm(dim)
         self.refine = nn.MultiheadAttention(dim, heads, batch_first=True, dropout=0)
-        self.ffn = nn.Sequential(nn.LayerNorm(dim), nn.Linear(dim, 2 * dim), nn.SiLU(),
-                                 nn.Linear(2 * dim, dim))
+        self.ffn = nn.Sequential(nn.LayerNorm(dim), nn.Linear(dim, 2 * dim), nn.SiLU(), nn.Linear(2 * dim, dim))
         self.context = nn.Linear(dim, dim)
         self.write = ActionWriteAdapter(action_dim, dim, heads, write_gate_init)
 
@@ -91,19 +93,27 @@ class EAHeads(nn.Module):
 
     def forward(self, tokens, features, arms, height, width):
         b, _, dim = tokens.shape
-        logits = torch.einsum("brd,bnd->brn", self.ground_query(tokens[:, :4]),
-                               self.ground_key(features)) * dim ** -.5
+        logits = torch.einsum("brd,bnd->brn", self.ground_query(tokens[:, :4]), self.ground_key(features)) * dim**-0.5
         logits = logits.reshape(b, 4, 1, height, width)
         relations = tokens[:, 4:8].reshape(b, 2, 2, dim)
         raw = self.plan(tokens[:, 9:]).reshape(b, 3, 2, 2, 4)
-        return dict(tokens=tokens, first_frame_features=features, grid=(height, width),
-                    grounding=dict(logits=logits, attention=logits.flatten(2).softmax(-1),
-                                   presence_logits=self.presence(tokens[:, :4]).squeeze(-1)),
-                    track_valid_logits=self.track(tokens[:, :4].reshape(b, 2, 2 * dim)).squeeze(-1),
-                    arm_present=arms, near_logits=self.near(relations[:, :, 0]).squeeze(-1),
-                    contact_logits=self.contact(relations[:, :, 0]).squeeze(-1),
-                    goal_proximity=self.goal(relations[:, :, 1]).squeeze(-1).sigmoid(),
-                    plan_directions=F.normalize(raw[..., :3], dim=-1), plan_moving_logits=raw[..., 3])
+        return dict(
+            tokens=tokens,
+            first_frame_features=features,
+            grid=(height, width),
+            grounding=dict(
+                logits=logits,
+                attention=logits.flatten(2).softmax(-1),
+                presence_logits=self.presence(tokens[:, :4]).squeeze(-1),
+            ),
+            track_valid_logits=self.track(tokens[:, :4].reshape(b, 2, 2 * dim)).squeeze(-1),
+            arm_present=arms,
+            near_logits=self.near(relations[:, :, 0]).squeeze(-1),
+            contact_logits=self.contact(relations[:, :, 0]).squeeze(-1),
+            goal_proximity=self.goal(relations[:, :, 1]).squeeze(-1).sigmoid(),
+            plan_directions=F.normalize(raw[..., :3], dim=-1),
+            plan_moving_logits=raw[..., 3],
+        )
 
     @staticmethod
     def losses(output, targets):
@@ -116,24 +126,40 @@ class EAHeads(nn.Module):
         targets[:, 0, 121:124] *= targets[:, 0, 14:15]
         targets[:, 0, 127:130] *= targets[:, 0, 15:16]
         # Reuse the established V3 masked relation/plan definitions; only spatial geometry differs.
-        proxy = SimpleNamespace(num_views=3, near_threshold=.10, near_loss_weight=.5,
-                                goal_loss_weight=.5, bbox_gaussian_targets=lambda boxes, valid:
-                                canvas_bbox_targets(boxes, valid, *output["grid"]))
+        proxy = SimpleNamespace(
+            num_views=3,
+            near_threshold=0.10,
+            near_loss_weight=0.5,
+            goal_loss_weight=0.5,
+            bbox_gaussian_targets=lambda boxes, valid: canvas_bbox_targets(boxes, valid, *output["grid"]),
+        )
         return EARSIGV3Module._dual_track_losses(proxy, output, targets)
 
 
 class RelationalSidecar(nn.Module):
-    def __init__(self, video_dim, action_dim, text_dim, *, latent_dim=512, heads=8,
-                 num_ea_tokens=15, read_gate_init=.01, write_gate_init=0., action_conditioning=True):
+    def __init__(
+        self,
+        video_dim,
+        action_dim,
+        text_dim,
+        *,
+        latent_dim=512,
+        heads=8,
+        num_ea_tokens=15,
+        read_gate_init=0.01,
+        write_gate_init=0.0,
+        action_conditioning=True,
+    ):
         super().__init__()
         if num_ea_tokens != 15 or latent_dim % heads:
             raise ValueError("Sidecar requires 15 tokens and latent_dim divisible by heads")
         self.action_conditioning = bool(action_conditioning)
-        self.role_tokens = nn.Parameter(torch.randn(15, latent_dim) * .02)
+        self.role_tokens = nn.Parameter(torch.randn(15, latent_dim) * 0.02)
         self.text = nn.Linear(text_dim, latent_dim)
         self.proprio = nn.Sequential(nn.Linear(160, latent_dim), nn.SiLU(), nn.Linear(latent_dim, latent_dim))
-        self.stages = nn.ModuleList([SidecarStage(video_dim, action_dim, latent_dim, heads,
-                                                read_gate_init, write_gate_init) for _ in range(3)])
+        self.stages = nn.ModuleList(
+            [SidecarStage(video_dim, action_dim, latent_dim, heads, read_gate_init, write_gate_init) for _ in range(3)]
+        )
         self.heads = EAHeads(latent_dim)
         if not self.action_conditioning:
             for stage in self.stages:
@@ -148,8 +174,10 @@ class RelationalSidecar(nn.Module):
         arms = torch.stack((mask[:, :10].any(-1), mask[:, 34:44].any(-1)), -1)
         if not arms.any(-1).all():
             raise ValueError("At least one observed arm must be present")
-        valid = torch.cat((arms.repeat_interleave(2, 1), arms.repeat_interleave(2, 1),
-                           arms.any(-1, keepdim=True), arms.repeat(1, 3)), -1)
+        valid = torch.cat(
+            (arms.repeat_interleave(2, 1), arms.repeat_interleave(2, 1), arms.any(-1, keepdim=True), arms.repeat(1, 3)),
+            -1,
+        )
         if text_mask is None:
             text_mask = torch.ones(text.shape[:2], device=text.device, dtype=torch.bool)
         weights = text_mask.to(text.dtype)

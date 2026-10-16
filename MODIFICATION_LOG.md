@@ -191,3 +191,16 @@ NVML当前Unknown Error：/dev/nvidiactl/nvidia0/nvidia-uvm对新进程open返�
 新增模块 relational_sidecar.py（模块与架构分别独立文件）、独立model/data/train/deploy配置、离线Aloha准备入口及20-update诊断启动器。原主干FM只增加默认不使用的显式 forward_fn 参数，EA输出在一次loss调用内局部返回，避免模型级缓存；旧Lite/module/launcher不覆盖。加入registry导入。标签从用户指定4350集合的raw/aloha重建，保持绝对EEF80D/32动作/9视频/8-16-32和wxyz边界，goal grounding同时mask goal_valid。运行时H×W直接对应L形画布；beta零、projection非零初始化；warmup/action_only/joint显式区分；compile/cache关闭。
 
 改动范围含模型、辅助监督数据构建、配置、启动/部署和测试。实现决策及未完成验收见 docs/RELATIONAL_SIDECAR_IMPLEMENTATION_20261016.md 与原规划第9节。旧版代码本地压缩快照已完成，远端分批上传进行中；CPU结构测试、源数据重建进行中，当前不宣称通过或效果提升。四卡A100/ZeRO2容量吞吐、完整Foundation新模块训练与闭环尚待硬件验证。
+
+
+### 2026-10-16T09:09:45.620044+00:00：MyWAM备份CI兼容性修复（独立分支）
+
+用户要求检查推送后run failed。确认两次旧版备份CI的真实失败为107项lint债务及Transformers最新版/torch2.7.1的hf_storage收集错误。独立工作树只作等价排版/import清理、测试lambda等价def，并新增CPU-CI约束5.19.0/0.41.0/Ruff0.11.9，feature/fix分支也触发CI；不跳过原测试、不取消lint。源训练工作树和环境保持。Ruff通过，AST排除imports后仅测试lambda存在差异；远端复验待run结果。详见docs/CI_FAILURE_ANALYSIS_20261016.md。
+
+
+### 2026-10-16 UTC：CI第二轮可迁移性修复
+原因与证据：远端38878693936的两个失败。将旧Aloha FK配置从服务器绝对路径改为仓库相对路径，在共享AlohaEEF入口定位；增加异cwd验证。修正旧BF16测试fixture的Tensor类型判断。无策略数学/权重/动作合同改变，原始备份保留。详见docs/CI_FAILURE_ANALYSIS_20261016.md。
+
+
+### 2026-10-16 UTC：新Sidecar数据和CPU链路验收、双卡短测启动
+指定4350集合中Aloha2500轨迹离线准备完成，原始HDF5只读；50任务150真实增强reader窗口、EEF动作/状态往返和A/C数据一致通过。真实Foundation CPU继承2089 tensors/heads不重置。新Sidecar CPU用例通过，组合40pass/1旧fixture错误已修。现场5/6空闲A100两卡启动独立2更新warmup、完整状态保存短测，不改变正式4卡配置，不操作其他作业。设置与未验证范围见独立交接文档。

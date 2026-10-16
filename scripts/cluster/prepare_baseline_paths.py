@@ -2,9 +2,9 @@
 """Relocate baseline-only metadata once after unpacking; do not regenerate data."""
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
-import importlib.util
 from pathlib import Path
 
 

@@ -4,8 +4,8 @@ import argparse
 import hashlib
 import io
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -15,10 +15,13 @@ def prepare(raw_root, output_dir):
     import h5py
     import numpy as np
     from PIL import Image
-    from openwam.dataloader.ea_rsig_lite import LiteRoboTwinSource, CAMERAS
+
+    from openwam.dataloader.ea_rsig_lite import CAMERAS, LiteRoboTwinSource
     from openwam.dataloader.robotwin import ROBOTWIN_ALL_TASKS
     from openwam.dataloader.utils.stats_computation.robotwin_stats_computation import (
-        _ModeAccumulator, _pin_eef_rot6d_identity)
+        _ModeAccumulator,
+        _pin_eef_rot6d_identity,
+    )
 
     raw_root, output_dir = Path(raw_root).resolve(), Path(output_dir).resolve()
     source_root = raw_root / 'raw/aloha-agilex'

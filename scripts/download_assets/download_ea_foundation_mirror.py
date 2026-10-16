@@ -4,10 +4,10 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
+import shutil
 import time
 from concurrent.futures import ThreadPoolExecutor
-import shutil
+from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
 import requests

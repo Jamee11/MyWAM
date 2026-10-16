@@ -2,20 +2,22 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
 import json
 import os
-from pathlib import Path
 import queue
 import signal
 import subprocess
 import sys
 import threading
-import time
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from benchmarks.robotwin.standard_eval import save, task_names
+from benchmarks.robotwin.standard_eval import (  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+    save,
+    task_names,
+)
 
 
 def main():

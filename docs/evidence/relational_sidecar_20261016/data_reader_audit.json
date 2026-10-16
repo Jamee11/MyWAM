@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "tasks": 50,
+  "episodes": 2500,
+  "windows": 549775,
+  "baseline_augmented_samples_equal": true,
+  "raw_source": "read_only",
+  "gpu_used": false,
+  "scope": "150 first/middle/last windows across 50 tasks; not every RGB pixel"
+}
