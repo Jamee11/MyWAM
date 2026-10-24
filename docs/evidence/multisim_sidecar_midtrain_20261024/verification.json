@@ -1,0 +1,17 @@
+{
+  "created_utc": "2026-10-24T17:23:38.645756+00:00",
+  "cpu_test_count": 27,
+  "real_source_smoke_episodes": 10,
+  "source_parity_cases": 6,
+  "preparation_sha256": "3096f6cf32a50e8347a3f48ed6c09fe53de48fbf823b7275d53995a62f4b6ce9",
+  "selected_total": 52204,
+  "full_dataset_ready": false,
+  "full_foundation_gpu_training_tested": false,
+  "formal_training_started": false,
+  "implementation_scope": "new isolated dataset/converter/config/launcher; original architecture/trainer/math unchanged",
+  "remaining": [
+    "complete all selected numeric/media conversion",
+    "full prepared-release artifact audit",
+    "full Foundation mixed-data GPU short training and reload not performed"
+  ]
+}

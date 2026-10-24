@@ -1,0 +1,10 @@
+{
+  "updated_utc": "2026-10-24T17:09:45.544523+00:00",
+  "backup_remote_commit": "0bf6aef0212184703803ff7e3aacaa919d6aaf2e",
+  "selected_visual_episodes": 52204,
+  "cpu_tests_passed": 27,
+  "actual_source_smoke_episodes": 10,
+  "formal_training_started": false,
+  "full_dataset_ready": false,
+  "full_builder_log": "outputs/midtrain_audit_20261024/full_prepare_frozen.log"
+}
