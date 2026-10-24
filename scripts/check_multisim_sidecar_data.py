@@ -4,8 +4,8 @@
 import argparse
 import hashlib
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT))
 
 def check(manifest, full=False, allow_smoke=False):
     import numpy as np
+
     from openwam.dataloader.multisim_sidecar import PreparedSimDataset
     from openwam.multisim_sidecar_contract import SOURCE_GROUPS
 

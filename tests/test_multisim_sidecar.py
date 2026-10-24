@@ -2,15 +2,21 @@
 
 import hashlib
 import json
-from pathlib import Path
 
 import cv2
 import h5py
 import numpy as np
 import pytest
 
-from openwam.multisim_sidecar_contract import ACTION_SLOTS, CONTRACT, SOURCE_GROUPS, decode_rgb, segmentation_boxes, validate_numeric
-from tests.test_relational_sidecar import make
+from openwam.multisim_sidecar_contract import (
+    CONTRACT,
+    SOURCE_GROUPS,
+    decode_rgb,
+    segmentation_boxes,
+    validate_numeric,
+)
+
+pytest_plugins = ["tests.test_relational_sidecar"]
 
 
 def arrays(steps=40, dual=False):
@@ -133,9 +139,10 @@ def test_numeric_rejects_invalid_rotations_and_absent_arm_values():
 
 def test_mixed_embodiment_loss_update_and_warmup_boundary(make, tmp_path):
     import torch
+
+    from openwam.dataloader.multisim_sidecar import PreparedSimDataset
     from tests.test_relational_sidecar import inputs
     from tests.test_sidecar_backbone_warmup import optimizer_for
-    from openwam.dataloader.multisim_sidecar import PreparedSimDataset
 
     manifest = make_release(tmp_path)
     samples = [PreparedSimDataset(manifest, group, allow_smoke=True)[0] for group in SOURCE_GROUPS]
@@ -174,6 +181,7 @@ def test_mixed_embodiment_loss_update_and_warmup_boundary(make, tmp_path):
 
 def test_train_statistics_do_not_read_heldout_values(tmp_path):
     from copy import deepcopy
+
     from scripts.prepare_multisim_sidecar_data import finalize
 
     manifest = make_release(tmp_path)
@@ -187,3 +195,35 @@ def test_train_statistics_do_not_read_heldout_values(tmp_path):
     stats = np.load(tmp_path / 'normalization_stats.npy', allow_pickle=True).item()['eef']
     assert stats['max'][0] < 1
     assert stats['min'][3] == -1 and stats['max'][3] == 1
+
+
+def test_resume_identity_includes_world_and_update_budget(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    from scripts.train_multisim_sidecar import data_contract
+
+    path = make_release(tmp_path)
+    manifest = json.loads(path.read_text())
+    manifest.update(total_episodes=4, counts={'fixture': 4}, splits={'train': 4})
+    path.write_text(json.dumps(manifest))
+    cfg = SimpleNamespace(dataloader=SimpleNamespace(manifest_path=str(path), weights=[1, 1, 1, 1], epoch_alignment=256),
+                          project=SimpleNamespace(seed=42), training=SimpleNamespace(batch_size=32, gradient_accumulation_steps=2,
+                                                                                 max_steps=100000, num_epochs=None))
+    monkeypatch.setenv('WORLD_SIZE', '4')
+    expected = data_contract(cfg)
+    monkeypatch.setenv('WORLD_SIZE', '8')
+    assert data_contract(cfg) != expected
+    monkeypatch.setenv('WORLD_SIZE', '4')
+    cfg.training.max_steps = 200000
+    assert data_contract(cfg) != expected
+
+
+def test_cpu_offload_cannot_silently_drop_backbone_warmup_hooks():
+    from types import SimpleNamespace
+
+    from scripts.train_multisim_sidecar import validate_warmup_optimizer
+
+    with pytest.raises(ValueError, match="drops WAM warmup hooks"):
+        validate_warmup_optimizer(SimpleNamespace(offload_optimizer_device="cpu"), 2000)
+    validate_warmup_optimizer(SimpleNamespace(offload_optimizer_device="none"), 2000)
+    validate_warmup_optimizer(SimpleNamespace(offload_optimizer_device="cpu"), 0)

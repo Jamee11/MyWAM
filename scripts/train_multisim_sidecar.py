@@ -4,8 +4,8 @@
 import hashlib
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 os.environ.setdefault('TORCH_WARM_POOL', '0')
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,15 +20,24 @@ def data_contract(cfg):
                 groups=['rlbench_franka', 'maniskill_franka', 'robotwin_aloha', 'robotwin_piper'],
                 weights=list(cfg.dataloader.weights), seed=int(cfg.project.seed),
                 epoch_alignment=int(cfg.dataloader.epoch_alignment), episodes=data['total_episodes'],
+                world_size=int(os.environ.get('WORLD_SIZE', '1')),
+                batch_size=int(cfg.training.batch_size), accumulation=int(cfg.training.gradient_accumulation_steps),
+                planned_microsteps=cfg.training.max_steps, planned_epochs=cfg.training.num_epochs,
                 source_counts=data['counts'], retained_splits=data['splits'],
                 source_action_semantics=['absolute_controller_target', 'next_achieved_absolute_eef'],
                 arm_slots={'left': list(range(10)), 'right': list(range(34, 44))},
                 plan_steps=[8, 16, 32], video_anchors=list(range(0, 33, 4)))
 
 
+def validate_warmup_optimizer(training, backbone_updates):
+    if backbone_updates and str(getattr(training, "offload_optimizer_device", "none")) != "none":
+        raise ValueError("CPU optimizer offload replaces AdamW and drops WAM warmup hooks; use offload_optimizer_device=none")
+
+
 def main():
     import train_maniskill_baseline as baseline
     from train_maniskill_sidecar import restore_saved_counter, validate_save_boundaries
+
     from openwam.dataloader.multisim_sidecar import MultiSimSidecarDataset
     from openwam.dataloader.registry import register_dataset
     from openwam.model.architectures.dual_system.relational_sidecar import RelationalSidecarArchitecture
@@ -51,6 +60,7 @@ def main():
     original_prepare = OpenWAMTrainer.prepare_accelerate
 
     def prepare(self, optimizer, dataloader, scheduler):
+        validate_warmup_optimizer(self.cfg.training, self.architecture.backbone_warmup_updates)
         result = original_prepare(self, optimizer, dataloader, scheduler)
         t = self.cfg.training
         epoch_micro = len(result[1])

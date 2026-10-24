@@ -7,7 +7,7 @@
 - 原项目代码已完成本地完整归档并备份到 GitHub，远端与本地代码树完全一致。
 - 五类输入的正式验收清单已扫描，冻结 **52,204 个已验收外观轨迹版本**。
 - 10 条真实来源轨迹的独立 smoke 数据已构建，覆盖 RLBench、原 ManiSkill、hard ManiSkill、RoboTwin Aloha/Piper 与新 clutter；读取和全部 numeric hash/media stat 检查通过。
-- 27 项 CPU 回归通过，含四源单双臂混合 Action/Video/EA loss、完整反向、WAM 暂不更新→联合更新切换、epoch采样覆盖及训练统计排除held-out数据。Hydra 配置解析及 shell 语法通过。
+- 最新指定回归集28项CPU检查通过，含四源单双臂混合 Action/Video/EA loss、完整反向、WAM 暂不更新→联合更新切换、epoch采样覆盖、训练统计排除held-out数据及恢复时world-size/预算身份检查。Hydra 配置解析及 shell 语法通过。
 - **全量数值/辅助标签构建正在进行，正式目录尚未发布 `manifest.ready.json`；这不等于全量数据已准备好。**
 - 本轮没有启动正式 mid-training，没有停止原 GPU0–3 训练或评估/真机服务；尚无全量 Foundation 混合训练速度、容量或策略成绩。
 
@@ -128,7 +128,7 @@ CHECK_ONLY=0 bash scripts/train_multisim_sidecar_midtrain.sh
 
 ```bash
 CHECK_ONLY=0 bash scripts/train_multisim_sidecar_midtrain.sh \
-  training.max_steps=8 training.save_steps=4 \
+  training.max_steps=8 training.save_steps=4 training.warmup_ratio=0.5 \
   model.architecture.relational_sidecar.backbone_warmup_updates=2
 ```
 
@@ -142,6 +142,8 @@ CHECK_ONLY=0 bash scripts/train_multisim_sidecar_midtrain.sh \
 
 恢复必须沿用原manifest、weights、seed、batch/world-size对应的对齐及原计划预算；小测→正式长训不是无条件等价的resume。Foundation或完整Sidecar初始目录通过`BASE_MODEL`指定；旧已训练Sidecar作为新阶段起点应明确是否保留2K WAM延迟更新，不能偷偷复用旧optimizer计数。
 
+如使用8张卡并希望保持global batch256与50,000次更新，新阶段可用`NPROC_PER_NODE=8 GRAD_ACCUM=1`，同时覆盖`training.max_steps=50000`。这是不同world-size的新run；现有ZeRO分片不支持在本入口中随意4→8卡直接resume，元数据会拒绝world/batch/accumulation/计划预算变化。跨world-size请另建finetune阶段，不能把它称为完整optimizer恢复。
+
 ## 7. 验证范围与后续实验
 
 工程证据位于`outputs/midtrain_audit_20261024`：源库存、resolved配置、CPU tests、10条真实smoke构建与读取检查、全量日志。全量状态以数据根`progress.json`和最终`manifest.ready.json`为准，某个子进程退出或目录存在不表示完成。
@@ -151,3 +153,21 @@ CHECK_ONLY=0 bash scripts/train_multisim_sidecar_midtrain.sh \
 尚需：全量生成/检查完成、完整Foundation多源短训和实际状态重载、各来源未见物理家族验证、正式训练吞吐/显存测量。CPU tiny模型、finite loss与数据格式通过都不能称midtrain有效或迁移成功。
 
 科学比较需要相同预算的单源/多源、Vanilla/Sidecar对照，并记录每个来源的暴露量。**本阶段包含Randomized数据，因此后续不能把其成绩直接称为原始Clean-only→Random协议提升。** 已见任务/物体、跨仿真、跨本体和零真实示范应分别定义；目标真机SFT或部署必须使用相应checkpoint的统计、动作reference与显式臂mask，不默认20D双臂normalizer自动代表单臂硬件。
+
+### 2026-10-24：Foundation工程短测进行中
+
+在GPU5/6开始双卡bs1、acc1、8微步的独立短测，使用已验收10条真实来源smoke数据、原Foundation和完整Sidecar；WAM延迟更新缩短为2次，仅验证更新切换/保存/恢复。原0–3训练不操作。日志与精确启动参数见`outputs/midtrain_audit_20261024/foundation_smoke/launch.json`及`train.log`。启动不代表已通过；后续以实际指标、保存和重载结果验收。当前全量数据构建仍独立运行。
+
+新增非转换文件的ruff检查通过；转换脚本保持构建源码冻结，导入排序清理延后至全量构建结束，避免在运行中改变preparation指纹。本地已检查的CPU回归精确命令为`pytest -q tests/test_multisim_sidecar.py tests/test_sidecar_backbone_warmup.py tests/test_optimizer_groups.py`，27 passed，日志`tests_lint_cleanup.log`。
+
+### GitHub CI现状
+
+代码树回读验证成功，但初次功能分支CI失败：tests为2258通过、5失败（旧HTTP测试缺Flask、旧远程评估fixture依赖本机outputs文件）；新增multisim测试未失败。全仓lint的370项在改动前备份代码中亦复现，另有冻结转换脚本5项导入排序待清理。因此代码备份成功不等同全仓CI通过。保留这些边界，不为本次数据框架任务掩盖或批量重写旧模块。
+
+### 双卡容量与offload边界
+
+第一次真实Foundation短测在前两次warmup更新后，于WAM首次optimizer更新出现ZeRO flatten显存不足（申请9.31GiB）；尚无保存/恢复成功结论。第二次仅启用`PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`，记录于`foundation_smoke_expandable`，不是缩小模型或关闭反向。
+
+当前Accelerate的CPU offload会创建新CPUAdam并丢弃原AdamW warmup hook，新入口因此拒绝`backbone_warmup_updates>0`且`offload_optimizer_device!=none`的组合；默认四卡无offload方案不变。不能将CPU offload当作保留该warmup语义的直接替代。
+
+全仓CPU检查在这次guard之前已通过2220项（18 skipped/21 deselected）；guard及相关混合数据/优化器测试另保留独立回归日志。GitHub旧缺依赖/fixture失败不等同本地全仓失败，二者环境边界分别记录。

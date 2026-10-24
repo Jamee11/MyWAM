@@ -498,3 +498,19 @@ Required considerations: RLBench currently has8204 accepted visual episodes rath
 
 ### 2026-10-24T17:23:38.653984+00:00: Multi-sim implementation/engineering evidence
 Added independent multisim_sidecar_contract, prepared mixed reader with per-epoch source coverage and aligned epochs, accepted-source offline converter with source command/time checks and preparation fingerprints, preflight, training profile and launcher. Preserved current Sidecar/full-backward2K optimization math. Current frozen selection52204, initial/final-revision real10-episode smoke passed;27 CPU checks passed including mixed-embodiment loss/warmup update and train-only stats; source parity6 cases passed. Full conversion and one-shot audit remain active, not a ready release or GPU/quality validation. Guide and evidence:docs/MULTISIM_SIDECAR_MIDTRAIN_20261024.md;docs/evidence/multisim_sidecar_midtrain_20261024/verification.json.
+
+
+### 2026-10-24T17:48:07.194757+00:00：midtrain恢复契约/工程短测与CI边界
+
+补齐新midtrain恢复元数据中的world-size、batch、accumulation与计划micro/epoch预算，拒绝跨world-size或改计划的伪resume；新混合数据回归覆盖此约束。新reader/训练入口/检查器/tests导入排序整理，pytest fixture通过插件显式注册；27项相关回归通过，原模型/原trainer/原单源数据逻辑未改。正在运行的prepare脚本及指纹依赖保持冻结，5项导入排序延后。
+
+GPU5/6各约70GiB空闲后启动独立Foundation工程短测PID3798274，10条真实来源smoke、bs1/acc1/8微步、WAM延迟2更新，检查完整读写反向与保存/重载。启动记录outputs/midtrain_audit_20261024/foundation_smoke/launch.json，尚未验收完成；原0–3训练/其他服务不停止。全量构建3795413继续。
+
+GitHub功能分支初次CI确认为失败而非上传失败：tests 2258 passed/5 failed，失败分别是旧HTTP测试缺Flask及旧远程评估测试依赖未入库的outputs/final_record；不是新增multisim测试失败。全仓ruff的370项在改动前backup commit逐文件复现，另有新prepare脚本5项导入排序待冻结结束清理。不将其报为CI绿灯，也不为本任务批量改旧模块/隐藏失败。详见outputs/midtrain_audit_20261024/ci_initial_*与lint_backup_comparison.json。
+
+
+### 2026-10-24T17:51:50.656134+00:00：WAM warmup与optimizer offload的必要限制
+
+实查当前Accelerate _prepare_deepspeed在CPU optimizer offload时调用map_pytorch_optim_to_deepspeed，创建新DeepSpeedCPUAdam，不复制原AdamW的step_pre_hook；该hook正是当前“完整反向但WAM不更新”的实现。因此新midtrain入口在prepare前显式拒绝WAM warmup+optimizer offload组合，避免静默变成WAM同步更新；默认offload=none完全不变，原单源入口不改。10行测试覆盖cpu/none及warmup=0；不以CPU offload绕过本轮显存问题。
+
+第一次双卡真实Foundation短测前两次Sidecar更新/完整反向通过，第三次（WAM首次更新）在ZeRO flatten申请9.31GiB时OOM，尚无checkpoint。第二次仅设置PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True，PID3800695，其他模型/数据/优化逻辑相同，当前加载中；日志foundation_smoke_expandable/train.log。全仓CPU suite此前2220 passed/18 skipped/21 deselected；新增offload guard随后单独回归，不把旧suite当新增分支覆盖。
