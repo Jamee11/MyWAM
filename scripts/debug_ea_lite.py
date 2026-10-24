@@ -2,15 +2,16 @@
 import json
 import math
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
-import torch
-import train as entry
-import openwam.train.openwam_trainer as trainer_module
+import torch  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+import train as entry  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+
+import openwam.train.openwam_trainer as trainer_module  # noqa: E402 -- source-tree imports follow sys.path bootstrap
 
 Trainer = trainer_module.OpenWAMTrainer
 original_init, original_log = Trainer.__init__, Trainer.log_step

@@ -1,0 +1,17 @@
+defaults:
+  - train_maniskill_baseline_10epochs
+  - override model: dual_system_relational_sidecar
+  - override dataloader: maniskill_sidecar
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      stage: joint
+training:
+  # Same global batch 256 as baseline; extra Sidecar activations need margin.
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  dataset_num_workers: 8  # Same as the ManiSkill baseline.
+  save_steps: 4235  # One epoch (~2118 updates); odd epoch length makes fixed 4000 unsafe for resume.
+  output_path: outputs/maniskill_sidecar/six_task_joint_bs32acc2_10epochs

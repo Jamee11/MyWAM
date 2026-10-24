@@ -75,8 +75,8 @@ def list_registered_datasets():
 def _register_builtins():
     """Register all built-in dataset classes."""
     from openwam.dataloader.agibotworld import MultiAgiBotWorldDataset
-    from openwam.dataloader.ea_rsig_v3 import EARSIGV3Dataset
     from openwam.dataloader.ea_rsig_lite import EARSIGLiteDataset
+    from openwam.dataloader.ea_rsig_v3 import EARSIGV3Dataset
     from openwam.dataloader.ebench import EBenchDataset
     from openwam.dataloader.interndata_a1 import InternDataA1Dataset
     from openwam.dataloader.libero import LiberoDataset

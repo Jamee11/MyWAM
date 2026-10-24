@@ -1,14 +1,15 @@
 """Prepared reader parity and lazy validation on real tiny HDF5s; CPU only."""
+
 import hashlib
-import json
-from pathlib import Path
-import random
 import io
+import json
+import random
+from pathlib import Path
 
 import h5py
 import numpy as np
-from PIL import Image
 import pytest
+from PIL import Image
 
 from openwam.dataloader.ea_rsig_lite import EARSIGLiteDataset
 from scripts.cache_ea_lite_startup import prepare
@@ -24,47 +25,89 @@ def prepared(tmp_path):
     (root / "scene_info.json").write_text(json.dumps({"episode_0": {"active_arm": "left"}}))
     episode = root / "data/episode0.hdf5"
     n = 40
-    buffer = io.BytesIO(); Image.new("RGB", (32, 24), "red").save(buffer, format="JPEG")
+    buffer = io.BytesIO()
+    Image.new("RGB", (32, 24), "red").save(buffer, format="JPEG")
     jpeg = np.frombuffer(buffer.getvalue(), np.uint8)
     with h5py.File(episode, "w") as file:
         for camera in ("head_camera", "left_camera", "right_camera"):
             images = file.create_dataset(f"observation/{camera}/rgb", (n,), dtype=h5py.vlen_dtype(np.uint8))
-            for row in range(n): images[row] = jpeg
+            for row in range(n):
+                images[row] = jpeg
         for arm in ("left", "right"):
-            pose = np.zeros((n, 7)); pose[:, 0] = np.arange(n) / 100; pose[:, 3] = 1
+            pose = np.zeros((n, 7))
+            pose[:, 0] = np.arange(n) / 100
+            pose[:, 3] = 1
             file[f"endpose/{arm}_endpose"] = pose
-            file[f"endpose/{arm}_gripper"] = np.ones(n) * .5
+            file[f"endpose/{arm}_gripper"] = np.ones(n) * 0.5
     labels = tmp_path / "labels.npz"
-    np.savez(labels, targets=np.zeros((n, 130), np.float32),
-             effectors=np.zeros((n, 2, 10), np.float32), arm_present=np.ones((n, 2), np.float32))
+    np.savez(
+        labels,
+        targets=np.zeros((n, 130), np.float32),
+        effectors=np.zeros((n, 2, 10), np.float32),
+        arm_present=np.ones((n, 2), np.float32),
+    )
     stats = tmp_path / "stats.npy"
     np.save(stats, dict(eef=dict(mean=np.zeros(20), std=np.ones(20), min=-np.ones(20), max=np.ones(20))))
-    sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+    def sha(p):
+        return hashlib.sha256(p.read_bytes()).hexdigest()
     stat = episode.stat()
-    manifest = dict(contract="openwam_alpha_eef32_ea_lite_v1", split="Clean", source_quaternion_order="wxyz",
-        ea_context="observed_endpose_plus_local_x_0.12m_TCP", plan_steps=[8, 16, 32], video_anchors=list(range(0, 33, 4)),
-        normalization_stats_path=str(stats), normalization_stats_sha256=sha(stats), total_frames=n,
-        tasks=[dict(name="task", data_root=str(root / "data"), episodes=[dict(path=str(episode), frames=n,
-            size=stat.st_size, mtime_ns=stat.st_mtime_ns, labels=str(labels), labels_sha256=sha(labels))])])
+    manifest = dict(
+        contract="openwam_alpha_eef32_ea_lite_v1",
+        split="Clean",
+        source_quaternion_order="wxyz",
+        ea_context="observed_endpose_plus_local_x_0.12m_TCP",
+        plan_steps=[8, 16, 32],
+        video_anchors=list(range(0, 33, 4)),
+        normalization_stats_path=str(stats),
+        normalization_stats_sha256=sha(stats),
+        total_frames=n,
+        tasks=[
+            dict(
+                name="task",
+                data_root=str(root / "data"),
+                episodes=[
+                    dict(
+                        path=str(episode),
+                        frames=n,
+                        size=stat.st_size,
+                        mtime_ns=stat.st_mtime_ns,
+                        labels=str(labels),
+                        labels_sha256=sha(labels),
+                    )
+                ],
+            )
+        ],
+    )
     source, ready = tmp_path / "manifest.json", tmp_path / "ready.json"
     source.write_text(json.dumps(manifest))
     prepare(source, ready)
-    foundation = tmp_path / "foundation"; foundation.mkdir()
-    header = {k: {"shape": shape} for k, shape in (
-        ("action_backbone.action_encoder.weight", [32, 80]),
-        ("action_backbone.action_decoder.weight", [80, 32]), ("proprio_encoder.weight", [32, 80]))}
+    foundation = tmp_path / "foundation"
+    foundation.mkdir()
+    header = {
+        k: {"shape": shape}
+        for k, shape in (
+            ("action_backbone.action_encoder.weight", [32, 80]),
+            ("action_backbone.action_decoder.weight", [80, 32]),
+            ("proprio_encoder.weight", [32, 80]),
+        )
+    }
     data = json.dumps(header).encode()
     weight = foundation / "checkpoint_step_154000.safetensors"
     weight.write_bytes(len(data).to_bytes(8, "little") + data)
-    (foundation / "download_verification.json").write_text(json.dumps(dict(files={weight.name: dict(
-        verified_upstream=True, size=weight.stat().st_size)})))
+    (foundation / "download_verification.json").write_text(
+        json.dumps(dict(files={weight.name: dict(verified_upstream=True, size=weight.stat().st_size)}))
+    )
     return source, ready, episode, labels, foundation
 
 
 def test_prepared_constructor_opens_no_hdf5_and_does_not_discover_files(prepared, monkeypatch):
     _, ready, _, _, _ = prepared
-    def forbidden(*args, **kwargs): raise AssertionError("startup must not scan raw HDF5s")
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("startup must not scan raw HDF5s")
+
     import openwam.dataloader.robotwin as official
+
     monkeypatch.setattr(official.h5py, "File", forbidden)
     monkeypatch.setattr(official.glob, "glob", forbidden)
     monkeypatch.setattr(official.os, "listdir", forbidden)
@@ -79,8 +122,10 @@ def test_prepared_and_scan_paths_have_identical_real_samples(prepared):
     cached = EARSIGLiteDataset(ready, startup_mode="prepared")
     assert cached.readers[0]._window_index == scanned.readers[0]._window_index
     for index in (0, 20, 38):
-        random.seed(123); expected = scanned[index]
-        random.seed(123); actual = cached[index]
+        random.seed(123)
+        expected = scanned[index]
+        random.seed(123)
+        actual = cached[index]
         assert expected.keys() == actual.keys()
         for key in expected:
             if key in ("video", "first_frame_image"):
@@ -95,7 +140,8 @@ def test_prepared_and_scan_paths_have_identical_real_samples(prepared):
 def test_source_check_is_lazy_and_rejects_changed_episode_on_read(prepared):
     _, ready, episode, _, _ = prepared
     dataset = EARSIGLiteDataset(ready, startup_mode="prepared")
-    with episode.open("ab") as stream: stream.write(b"changed")
+    with episode.open("ab") as stream:
+        stream.write(b"changed")
     # Startup itself did not scan the source; first use still rejects a stale binding.
     with pytest.raises(ValueError, match="Source episode changed"):
         dataset[0]
@@ -121,7 +167,8 @@ def test_missing_prepared_metadata_fails_without_building(prepared):
 
 def test_full_audit_detects_damage_that_fast_preflight_intentionally_defers(prepared):
     _, ready, episode, _, foundation = prepared
-    with episode.open("ab") as stream: stream.write(b"changed")
+    with episode.open("ab") as stream:
+        stream.write(b"changed")
     fast = check(ready, foundation, data_check="fast")
     assert not fast["full_dataset_integrity_audited"]
     with pytest.raises(ValueError, match="Source changed"):

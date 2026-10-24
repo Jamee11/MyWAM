@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Audit schema-5 metadata and decode real samples; never start training."""
 import argparse
-from bisect import bisect_right
 import json
 import sys
+from bisect import bisect_right
 from pathlib import Path
 
 import numpy as np

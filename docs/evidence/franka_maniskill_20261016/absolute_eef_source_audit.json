@@ -1,0 +1,771 @@
+{
+  "scope": "read-only audit; 3 episodes/task, all numeric timesteps in sampled episodes; no rendering/replay; no training changes",
+  "tasks": [
+    {
+      "task": "push_cube",
+      "manifest_records": 1000,
+      "source_h5": [
+        "/remote-home/jinminghao/datasets/maniskill_eort_color_distractors_v4_20260728/push_cube/train/color_distractors/raw/PushCubeEORTColorDistractors-v1/motionplanning/push_cube_train_color_distractors_seed0_n1000.state_dict+rgb+depth+segmentation.pd_ee_delta_pose.physx_cpu.h5"
+      ],
+      "episodes": [
+        {
+          "trajectory": "traj_0",
+          "steps": 62,
+          "world_tcp_first": [
+            0.012253543362021446,
+            0.0380113385617733,
+            0.18215224146842957,
+            -0.00686229020357132,
+            0.7039350867271423,
+            0.709999144077301,
+            0.018153749406337738
+          ],
+          "base_tcp_first": [
+            0.627253532409668,
+            0.0380113385617733,
+            0.18215227127075195
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 3.550662198376166e-09,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 7.450580596923828e-09,
+          "target_vs_achieved_next_position_max_m": 0.01958726733890903,
+          "target_vs_achieved_next_rotation_max_rad": 0.02636534816222103,
+          "action_rot_norm_max": 0.26003167033195496,
+          "camera_shapes": {
+            "front_camera": [
+              63,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              63,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_500",
+          "steps": 57,
+          "world_tcp_first": [
+            -0.0037541789934039116,
+            -0.02631339803338051,
+            0.1692359894514084,
+            0.0060311597771942616,
+            0.706021249294281,
+            0.7079464793205261,
+            -0.017590872943401337
+          ],
+          "base_tcp_first": [
+            0.6112458109855652,
+            -0.02631339803338051,
+            0.16923601925373077
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 1.7943583657450385e-09,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 7.450585037815927e-09,
+          "target_vs_achieved_next_position_max_m": 0.02015730073533799,
+          "target_vs_achieved_next_rotation_max_rad": 0.026104400452107244,
+          "action_rot_norm_max": 0.2569880783557892,
+          "camera_shapes": {
+            "front_camera": [
+              58,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              58,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_999",
+          "steps": 63,
+          "world_tcp_first": [
+            -0.029278835281729698,
+            0.016218135133385658,
+            0.13382558524608612,
+            -0.03654107451438904,
+            0.6990946531295776,
+            0.7133947014808655,
+            -0.03161468356847763
+          ],
+          "base_tcp_first": [
+            0.5857211947441101,
+            0.016218135133385658,
+            0.1338256150484085
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 4.9886946024792095e-09,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 1.4901161193847656e-08,
+          "target_vs_achieved_next_position_max_m": 0.021323780881904737,
+          "target_vs_achieved_next_rotation_max_rad": 0.03461538632298605,
+          "action_rot_norm_max": 0.34326282143592834,
+          "camera_shapes": {
+            "front_camera": [
+              64,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              64,
+              256,
+              256,
+              3
+            ]
+          }
+        }
+      ],
+      "source_h5_trajectory_count": 1000
+    },
+    {
+      "task": "pick_cube",
+      "manifest_records": 1000,
+      "source_h5": [
+        "/remote-home/jinminghao/datasets/maniskill_eort_color_distractors_v4_20260728/pick_cube/train/color_distractors/raw/PickCubeEORTColorDistractors-v1/motionplanning/pick_cube_train_color_distractors_seed0_n1000.state_dict+rgb+depth+segmentation.pd_ee_delta_pose.physx_cpu.h5"
+      ],
+      "episodes": [
+        {
+          "trajectory": "traj_0",
+          "steps": 74,
+          "world_tcp_first": [
+            0.012253543362021446,
+            0.0380113385617733,
+            0.18215224146842957,
+            -0.00686229020357132,
+            0.7039350867271423,
+            0.709999144077301,
+            0.018153749406337738
+          ],
+          "base_tcp_first": [
+            0.627253532409668,
+            0.0380113385617733,
+            0.18215227127075195
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 4.319419358653095e-08,
+          "command_roundtrip_translation_max_abs_error": 1.4901161193847656e-08,
+          "command_roundtrip_rotation_max_abs_error": 2.980232316485143e-08,
+          "target_vs_achieved_next_position_max_m": 0.02504247730755329,
+          "target_vs_achieved_next_rotation_max_rad": 0.047442467839712385,
+          "action_rot_norm_max": 0.7810555100440979,
+          "camera_shapes": {
+            "front_camera": [
+              75,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              75,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_500",
+          "steps": 87,
+          "world_tcp_first": [
+            -0.009405658580362797,
+            -0.015553982928395271,
+            0.1548004448413849,
+            -0.00552570354193449,
+            0.7123398780822754,
+            0.7015610337257385,
+            -0.01880226470530033
+          ],
+          "base_tcp_first": [
+            0.6055943369865417,
+            -0.015553982928395271,
+            0.15480047464370728
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 5.672119960775416e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 2.9802322054628405e-08,
+          "target_vs_achieved_next_position_max_m": 0.020427305639339286,
+          "target_vs_achieved_next_rotation_max_rad": 0.062035745580668364,
+          "action_rot_norm_max": 1.0,
+          "camera_shapes": {
+            "front_camera": [
+              88,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              88,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_999",
+          "steps": 90,
+          "world_tcp_first": [
+            0.0023605339229106903,
+            -0.02533259242773056,
+            0.15519818663597107,
+            0.0036336539778858423,
+            0.7295007705688477,
+            0.6839665174484253,
+            -0.0023328764364123344
+          ],
+          "base_tcp_first": [
+            0.617360532283783,
+            -0.02533259242773056,
+            0.15519821643829346
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 3.6065763347441276e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 2.980232349791834e-08,
+          "target_vs_achieved_next_position_max_m": 0.019589306315331796,
+          "target_vs_achieved_next_rotation_max_rad": 0.061179542184403427,
+          "action_rot_norm_max": 0.9999998807907104,
+          "camera_shapes": {
+            "front_camera": [
+              91,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              91,
+              256,
+              256,
+              3
+            ]
+          }
+        }
+      ],
+      "source_h5_trajectory_count": 1000
+    },
+    {
+      "task": "stack_cube",
+      "manifest_records": 1000,
+      "source_h5": [
+        "/remote-home/jinminghao/datasets/maniskill_eort_task_suite_v5_20260730/stack_cube/train/color_distractors/aggregate/stack_cube_train_color_distractors_aggregated_n1000.state_dict+rgb+depth+segmentation.pd_ee_delta_pose.physx_cpu.h5"
+      ],
+      "episodes": [
+        {
+          "trajectory": "traj_0",
+          "steps": 107,
+          "world_tcp_first": [
+            0.012253543362021446,
+            0.0380113385617733,
+            0.18215224146842957,
+            -0.00686229020357132,
+            0.7039350867271423,
+            0.709999144077301,
+            0.018153749406337738
+          ],
+          "base_tcp_first": [
+            0.627253532409668,
+            0.0380113385617733,
+            0.18215227127075195
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.381148423656943e-08,
+          "command_roundtrip_translation_max_abs_error": 1.4901161193847656e-08,
+          "command_roundtrip_rotation_max_abs_error": 2.2351739237258528e-08,
+          "target_vs_achieved_next_position_max_m": 0.024556385953254812,
+          "target_vs_achieved_next_rotation_max_rad": 0.03468481796572829,
+          "action_rot_norm_max": 0.5662988424301147,
+          "camera_shapes": {
+            "front_camera": [
+              108,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              108,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_500",
+          "steps": 122,
+          "world_tcp_first": [
+            -0.00360963586717844,
+            0.015886541455984116,
+            0.16639813780784607,
+            -0.0014315641019493341,
+            0.6865928173065186,
+            0.7269951105117798,
+            -0.008152954280376434
+          ],
+          "base_tcp_first": [
+            0.6113903522491455,
+            0.015886541455984116,
+            0.16639816761016846
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.827683958844449e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 1.4901163303271403e-08,
+          "target_vs_achieved_next_position_max_m": 0.02011085464555828,
+          "target_vs_achieved_next_rotation_max_rad": 0.029050462537792976,
+          "action_rot_norm_max": 0.473215788602829,
+          "camera_shapes": {
+            "front_camera": [
+              123,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              123,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_999",
+          "steps": 110,
+          "world_tcp_first": [
+            -0.007035106420516968,
+            0.019408632069826126,
+            0.1606518030166626,
+            -0.004148752428591251,
+            0.7115554213523865,
+            0.7026142477989197,
+            -0.0022383369505405426
+          ],
+          "base_tcp_first": [
+            0.6079648733139038,
+            0.019408632069826126,
+            0.16065183281898499
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.172048520808843e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 2.980231961213775e-08,
+          "target_vs_achieved_next_position_max_m": 0.015648063046995574,
+          "target_vs_achieved_next_rotation_max_rad": 0.040452305940058754,
+          "action_rot_norm_max": 0.6658859252929688,
+          "camera_shapes": {
+            "front_camera": [
+              111,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              111,
+              256,
+              256,
+              3
+            ]
+          }
+        }
+      ],
+      "source_h5_trajectory_count": 1000
+    },
+    {
+      "task": "place_sphere",
+      "manifest_records": 1000,
+      "source_h5": [
+        "/remote-home/jinminghao/datasets/maniskill_eort_task_suite_v5_20260730/place_sphere/train/color_distractors/aggregate/place_sphere_train_color_distractors_aggregated_n1000.state_dict+rgb+depth+segmentation.pd_ee_delta_pose.physx_cpu.h5"
+      ],
+      "episodes": [
+        {
+          "trajectory": "traj_0",
+          "steps": 106,
+          "world_tcp_first": [
+            -0.0025698114186525345,
+            -0.012682177126407623,
+            0.16676771640777588,
+            -0.005152055993676186,
+            0.7065473794937134,
+            0.7074958682060242,
+            -0.014629006385803223
+          ],
+          "base_tcp_first": [
+            0.612430214881897,
+            -0.012682177126407623,
+            0.16676774621009827
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 4.523412788691062e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 2.9802322387695312e-08,
+          "target_vs_achieved_next_position_max_m": 0.015410265344525218,
+          "target_vs_achieved_next_rotation_max_rad": 0.048424040400830363,
+          "action_rot_norm_max": 0.7985085844993591,
+          "camera_shapes": {
+            "front_camera": [
+              107,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              107,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_500",
+          "steps": 139,
+          "world_tcp_first": [
+            -0.017996104434132576,
+            0.008178919553756714,
+            0.15128734707832336,
+            -0.016013460233807564,
+            0.7068237662315369,
+            0.7068958878517151,
+            -0.021024268120527267
+          ],
+          "base_tcp_first": [
+            0.5970038771629333,
+            0.008178919553756714,
+            0.15128737688064575
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 5.416872412467424e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 2.980232349791834e-08,
+          "target_vs_achieved_next_position_max_m": 0.014036788754266609,
+          "target_vs_achieved_next_rotation_max_rad": 0.06066161796154178,
+          "action_rot_norm_max": 1.0,
+          "camera_shapes": {
+            "front_camera": [
+              140,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              140,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_999",
+          "steps": 107,
+          "world_tcp_first": [
+            0.01607600599527359,
+            -0.00913729052990675,
+            0.18451616168022156,
+            0.020260822027921677,
+            0.7205448746681213,
+            0.6927895545959473,
+            0.021147646009922028
+          ],
+          "base_tcp_first": [
+            0.6310760378837585,
+            -0.00913729052990675,
+            0.18451619148254395
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.488528738505896e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 1.4901164635539033e-08,
+          "target_vs_achieved_next_position_max_m": 0.018387962486120353,
+          "target_vs_achieved_next_rotation_max_rad": 0.03198975721165778,
+          "action_rot_norm_max": 0.5273590087890625,
+          "camera_shapes": {
+            "front_camera": [
+              108,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              108,
+              256,
+              256,
+              3
+            ]
+          }
+        }
+      ],
+      "source_h5_trajectory_count": 1000
+    },
+    {
+      "task": "pick_cuboid",
+      "manifest_records": 1000,
+      "source_h5": [
+        "/remote-home/jinminghao/datasets/maniskill_eort_task_suite_v5_20260730/pick_cuboid/train/color_distractors/aggregate/pick_cuboid_train_color_distractors_aggregated_n1000.state_dict+rgb+depth+segmentation.pd_ee_delta_pose.physx_cpu.h5"
+      ],
+      "episodes": [
+        {
+          "trajectory": "traj_0",
+          "steps": 74,
+          "world_tcp_first": [
+            0.012253543362021446,
+            0.0380113385617733,
+            0.18215224146842957,
+            -0.00686229020357132,
+            0.7039350867271423,
+            0.709999144077301,
+            0.018153749406337738
+          ],
+          "base_tcp_first": [
+            0.627253532409668,
+            0.0380113385617733,
+            0.18215227127075195
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.690366741738166e-08,
+          "command_roundtrip_translation_max_abs_error": 1.4901161193847656e-08,
+          "command_roundtrip_rotation_max_abs_error": 2.980232316485143e-08,
+          "target_vs_achieved_next_position_max_m": 0.025035135344129242,
+          "target_vs_achieved_next_rotation_max_rad": 0.04744082454128974,
+          "action_rot_norm_max": 0.7809943556785583,
+          "camera_shapes": {
+            "front_camera": [
+              75,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              75,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_500",
+          "steps": 69,
+          "world_tcp_first": [
+            -0.013255930505692959,
+            -0.02234264649450779,
+            0.16128095984458923,
+            -0.0060102492570877075,
+            0.7348011136054993,
+            0.678040087223053,
+            -0.017112020403146744
+          ],
+          "base_tcp_first": [
+            0.6017440557479858,
+            -0.02234264649450779,
+            0.16128098964691162
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 5.194511648387227e-08,
+          "command_roundtrip_translation_max_abs_error": 1.4901161193847656e-08,
+          "command_roundtrip_rotation_max_abs_error": 2.9802322387695312e-08,
+          "target_vs_achieved_next_position_max_m": 0.022706074881630917,
+          "target_vs_achieved_next_rotation_max_rad": 0.05015210019050413,
+          "action_rot_norm_max": 0.8177202343940735,
+          "camera_shapes": {
+            "front_camera": [
+              70,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              70,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_999",
+          "steps": 119,
+          "world_tcp_first": [
+            0.008229866623878479,
+            0.0015876265242695808,
+            0.18425029516220093,
+            0.017592262476682663,
+            0.6928296089172363,
+            0.7208868265151978,
+            8.750241249799728e-05
+          ],
+          "base_tcp_first": [
+            0.6232298612594604,
+            0.001587626407854259,
+            0.18425032496452332
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.586026200368232e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 2.980232405302985e-08,
+          "target_vs_achieved_next_position_max_m": 0.02068336404833248,
+          "target_vs_achieved_next_rotation_max_rad": 0.06112256282960654,
+          "action_rot_norm_max": 1.0000001192092896,
+          "camera_shapes": {
+            "front_camera": [
+              120,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              120,
+              256,
+              256,
+              3
+            ]
+          }
+        }
+      ],
+      "source_h5_trajectory_count": 1000
+    },
+    {
+      "task": "pick_sphere",
+      "manifest_records": 1000,
+      "source_h5": [
+        "/remote-home/jinminghao/datasets/maniskill_eort_task_suite_v5_20260730/pick_sphere/train/color_distractors/aggregate/pick_sphere_train_color_distractors_aggregated_n1000.state_dict+rgb+depth+segmentation.pd_ee_delta_pose.physx_cpu.h5"
+      ],
+      "episodes": [
+        {
+          "trajectory": "traj_0",
+          "steps": 76,
+          "world_tcp_first": [
+            0.012253543362021446,
+            0.0380113385617733,
+            0.18215224146842957,
+            -0.00686229020357132,
+            0.7039350867271423,
+            0.709999144077301,
+            0.018153749406337738
+          ],
+          "base_tcp_first": [
+            0.627253532409668,
+            0.0380113385617733,
+            0.18215227127075195
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.719372688088813e-09,
+          "command_roundtrip_translation_max_abs_error": 1.4901161193847656e-08,
+          "command_roundtrip_rotation_max_abs_error": 3.725291991552027e-09,
+          "target_vs_achieved_next_position_max_m": 0.024860199297530357,
+          "target_vs_achieved_next_rotation_max_rad": 0.013507809556891005,
+          "action_rot_norm_max": 0.22290568053722382,
+          "camera_shapes": {
+            "front_camera": [
+              77,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              77,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_500",
+          "steps": 74,
+          "world_tcp_first": [
+            -0.01378319226205349,
+            0.01715797558426857,
+            0.1537238210439682,
+            -0.0218818299472332,
+            0.6904382705688477,
+            0.7227230072021484,
+            -0.02208428643643856
+          ],
+          "base_tcp_first": [
+            0.6012167930603027,
+            0.01715797558426857,
+            0.1537238508462906
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 6.144009530444498e-08,
+          "command_roundtrip_translation_max_abs_error": 1.1175870895385742e-08,
+          "command_roundtrip_rotation_max_abs_error": 2.980232371996294e-08,
+          "target_vs_achieved_next_position_max_m": 0.020375974062338736,
+          "target_vs_achieved_next_rotation_max_rad": 0.04336791826492785,
+          "action_rot_norm_max": 0.7114549279212952,
+          "camera_shapes": {
+            "front_camera": [
+              75,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              75,
+              256,
+              256,
+              3
+            ]
+          }
+        },
+        {
+          "trajectory": "traj_999",
+          "steps": 78,
+          "world_tcp_first": [
+            -0.013206476345658302,
+            -0.0034806812182068825,
+            0.15298792719841003,
+            -0.01842062547802925,
+            0.7021076679229736,
+            0.7116420865058899,
+            -0.016462665051221848
+          ],
+          "base_tcp_first": [
+            0.6017935276031494,
+            -0.003480681451037526,
+            0.15298795700073242
+          ],
+          "derived_position_max_abs_error_m": 0.0,
+          "derived_rotation_max_error_rad": 5.728632643706211e-08,
+          "command_roundtrip_translation_max_abs_error": 7.450580596923828e-09,
+          "command_roundtrip_rotation_max_abs_error": 2.2351738682147015e-08,
+          "target_vs_achieved_next_position_max_m": 0.014300319172394953,
+          "target_vs_achieved_next_rotation_max_rad": 0.03148906639799049,
+          "action_rot_norm_max": 0.5175004601478577,
+          "camera_shapes": {
+            "front_camera": [
+              79,
+              256,
+              256,
+              3
+            ],
+            "hand_camera": [
+              79,
+              256,
+              256,
+              3
+            ]
+          }
+        }
+      ],
+      "source_h5_trajectory_count": 1000
+    }
+  ],
+  "controller_source_sha256": {
+    "/remote-home/jinminghao/WAMs/ManiSkill/mani_skill/agents/controllers/pd_ee_pose.py": "96ce3b4ea7a1504563c394f6a5f0cb2f2b33fc991858c3b502d8d81bca29c2d1",
+    "/remote-home/jinminghao/WAMs/ManiSkill/mani_skill/agents/robots/panda/panda.py": "bf85577be75b7513802e676decb5543e3e65f2a3dfbc26175dd8b77ae57691f3"
+  }
+}

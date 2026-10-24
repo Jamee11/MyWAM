@@ -1,0 +1,6 @@
+defaults:
+  - ea_rsig_lite
+  - _self_
+
+# Reuse the audited EEF reader, with independently prepared Aloha-only artifacts.
+manifest_path: ${oc.env:EA_SIDECAR_MANIFEST,outputs/sidecar/aloha_4350/manifest.ready.json}

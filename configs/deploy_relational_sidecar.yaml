@@ -1,0 +1,24 @@
+# Deployment reads this directly using OmegaConf.load.
+checkpoint_path: null
+device: cuda:0
+server:
+  host: "0.0.0.0"
+  port: 8849
+inference:
+  denoise_steps: 10
+  denoise_mode: sync
+  inference_mode: sync
+  lead_modality: video
+  num_frames: 33
+  video_num_frames: 9
+  inference_horizon: 32
+  cfg_scale: 1.0
+optimization:
+  decode_video: false
+  compile:
+    enabled: false
+  dit_cache:
+    enabled: false
+  prompt_embed_cache:
+    enabled: true
+    maxsize: 32

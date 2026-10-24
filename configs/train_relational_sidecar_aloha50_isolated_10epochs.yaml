@@ -1,0 +1,14 @@
+defaults:
+  - train_relational_sidecar_aloha50_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      stage: joint
+      action_conditioning: true
+      isolation_warmup_updates: 2000  # Optimizer updates; 4000 microsteps at accumulation=2.
+      aux_loss_scale: 0.5  # Includes intermediate deep supervision.
+training:
+  sidecar_lr: 5e-5  # Backbone/action retain 1e-4; existing cosine has a shared absolute floor.
+  output_path: outputs/sidecar/aloha50_isolated2k_10epochs

@@ -4,9 +4,9 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
 import struct
 import subprocess
+from pathlib import Path
 
 
 def check_gpus(num_gpus=4, gpu_profile=80, gpu_name="A100"):

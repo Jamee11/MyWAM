@@ -1,0 +1,123 @@
+{
+  "name": "sidecar42960_remaining24_4090_20261022",
+  "scope": "12 previously unstarted tasks, Clean+Randomized=24 conditions, 100 episodes each",
+  "checkpoint_sha256": "501addbed687e6d7587af60ab4480b9c79eaa2c8867d723b74d54e0acc9deb55",
+  "previous_final_record": "outputs/robotwin_eval/sidecar42960_gpu56_20261020T022957Z/user_stop_20261022T160226Z/final_record.json",
+  "previous_final_record_sha256": "7e4af67b36cdd2d98182cf322af9d0eb693cbb8613d01082f0bdd92774804f1a",
+  "previous_completed_conditions": 20,
+  "previous_remaining_conditions": 80,
+  "tasks": [
+    "handover_mic",
+    "lift_pot",
+    "move_pillbottle_pad",
+    "move_playingcard_away",
+    "move_stapler_pad",
+    "open_laptop",
+    "open_microwave",
+    "place_bread_skillet",
+    "place_burger_fries",
+    "place_cans_plasticbox",
+    "stamp_seal",
+    "turn_switch"
+  ],
+  "conditions": [
+    {
+      "task": "open_microwave",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "place_cans_plasticbox",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "open_laptop",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "handover_mic",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "place_bread_skillet",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "place_burger_fries",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "lift_pot",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "move_pillbottle_pad",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "move_playingcard_away",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "move_stapler_pad",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "stamp_seal",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "turn_switch",
+      "mode": "demo_randomized"
+    },
+    {
+      "task": "open_microwave",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "place_cans_plasticbox",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "open_laptop",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "handover_mic",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "place_bread_skillet",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "place_burger_fries",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "lift_pot",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "move_pillbottle_pad",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "move_playingcard_away",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "move_stapler_pad",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "stamp_seal",
+      "mode": "demo_clean"
+    },
+    {
+      "task": "turn_switch",
+      "mode": "demo_clean"
+    }
+  ],
+  "order": "Randomized first; descending official episode step budget within each domain; dynamic six-slot queue",
+  "video": false
+}

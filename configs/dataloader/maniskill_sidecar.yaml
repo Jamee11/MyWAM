@@ -1,0 +1,6 @@
+defaults:
+  - maniskill_absolute
+  - _self_
+
+type: maniskill_sidecar
+manifest_path: ${oc.env:MANISKILL_SIDECAR_MANIFEST,outputs/maniskill_sidecar/data_absolute_eef_20261019/manifest.ready.json}

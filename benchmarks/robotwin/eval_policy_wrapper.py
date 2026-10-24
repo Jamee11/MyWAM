@@ -10,6 +10,7 @@ import importlib.util
 import inspect
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -127,14 +128,53 @@ def _load_robotwin_eval_module(robotwin_path: str):
 
 
 def _prepare_runtime_root(robotwin_path: str) -> str:
+    policy_path = os.environ.get("POLICY_CONFIG_PATH")
+    policy = yaml.safe_load(Path(policy_path).read_text()) if policy_path else {}
+    video_override = (policy or {}).get("eval_video_log")
+    if video_override is not None and type(video_override) is not bool:
+        raise ValueError("policy eval_video_log must be a YAML boolean")
     runtime_root = os.environ.get("ROBOTWIN_RUNTIME_ROOT", "")
     if runtime_root:
         runtime_root = os.path.abspath(runtime_root)
         os.makedirs(runtime_root, exist_ok=True)
-    elif os.access(robotwin_path, os.W_OK):
+    elif video_override is None and os.access(robotwin_path, os.W_OK):
         return robotwin_path
     else:
         runtime_root = tempfile.mkdtemp(prefix="robotwin_runtime.", dir=os.environ.get("TMPDIR", "/tmp"))
+
+    if video_override is not None:
+        if Path(runtime_root).resolve() == Path(robotwin_path).resolve():
+            raise ValueError("Video override requires a private runtime")
+        source = Path(robotwin_path) / "task_config"
+        target = Path(runtime_root) / "task_config"
+        if target.is_symlink():
+            raise ValueError("Video override requires a fresh private task_config directory")
+        target.mkdir(exist_ok=True)
+        evidence = {}
+        for item in source.iterdir():
+            destination = target / item.name
+            if item.name in ("demo_clean.yml", "demo_randomized.yml"):
+                original = item.read_text()
+                modified, count = re.subn(
+                    r"(?m)^(eval_video_log:\s*)(true|false)([ \t]*(?:#.*)?)$",
+                    lambda match: match[1] + str(video_override).lower() + match[3],
+                    original,
+                )
+                if count != 1:
+                    raise ValueError(f"Expected one eval_video_log setting in {item}")
+                if destination.is_symlink():
+                    raise ValueError(f"Refusing to modify linked task config: {destination}")
+                destination.write_text(modified)
+                evidence[item.name] = {
+                    "source_sha256": hashlib.sha256(original.encode()).hexdigest(),
+                    "runtime_sha256": hashlib.sha256(modified.encode()).hexdigest(),
+                }
+            elif not os.path.lexists(destination):
+                destination.symlink_to(item.resolve())
+        (Path(runtime_root) / "video_logging_override.json").write_text(
+            json.dumps({"eval_video_log": video_override, "configs": evidence}, indent=2) + "\n"
+        )
+        print(f"[eval_policy_wrapper] private eval_video_log={video_override}", flush=True)
 
     for name in os.listdir(robotwin_path):
         if name == "eval_result":

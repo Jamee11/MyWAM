@@ -79,11 +79,12 @@ def validate_result(log: str, runtime: Path, expected: int, returncode: int) -> 
             "native_result": str(result_path) if result_path else None, "returncode": returncode}
 
 
-def inspect_server(pid: int, checkpoint: Path, port: int) -> dict:
+def inspect_server(pid: int, checkpoint: Path, port: int, deploy_config: Path | None = None) -> dict:
     """Verify a reused local listener belongs to the declared checkpoint process."""
     proc = Path(f"/proc/{pid}")
     command = [v.decode() for v in (proc / "cmdline").read_bytes().split(b"\0") if v]
     cwd = (proc / "cwd").resolve()
+    deploy_config = deploy_config or ROOT / "configs/deploy.yaml"
     if "--ckpt-dir" not in command or "--port" not in command:
         raise ValueError("Reused server must explicitly declare --ckpt-dir and --port")
     declared = (cwd / command[command.index("--ckpt-dir") + 1]).resolve()
@@ -93,14 +94,20 @@ def inspect_server(pid: int, checkpoint: Path, port: int) -> dict:
         pool_file = (cwd / command[command.index("--manifest") + 1]).resolve()
         pool = json.loads(pool_file.read_text())
         if (pool["pid"] != pid or pool["checkpoint_dir"] != str(checkpoint.resolve())
-                or pool["deploy_config_sha256"] != sha256(ROOT / "configs/deploy.yaml")
+                or pool["deploy_config_sha256"] != sha256(deploy_config)
                 or port not in pool["ports"]):
             raise ValueError("Shared server manifest/checkpoint/deploy configuration mismatch")
     if declared != checkpoint.resolve() or (pool is None and base_port != port):
         raise ValueError("Reused server checkpoint/port mismatch")
     if "--ckpt-name" in command:
         raise ValueError("For reused servers, use the default latest checkpoint selection")
-    allowed = {"--ckpt-dir", "--host", "--port", "--device", "--readiness-token"}
+    allowed = {"--ckpt-dir", "--host", "--port", "--device", "--readiness-token", "--config"}
+    if "--config" in command:
+        actual_config = cwd / command[command.index("--config") + 1]
+        if sha256(actual_config) != sha256(deploy_config):
+            raise ValueError("Reused server deploy configuration mismatch")
+    elif pool is None and sha256(deploy_config) != sha256(ROOT / "configs/deploy.yaml"):
+        raise ValueError("Non-default configuration requires an explicit server --config")
     if pool is not None:
         allowed |= {"--slots", "--manifest"}
     if any(item.startswith("--") and item not in allowed for item in command):
@@ -157,6 +164,8 @@ def main():
     p.add_argument("--cuda-arch", default=os.environ.get("TORCH_CUDA_ARCH_LIST"),
                    help="CUDA extension target, e.g. 8.9 for L20; default is PyTorch auto-detection")
     p.add_argument("--ffmpeg", type=Path, help="working ffmpeg binary; system binary preferred by default")
+    p.add_argument("--deploy-config", type=Path, default=ROOT / "configs/deploy.yaml")
+    p.add_argument("--policy-config", type=Path, default=HERE / "policy_config.yml")
     p.add_argument("--server-gpu", required=True)
     p.add_argument("--sim-gpu", required=True)
     p.add_argument("--port", type=int, default=18848)
@@ -172,10 +181,13 @@ def main():
     args.modes = list(dict.fromkeys(args.modes))
     if not tasks or set(tasks) - set(task_names()):
         p.error("unknown task names")
-    for key in ("checkpoint", "output", "robotwin_path", "sim_python"):
+    for key in ("checkpoint", "output", "robotwin_path", "sim_python", "deploy_config", "policy_config"):
         # Do not resolve the interpreter symlink: conda/venv prefix comes from its entry path.
         setattr(args, key, getattr(args, key).absolute())
-    if not (args.robotwin_path / "OPENWAM_COPY_MANIFEST.json").is_file():
+    runtime_manifest = args.robotwin_path / "OPENWAM_COPY_MANIFEST.json"
+    if not runtime_manifest.is_file():
+        runtime_manifest = args.robotwin_path / "OPENWAM_OFFICIAL_MANIFEST.json"
+    if not runtime_manifest.is_file():
         p.error("use scripts/copy_robotwin_runtime.py to create an independent local checkout first")
     if args.robotwin_path.is_symlink() or not args.sim_python.is_file():
         p.error("invalid independent checkout or simulator interpreter")
@@ -198,8 +210,8 @@ def main():
               "checkpoint_sha256": sha256(weight), "results": []}
     for label, source in {"training_config": args.checkpoint / "config.yaml",
                           "normalization_stats": args.checkpoint / "normalization_stats.npy",
-                          "deploy_config": ROOT / "configs/deploy.yaml",
-                          "policy_config": HERE / "policy_config.yml",
+                          "deploy_config": args.deploy_config,
+                          "policy_config": args.policy_config,
                           "step_limits": HERE / "step_limits.yml",
                           "wrapper": HERE / "eval_policy_wrapper.py",
                           "adapter": HERE / "openwam2robotwin_interface.py",
@@ -209,7 +221,7 @@ def main():
             record[label]["contents"] = yaml.safe_load(source.read_text())
     record["robotwin_commit"] = subprocess.check_output(["git", "-C", str(args.robotwin_path), "rev-parse", "HEAD"], text=True).strip()
     manifest_snapshot = args.output / "robotwin_copy_manifest.json"
-    manifest_snapshot.write_bytes((args.robotwin_path / "OPENWAM_COPY_MANIFEST.json").read_bytes())
+    manifest_snapshot.write_bytes(runtime_manifest.read_bytes())
     record["robotwin_copy_manifest_sha256"] = sha256(manifest_snapshot)
     extension_manifest = args.robotwin_path / "OPENWAM_EXTENSION_INSTALL.json"
     if extension_manifest.is_file():
@@ -253,9 +265,9 @@ def main():
     server_log = None
     token = uuid.uuid4().hex
     policy_snapshot = args.output / "policy_config.yml"
-    policy_snapshot.write_bytes((HERE / "policy_config.yml").read_bytes())
+    policy_snapshot.write_bytes(args.policy_config.read_bytes())
     deploy_snapshot = args.output / "deploy.yaml"
-    deploy_snapshot.write_bytes((ROOT / "configs/deploy.yaml").read_bytes())
+    deploy_snapshot.write_bytes(args.deploy_config.read_bytes())
     try:
         ffmpeg, ffmpeg_version = select_ffmpeg(args.ffmpeg)
         private_bin = args.output / "bin"
@@ -263,7 +275,7 @@ def main():
         (private_bin / "ffmpeg").symlink_to(ffmpeg)
         record["ffmpeg"] = {"binary": str(ffmpeg), "version": ffmpeg_version}
         if args.reuse_server_pid:
-            record["server"] = inspect_server(args.reuse_server_pid, args.checkpoint, args.port)
+            record["server"] = inspect_server(args.reuse_server_pid, args.checkpoint, args.port, args.deploy_config)
             if record["server"]["cuda_visible_devices"] != args.server_gpu:
                 raise ValueError("Reused server GPU does not match --server-gpu")
         else:
@@ -299,7 +311,7 @@ def main():
         sim_env = dict(env, ROBOTWIN_PATH=str(args.robotwin_path), ROBOTWIN_PYTHON=str(args.sim_python),
                        ROBOTWIN_TEST_NUM=str(args.episodes), SAPIEN_DISABLE_RAY_TRACING="0",
                        ROBOTWIN_ENABLE_PLANNER_FALLBACK="0", MAX_JOBS=env.get("MAX_JOBS", "4"),
-                       TORCH_EXTENSIONS_DIR=str(ROOT / ".cache/robotwin/torch_extensions"),
+                       TORCH_EXTENSIONS_DIR=str(ROOT / ".cache/robotwin" / ("torch_extensions" if args.robotwin_path == ROOT / ".external/RoboTwin" else "torch_extensions_official")),
                        POLICY_CONFIG_PATH=str(policy_snapshot),
                        PYTHONPATH=str(args.robotwin_path / "envs/curobo/src"))
         sim_env["PATH"] = str(args.sim_python.parent) + os.pathsep + env["PATH"]

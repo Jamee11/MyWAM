@@ -1,14 +1,15 @@
 """Architecture package exports and side-effect registration."""
 
 from openwam.model.architectures import dual_system, single_system, tri_system  # noqa: F401
-from openwam.model.architectures.dual_system.ea_rsig_v3 import EARSIGV3Architecture
-from openwam.model.architectures.dual_system.ea_rsig_lite import EARSIGLiteArchitecture
 from openwam.model.architectures.base import ActionState, BaseWAMArchitecture
 from openwam.model.architectures.dual_system import (
     DualSystemCrossAttnArchitecture,
     DualSystemIDMArchitecture,
     DualSystemSelfAttnArchitecture,
 )
+from openwam.model.architectures.dual_system.ea_rsig_lite import EARSIGLiteArchitecture
+from openwam.model.architectures.dual_system.ea_rsig_v3 import EARSIGV3Architecture
+from openwam.model.architectures.dual_system.relational_sidecar import RelationalSidecarArchitecture
 from openwam.model.architectures.registry import (
     ARCHITECTURE_METADATA,
     ARCHITECTURE_REGISTRY,
@@ -45,6 +46,7 @@ __all__ = [
     "DualSystemSelfAttnArchitecture",
     "EARSIGV3Architecture",
     "EARSIGLiteArchitecture",
+    "RelationalSidecarArchitecture",
     "SingleSystemMoEArchitecture",
     "SingleSystemVanillaArchitecture",
     "TriSystemJointSelfAttnArchitecture",

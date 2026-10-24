@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-import math
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 
 EA_RSIG_V3_MAX_ARMS = 2
 EA_RSIG_V3_MAX_TRACKS = 2

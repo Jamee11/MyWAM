@@ -1,0 +1,14 @@
+{
+  "scope": "150 episodes: first/middle/last per task; up to20 evenly spaced frames each; deterministic, not exact training-batch weighted",
+  "frames": 3000,
+  "valid_roles": 6407,
+  "grid": [
+    12,
+    10
+  ],
+  "target_entropy_mean": 3.381713722275328,
+  "target_entropy_std": 0.41062362851842155,
+  "target_entropy_p05": 2.712791085999773,
+  "target_entropy_p95": 4.138153660824752,
+  "interpretation": "Soft-target CE lower bound for this sample; no model outputs evaluated; subtracting from separately logged batch means is not an exact KL estimate."
+}

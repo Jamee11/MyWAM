@@ -1,0 +1,62 @@
+{
+  "scope": "CPU import-only; no model allocation or GPU training",
+  "torch_warm_pool": "0 in both runs",
+  "source_environment": "unchanged",
+  "ram_runtime": "/dev/shm/openwam-sidecar-runtime-20261016.3vRKd9",
+  "measurements": {
+    "gpfs": [
+      {
+        "module": "torch",
+        "seconds": 212.4881251603365,
+        "total": 212.48812770470977
+      },
+      {
+        "module": "openwam.dataloader.registry",
+        "seconds": 749.0181336924434,
+        "total": 961.5222714878619
+      },
+      {
+        "module": "accelerate",
+        "seconds": 2.5287270545959473e-05,
+        "total": 961.5223468542099
+      },
+      {
+        "module": "deepspeed",
+        "seconds": 316.82506996393204,
+        "total": 1278.3474355861545
+      },
+      {
+        "module": "openwam.model.architectures",
+        "seconds": 3.565102815628052e-05,
+        "total": 1278.34755994007
+      }
+    ],
+    "ram_venv": [
+      {
+        "module": "torch",
+        "seconds": 36.149386923760176,
+        "total": 36.149418126791716
+      },
+      {
+        "module": "openwam.dataloader.registry",
+        "seconds": 37.51444508135319,
+        "total": 73.66398502513766
+      },
+      {
+        "module": "accelerate",
+        "seconds": 5.048885941505432e-05,
+        "total": 73.66416839882731
+      },
+      {
+        "module": "deepspeed",
+        "seconds": 13.485108572989702,
+        "total": 87.14930705353618
+      },
+      {
+        "module": "openwam.model.architectures",
+        "seconds": 1.556798815727234e-05,
+        "total": 87.14935806766152
+      }
+    ]
+  }
+}

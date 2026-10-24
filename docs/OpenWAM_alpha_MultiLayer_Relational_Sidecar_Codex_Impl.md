@@ -143,3 +143,19 @@ A_next = A_k + beta_k * OutputProjection(R_k)
 5. 输出具体更改文件清单、未解决事项与 GPU 显存/吞吐实测；严禁声称本架构已经验证提升 C2R SR。
 
 **一句话核心机制：** 以 OpenWAM 受因果保护的当前第一帧多层表示为知识源；15 个 EA tokens 在三处 sidecar stage 累积、精炼和接受仿真特权监督；每次经新建 gated cross-attention 将关系条件写回现有 Action hidden states；随后由**原始** MoT joint-attention 传播到后续动作和预测世界，训练与部署均不读取 GT 未来状态。
+
+
+## 9. 2026-10-16 实施中的合同细化
+
+本节补充实现决策，前述机制和验收目标保留。具体执行证据持续记入 `docs/RELATIONAL_SIDECAR_IMPLEMENTATION_20261016.md`。
+
+1. 独立模型配置 `dual_system_relational_sidecar`、架构 variant `joint_self_attn_relational_sidecar`；原 `dual_system_ea_rsig_lite` 及 block0 实现保留。关闭新模块用 `model.architecture.relational_sidecar.enabled=false`；普通 baseline 直接选择 `model=dual_system`。旧 Lite checkpoint 与新 Sidecar checkpoint 不可互相宽松加载；二者分别从同一 Foundation 初始化，防止静默丢失 EA 权重。
+2. Z 的机器人输入是 **已按自有 EEF stats 归一化的当前80D proprio，以及同维 mask**，拼为160D后编码。没有额外 oracle EEF/TCP 输入，也不把80D归一化坐标当物理米制坐标计算几何 loss。监督沿用每角色当前 local frame 的物理方向；输入学习映射而非伪装为已解析的物理 TCP。mask 从当前观测/部署 unified normalizer 映射取得，不能从GT track_valid取得。
+3. 空间监督原始130D字段仍保存每相机归一化 xyxy，以复用 reader 和标签合同；loss 显式把 head 映射到画布上2/3、左右腕映射到底部1/3的左右半幅。直接在真实 runtime H×W 上计算分布，不将三个视角各重采样到14×14。高斯仅在所属视角区域有质量；不可见或goal_valid=0的目标不强造可见框。
+4. 最终 stage 接 Ground/Relation/Plan 三项；stage1 Ground、stage2 Relation 额外乘 deep_supervision=0.1。15个 token 在全部stage更新。深层 alpha=0 的意义是停止新增视觉读取，Refine 仍可变换旧 Z，不能错误要求与浅层 Z 逐元素相同；应测试浅层干预仍能影响最后 Z。
+5. 新模型 `forward_with_aux()` 显式返回三层输出，普通 `forward()` 保持2-tuple。基础 FM 只新增可选 `forward_fn` 参数，默认调用原 self(...)；新模型用一次 compute_loss 调用内的局部闭包取得辅助输出，不写 self.last_aux / extras / context，也不依赖 forward hook 传递关系状态。梯度诊断 hook 仅记录梯度范数，不参与前向数据流。
+6. beta=0、输出投影保持普通随机初始化，避免双零初始化使 beta 无梯度。warmup 冻结原主干；action_only 仅训练 Action+Sidecar，Video 参数冻结但不把整个 MoT 包进 no_grad；joint 为显式全量 DiT 适配。三模式均不自动启动长训练。全量 joint 不保证在现有硬件容纳。
+7. 数据限定新4350集合内 raw/aloha 的50任务/2500轨迹，**不是将处理后14D qpos作为动作**。离线从本批原始 oracle 重新构造8/16/32步和新RGB匹配标签、拟合 EEF stats 并缓存启动元数据；不复用旧腕部 near=.1 的 bbox 或旧10/20/40计划。训练启动读取 ready manifest，保留一次快速预检和首次读取源文件的size/mtime绑定。
+8. RGB reader 暂时复用已验证的 RoboTwin legacy JPEG 约定（cv2 decode 后不额外交换通道）；准备程序检查每episode三相机首尾 JPEG 标记，出现 XPL-RGB1 就拒绝，要求先明确对应 codec。该检查不是逐帧 RGB 视觉验收，4350原数据的最终验收记录须与本次OpenWAM EEF重建验收分开。
+9. action-plan alignment loss 不实现、不开启；缺少物理 clean-action 重建时不能拿 FM velocity 当运动方向。Interaction Summary 没有百分比 progress 标签，不引入虚假监督。
+10. 本机旧评测作业保留；本轮以 CPU tiny真实主干、源数据合同和启动命令验证为主。4×A100/ZeRO2的20次更新、容量/速度、全量 Foundation BF16 数值及闭环 SR 是独立硬件/实验门槛，未执行时必须写“未验证”。

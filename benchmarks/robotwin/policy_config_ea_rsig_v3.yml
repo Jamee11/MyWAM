@@ -12,6 +12,6 @@ request_timeout: 300
 action_type: qpos
 debug: false
 ea_fk:
-  urdf: /remote-home/jinminghao/OpenWAM/assets/ea_robotwin/aloha.urdf
-  config: /remote-home/jinminghao/OpenWAM/assets/ea_robotwin/aloha_config.yml
-  conversion_summary: /remote-home/jinminghao/OpenWAM/assets/ea_robotwin/training_contract.json
+  urdf: assets/ea_robotwin/aloha.urdf
+  config: assets/ea_robotwin/aloha_config.yml
+  conversion_summary: assets/ea_robotwin/training_contract.json

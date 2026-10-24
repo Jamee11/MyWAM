@@ -1,10 +1,11 @@
 """Portable paths and launcher routing; no torch imports, network or GPU execution."""
+
 import hashlib
 import json
 import os
-from pathlib import Path
 import shutil
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -22,12 +23,26 @@ def copied_data(tmp_path):
     labels = data / "labels/task/episode0.npz"
     labels.write_bytes(b"copied labels")
     (data / "normalization_stats.npy").write_bytes(b"copied stats")
-    source = dict(contract="openwam_alpha_eef32_ea_lite_v1", source_root="/old/raw",
-                  normalization_stats_path="/old/data/normalization_stats.npy",
-                  tasks=[dict(name="task", data_root="/old/raw/task/data", episodes=[dict(
-                      path="/old/raw/task/data/episode0.hdf5", size=episode.stat().st_size,
-                      mtime_ns=episode.stat().st_mtime_ns, labels="/old/data/labels/task/episode0.npz",
-                      labels_sha256=hashlib.sha256(labels.read_bytes()).hexdigest())])])
+    source = dict(
+        contract="openwam_alpha_eef32_ea_lite_v1",
+        source_root="/old/raw",
+        normalization_stats_path="/old/data/normalization_stats.npy",
+        tasks=[
+            dict(
+                name="task",
+                data_root="/old/raw/task/data",
+                episodes=[
+                    dict(
+                        path="/old/raw/task/data/episode0.hdf5",
+                        size=episode.stat().st_size,
+                        mtime_ns=episode.stat().st_mtime_ns,
+                        labels="/old/data/labels/task/episode0.npz",
+                        labels_sha256=hashlib.sha256(labels.read_bytes()).hexdigest(),
+                    )
+                ],
+            )
+        ],
+    )
     manifest = data / "manifest.json"
     manifest.write_text(json.dumps(source))
     return manifest, raw, data, source
@@ -67,17 +82,27 @@ def test_relocate_rejects_changed_source_and_missing_labels(tmp_path):
 @pytest.mark.parametrize("mode,count,profile", [("1", "4", "80"), ("0", "8", "80"), ("0", "2", "40")])
 def test_launchers_route_without_loading_model_or_allocating_gpu(tmp_path, mode, count, profile):
     scripts, binaries = tmp_path / "scripts", tmp_path / ".venv/bin"
-    scripts.mkdir(); binaries.mkdir(parents=True)
+    scripts.mkdir()
+    binaries.mkdir(parents=True)
     for name in ("train_ea_lite_4gpu.sh", "train_ea_lite_multigpu.sh"):
         shutil.copy2(ROOT / "scripts" / name, scripts / name)
     for program in ("python", "torchrun"):
         stub = binaries / program
-        stub.write_text(f'#!/bin/sh\nprintf "%s\\n" "{program}: $*" "CUDA=$CUDA_VISIBLE_DEVICES NPROC=$NPROC_PER_NODE"\n')
+        stub.write_text(
+            f'#!/bin/sh\nprintf "%s\\n" "{program}: $*" "CUDA=$CUDA_VISIBLE_DEVICES NPROC=$NPROC_PER_NODE"\n'
+        )
         stub.chmod(0o755)
-    env = dict(os.environ, CHECK_ONLY=mode, EA_NUM_GPUS=count, EA_GPU_PROFILE=profile,
-               EA_GPU_NAME="H200", CUDA_VISIBLE_DEVICES=",".join(map(str, range(int(count)))))
-    result = subprocess.run(["bash", str(scripts / "train_ea_lite_multigpu.sh")], env=env,
-                            text=True, capture_output=True, check=True)
+    env = dict(
+        os.environ,
+        CHECK_ONLY=mode,
+        EA_NUM_GPUS=count,
+        EA_GPU_PROFILE=profile,
+        EA_GPU_NAME="H200",
+        CUDA_VISIBLE_DEVICES=",".join(map(str, range(int(count)))),
+    )
+    result = subprocess.run(
+        ["bash", str(scripts / "train_ea_lite_multigpu.sh")], env=env, text=True, capture_output=True, check=True
+    )
     if mode == "1":
         assert "--cfg job --resolve" in result.stdout and "torchrun:" not in result.stdout
         assert "CUDA= NPROC=" in result.stdout
@@ -91,14 +116,22 @@ def test_launchers_route_without_loading_model_or_allocating_gpu(tmp_path, mode,
 
 def test_install_script_removes_old_editable_path_using_explicit_tools(tmp_path):
     scripts, binaries = tmp_path / "scripts", tmp_path / ".venv/bin"
-    scripts.mkdir(); binaries.mkdir(parents=True)
+    scripts.mkdir()
+    binaries.mkdir(parents=True)
     shutil.copy2(ROOT / "scripts/install_ea_environment.sh", scripts)
     (tmp_path / "requirements-ea-lock.txt").write_text("torch==2.7.1+cu128\n-e file:///old/OpenWAM\npytest==9.0.3\n")
     python = binaries / "python"
-    python.write_text('#!/bin/sh\nprintf "%s\\n" "python: $*"\n'); python.chmod(0o755)
+    python.write_text('#!/bin/sh\nprintf "%s\\n" "python: $*"\n')
+    python.chmod(0o755)
     uv = tmp_path / "uv"
-    uv.write_text('#!/bin/sh\nprintf "%s\\n" "uv: $*"\n'); uv.chmod(0o755)
-    result = subprocess.run(["bash", str(scripts / "install_ea_environment.sh")],
-                            env=dict(os.environ, UV_BIN=str(uv)), text=True, capture_output=True, check=True)
+    uv.write_text('#!/bin/sh\nprintf "%s\\n" "uv: $*"\n')
+    uv.chmod(0o755)
+    result = subprocess.run(
+        ["bash", str(scripts / "install_ea_environment.sh")],
+        env=dict(os.environ, UV_BIN=str(uv)),
+        text=True,
+        capture_output=True,
+        check=True,
+    )
     assert "-e ." in result.stdout and "-r outputs/setup/requirements-ea-relocatable.txt" in result.stdout
     assert "-e file:" not in (tmp_path / "outputs/setup/requirements-ea-relocatable.txt").read_text()

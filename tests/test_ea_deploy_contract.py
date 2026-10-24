@@ -2,9 +2,9 @@
 from types import SimpleNamespace
 
 import numpy as np
-from PIL import Image
 import pytest
 import torch
+from PIL import Image
 
 from openwam.deploy import engine as engine_module
 from openwam.deploy.obs_preprocess import ObsPreprocessor

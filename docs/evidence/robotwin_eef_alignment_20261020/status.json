@@ -1,0 +1,5 @@
+{
+  "status": "stopped_before_numeric_results",
+  "reason": "User clarified the question concerns desired command EEF versus achieved EEF. Source audit establishes those semantics. Optional full numeric audit was interrupted during slow shared-filesystem imports; no numeric or physics-tracking result is claimed.",
+  "gpu_used": false
+}

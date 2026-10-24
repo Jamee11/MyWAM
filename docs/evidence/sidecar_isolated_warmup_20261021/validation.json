@@ -1,0 +1,30 @@
+{
+  "utc": "2026-10-21T04:10:59.012382+00:00",
+  "status": "cpu_checks_passed_gpu_not_run",
+  "test_runs": [
+    {
+      "files": [
+        "tests/test_relational_sidecar.py",
+        "tests/test_optimizer_groups.py",
+        "tests/test_sidecar_gpu_handover.py"
+      ],
+      "passed": 41
+    },
+    {
+      "files": [
+        "tests/test_sidecar_isolation_trainer.py",
+        "tests/test_optimizer_groups.py",
+        "tests/test_openwam_trainer.py",
+        "tests/test_training_utils.py"
+      ],
+      "passed": 33
+    }
+  ],
+  "note": "Test runs overlap; do not sum their counts. First run preceded the scheduler regression test added for the second run.",
+  "launcher_check_only_exit_code": 0,
+  "shell_syntax": "passed",
+  "git_diff_check": "passed",
+  "gpu_training_started": false,
+  "gpu_zero2_transition_verified": false,
+  "success_rate_measured": false
+}

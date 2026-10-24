@@ -1,0 +1,11 @@
+defaults:
+  - train_relational_sidecar_aloha50_isolated_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      isolation_warmup_updates: 0
+      backbone_warmup_updates: 2000  # Full forward/backward; skip only WAM optimizer updates.
+training:
+  output_path: outputs/sidecar/aloha50_frozen_backbone2k_10epochs

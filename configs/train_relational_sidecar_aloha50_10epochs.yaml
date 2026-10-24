@@ -1,0 +1,18 @@
+defaults:
+  - train_relational_sidecar_4gpu
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      stage: joint
+dataloader:
+  color_jitter:
+    enabled: true
+training:
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  num_epochs: 10
+  max_steps: null
+  save_steps: 4000  # 2000 optimizer updates, matching the previous save cadence.
+  output_path: outputs/sidecar/aloha50_C_joint_bs32acc2_10epochs

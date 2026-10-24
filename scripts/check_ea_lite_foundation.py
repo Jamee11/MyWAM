@@ -3,8 +3,8 @@
 import argparse
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -15,6 +15,7 @@ def check(foundation, report):
         raise ValueError("Run this readiness gate with CUDA_VISIBLE_DEVICES='' (CPU only)")
     import torch
     from hydra import compose, initialize_config_dir
+
     from openwam.train.utils.ckpt_model_loader import build_architecture_from_ckpt_dir
     torch.set_num_threads(4)
     with initialize_config_dir(version_base=None, config_dir=str(ROOT / "configs")):
