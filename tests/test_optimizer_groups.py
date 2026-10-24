@@ -5,8 +5,8 @@ top-level ``video_backbone`` + ``action_backbone`` children) so mock drift
 can't mask the optimizer-misses-video-DiT bug we hit before.
 """
 
-import torch
 import pytest
+import torch
 
 
 class _FakeActionBackbone(torch.nn.Module):
@@ -87,14 +87,15 @@ def test_invalid_sidecar_lr(lr):
 
 def test_sidecar_cosine_lr_never_exceeds_backbone_lr():
     from types import SimpleNamespace
+
     from openwam.train.utils.optimizer_groups import build_trainable_parameters
     from openwam.train.utils.training_utils import build_cosine_scheduler
 
     trainer = _FakeTrainer()
     trainer.architecture.sidecar = torch.nn.Linear(4, 4)
-    optimizer = torch.optim.AdamW(build_trainable_parameters(
-        trainer, action_lr=1e-4, video_lr=1e-4, sidecar_lr=5e-5
-    ), lr=1e-4)
+    optimizer = torch.optim.AdamW(
+        build_trainable_parameters(trainer, action_lr=1e-4, video_lr=1e-4, sidecar_lr=5e-5), lr=1e-4
+    )
     cfg = SimpleNamespace(training=SimpleNamespace(learning_rate=1e-4, warmup_ratio=0.05, lr_min_ratio=0.01))
     scheduler = build_cosine_scheduler(optimizer, total_opt_steps=100, cfg=cfg, num_processes=4)
     for step in range(401):

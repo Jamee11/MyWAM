@@ -1,4 +1,5 @@
 """Exercise queue control flow without a model, GPU or simulator."""
+
 import json
 import sys
 import threading
@@ -10,7 +11,11 @@ from benchmarks.robotwin import eval_remaining24 as queue
 
 @pytest.mark.parametrize("explicit", [False, True])
 def test_queue_runs_all_cases_and_keeps_failures_out_of_denominator(tmp_path, monkeypatch, capsys, explicit):
-    plan = queue.load_plan(queue.PLAN)
+    plan = json.loads(queue.PLAN.read_text())
+    # A queue unit test needs its own sealed history, not a machine-local experiment result.
+    previous = tmp_path / "previous_final_record.json"
+    previous.write_text(json.dumps(dict(completed=[], partial=[])))
+    plan.update(previous_final_record=str(previous), previous_final_record_sha256=queue.digest(previous))
     if explicit:
         plan = {**plan, "expected_conditions": 3, "conditions": plan["conditions"][:3]}
     plan_path = tmp_path / "plan.json"
@@ -20,24 +25,44 @@ def test_queue_runs_all_cases_and_keeps_failures_out_of_denominator(tmp_path, mo
         directory = model_root / f"model{model}"
         directory.mkdir(parents=True)
         for slot in range(3):
-            (directory / f"session_slot{slot}.json").write_text(json.dumps(
-                dict(slot=slot, checkpoint_sha256=plan["checkpoint_sha256"])))
+            (directory / f"session_slot{slot}.json").write_text(
+                json.dumps(dict(slot=slot, checkpoint_sha256=plan["checkpoint_sha256"]))
+            )
     fake = tmp_path / "fake_python"
-    fake.write_text(f"#!{sys.executable}\n" + '''import json,sys
+    fake.write_text(
+        f"#!{sys.executable}\n"
+        + """import json,sys
 from pathlib import Path
 def arg(k): return sys.argv[sys.argv.index(k)+1]
 p=Path(arg('--output')); p.mkdir()
 if arg('--task')=='open_microwave': raise SystemExit(3)
 (p/'run.json').write_text(json.dumps(dict(status='complete', result=dict(
     complete=True, completed_episodes=100, successes=50, success_rate=.5), wall_seconds=.01)))
-''')
+"""
+    )
     fake.chmod(0o755)
     output = tmp_path / "result"
-    argv = ["queue", "--model-run", str(model_root), "--output", str(output),
-            "--plan", str(plan_path), "--sim-python", str(fake)]
+    argv = [
+        "queue",
+        "--model-run",
+        str(model_root),
+        "--output",
+        str(output),
+        "--plan",
+        str(plan_path),
+        "--sim-python",
+        str(fake),
+    ]
     if explicit:
-        argv += ["--sessions", str(model_root / "model6/session_slot0.json"),
-                 "--sim-gpus", "4", "--ports", "22730", "--wait-for-capacity"]
+        argv += [
+            "--sessions",
+            str(model_root / "model6/session_slot0.json"),
+            "--sim-gpus",
+            "4",
+            "--ports",
+            "22730",
+            "--wait-for-capacity",
+        ]
     gpu_queries = []
 
     def gpu_output(command, **_):
@@ -50,7 +75,7 @@ if arg('--task')=='open_microwave': raise SystemExit(3)
 
     class FastEvent(original_event):
         def wait(self, timeout=None):
-            return super().wait(.001 if timeout == 30 else timeout)
+            return super().wait(0.001 if timeout == 30 else timeout)
 
     monkeypatch.setattr(queue.threading, "Event", FastEvent)
     monkeypatch.setattr(queue.subprocess, "check_output", gpu_output)

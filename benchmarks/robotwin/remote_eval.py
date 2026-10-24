@@ -1,4 +1,5 @@
 """Split-host RoboTwin deployment; reuse the existing server and native evaluator."""
+
 from __future__ import annotations
 
 import argparse
@@ -7,11 +8,11 @@ import json
 import os
 import signal
 import socket
-from pathlib import Path
 import subprocess
 import sys
 import time
 import uuid
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -35,6 +36,7 @@ def save(path, value):
 
 def probe(session, port, host="127.0.0.1", timeout=15):
     from benchmarks.utils.transport import WSPolicyClient
+
     start = time.monotonic()
     with WSPolicyClient(f"ws://{host}:{port}", timeout=timeout, open_timeout=timeout) as ws:
         pong = ws.ping()  # Never reset or generate actions in a liveness probe.
@@ -47,6 +49,7 @@ def probe(session, port, host="127.0.0.1", timeout=15):
 
 def model(args):
     import yaml
+
     out = args.output.absolute()
     out.mkdir(parents=True, exist_ok=False)
     cfg = yaml.safe_load(args.deploy_config.read_text())
@@ -54,28 +57,54 @@ def model(args):
         cfg["optimization"]["compile"].update(enabled=True, sidecar_strategy="ffn")
     deploy = out / "deploy.yaml"
     deploy.write_text(yaml.safe_dump(cfg))
-    weights = sorted(args.checkpoint.glob("checkpoint_step_*.safetensors"),
-                     key=lambda p: int(p.stem.rsplit("_", 1)[1]))
+    weights = sorted(args.checkpoint.glob("checkpoint_step_*.safetensors"), key=lambda p: int(p.stem.rsplit("_", 1)[1]))
     if not weights:
         raise ValueError("Checkpoint directory must contain checkpoint_step_*.safetensors and its artifacts")
-    free = subprocess.check_output(["nvidia-smi", "-i", args.gpu,
-        "--query-gpu=memory.free", "--format=csv,noheader,nounits"], text=True)
+    free = subprocess.check_output(
+        ["nvidia-smi", "-i", args.gpu, "--query-gpu=memory.free", "--format=csv,noheader,nounits"], text=True
+    )
     if int(free.strip()) < args.min_free_mib:
         raise RuntimeError("Insufficient free GPU memory; existing jobs are left running")
     token = uuid.uuid4().hex
     entry = "serve_remote_sidecar.py" if args.kind == "sidecar" else "serve_parallel.py"
-    command = [sys.executable, "-u", str(HERE / entry), "--ckpt-dir", str(args.checkpoint.absolute()),
-        "--port", str(args.port), "--slots", str(args.slots), "--manifest", str(out / "pool.json"),
-        "--readiness-token", token, "--config", str(deploy)]
-    env = dict(os.environ, CUDA_VISIBLE_DEVICES=args.gpu, HF_HUB_OFFLINE="1",
-        TRANSFORMERS_OFFLINE="1", TORCHINDUCTOR_CACHE_DIR=str(out / "inductor"))
+    command = [
+        sys.executable,
+        "-u",
+        str(HERE / entry),
+        "--ckpt-dir",
+        str(args.checkpoint.absolute()),
+        "--port",
+        str(args.port),
+        "--slots",
+        str(args.slots),
+        "--manifest",
+        str(out / "pool.json"),
+        "--readiness-token",
+        token,
+        "--config",
+        str(deploy),
+    ]
+    env = dict(
+        os.environ,
+        CUDA_VISIBLE_DEVICES=args.gpu,
+        HF_HUB_OFFLINE="1",
+        TRANSFORMERS_OFFLINE="1",
+        TORCHINDUCTOR_CACHE_DIR=str(out / "inductor"),
+    )
     # Keep architecture-specific compiled kernels separate between A100 and L20.
-    metadata = {"checkpoint": str(weights[-1].absolute()), "checkpoint_sha256": digest(weights[-1]),
-        "deploy_config_sha256": digest(deploy), "kind": args.kind, "gpu": args.gpu,
-        "readiness_token": token, "ports": list(range(args.port, args.port + args.slots)),
-        "protocol": "loopback WebSocket via SSH; one independent policy state per slot"}
-    metadata["checkpoint_artifact_sha256"] = {name: digest(args.checkpoint / name)
-        for name in ["config.yaml", "normalization_stats.npy"]}
+    metadata = {
+        "checkpoint": str(weights[-1].absolute()),
+        "checkpoint_sha256": digest(weights[-1]),
+        "deploy_config_sha256": digest(deploy),
+        "kind": args.kind,
+        "gpu": args.gpu,
+        "readiness_token": token,
+        "ports": list(range(args.port, args.port + args.slots)),
+        "protocol": "loopback WebSocket via SSH; one independent policy state per slot",
+    }
+    metadata["checkpoint_artifact_sha256"] = {
+        name: digest(args.checkpoint / name) for name in ["config.yaml", "normalization_stats.npy"]
+    }
     save(out / "model.json", metadata)
     with (out / "server.log").open("w") as log:
         child = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT)
@@ -111,15 +140,20 @@ def model(args):
 
 def sim(args):
     import fcntl
+
     import yaml
+
     from benchmarks.robotwin.standard_eval import validate_result
+
     session = json.loads(args.session.read_text())
     out = args.output.absolute()
     out.mkdir(parents=True, exist_ok=False)
     # Local coordination supplements the explicit one-slot-per-simulator assignment.
     lock_path = Path(os.environ.get("TMPDIR", "/tmp")) / (
-        "openwam-remote-" + hashlib.sha256(
-            f"{session['readiness_token']}:{session['slot']}".encode()).hexdigest()[:24] + ".lock")
+        "openwam-remote-"
+        + hashlib.sha256(f"{session['readiness_token']}:{session['slot']}".encode()).hexdigest()[:24]
+        + ".lock"
+    )
     with lock_path.open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         health = probe(session, args.port, args.host)
@@ -129,34 +163,66 @@ def sim(args):
         cfg["eval_video_log"] = False
         policy = out / "policy.yml"
         policy.write_text(yaml.safe_dump(cfg))
-        env = {k: v for k, v in os.environ.items()
-               if not k.startswith("ROBOTWIN_") and k != "POLICY_CONFIG_PATH"}
-        env.update(ROBOTWIN_PATH=str(args.robotwin_path.absolute()),
+        env = {k: v for k, v in os.environ.items() if not k.startswith("ROBOTWIN_") and k != "POLICY_CONFIG_PATH"}
+        env.update(
+            ROBOTWIN_PATH=str(args.robotwin_path.absolute()),
             ROBOTWIN_PYTHON=str(Path(sys.executable).absolute()),
-            ROBOTWIN_RUNTIME_ROOT=str(out / "runtime"), ROBOTWIN_TEST_NUM=str(args.episodes),
-            POLICY_CONFIG_PATH=str(policy), SAPIEN_DISABLE_RAY_TRACING="0",
-            ROBOTWIN_ENABLE_PLANNER_FALLBACK="0", PYTHONNOUSERSITE="1",
-            OMP_NUM_THREADS="4", MKL_NUM_THREADS="4", HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1",
-            TORCH_EXTENSIONS_DIR=str(ROOT / ".cache/robotwin/remote_sim_extensions" / socket.gethostname()))
+            ROBOTWIN_RUNTIME_ROOT=str(out / "runtime"),
+            ROBOTWIN_TEST_NUM=str(args.episodes),
+            POLICY_CONFIG_PATH=str(policy),
+            SAPIEN_DISABLE_RAY_TRACING="0",
+            ROBOTWIN_ENABLE_PLANNER_FALLBACK="0",
+            PYTHONNOUSERSITE="1",
+            OMP_NUM_THREADS="4",
+            MKL_NUM_THREADS="4",
+            HF_HUB_OFFLINE="1",
+            TRANSFORMERS_OFFLINE="1",
+            TORCH_EXTENSIONS_DIR=str(ROOT / ".cache/robotwin/remote_sim_extensions" / socket.gethostname()),
+        )
         env["PYTHONPATH"] = str(args.robotwin_path.absolute() / "envs/curobo/src")
-        command = ["bash", str(HERE / "single_eval.sh"), args.task, args.mode,
-            out.name, args.gpu, str(args.port), args.host]
+        command = [
+            "bash",
+            str(HERE / "single_eval.sh"),
+            args.task,
+            args.mode,
+            out.name,
+            args.gpu,
+            str(args.port),
+            args.host,
+        ]
         paths = [HERE / n for n in ["eval_policy_wrapper.py", "openwam2robotwin_interface.py", "step_limits.yml"]]
-        paths += [args.robotwin_path / n for n in ["script/eval_policy.py", "envs/camera/camera.py",
-            "envs/_base_task.py", "task_config/_camera_config.yml"]]
-        record = {"status": "running", "session": session, "health": health, "command": command,
+        paths += [
+            args.robotwin_path / n
+            for n in [
+                "script/eval_policy.py",
+                "envs/camera/camera.py",
+                "envs/_base_task.py",
+                "task_config/_camera_config.yml",
+            ]
+        ]
+        record = {
+            "status": "running",
+            "session": session,
+            "health": health,
+            "command": command,
             "scope": "standard100" if args.episodes == 100 else "smoke_only",
             "source_sha256": {str(p): digest(p) for p in paths},
-            "gpu_snapshot": subprocess.check_output(["nvidia-smi", "--query-gpu=index,name,memory.free",
-                "--format=csv"], text=True), "video": False,
-            "near": "unchanged official camera source; this is not wrist-near A/B"}
+            "gpu_snapshot": subprocess.check_output(
+                ["nvidia-smi", "--query-gpu=index,name,memory.free", "--format=csv"], text=True
+            ),
+            "video": False,
+            "near": "unchanged official camera source; this is not wrist-near A/B",
+        }
         save(out / "run.json", record)
         started = time.monotonic()
         with (out / "client.log").open("w") as log:
             code = subprocess.call(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT)
         result = validate_result((out / "client.log").read_text(), out / "runtime", args.episodes, code)
-        record.update(status="complete" if result["complete"] else "failed", result=result,
-                      wall_seconds=time.monotonic() - started)
+        record.update(
+            status="complete" if result["complete"] else "failed",
+            result=result,
+            wall_seconds=time.monotonic() - started,
+        )
         save(out / "run.json", record)
         print(json.dumps(record["result"], indent=2))
         return 0 if result["complete"] else 1
@@ -202,7 +268,9 @@ def main():
 
 
 if __name__ == "__main__":
+
     def terminate(*_):
         raise SystemExit(143)
+
     signal.signal(signal.SIGTERM, terminate)
     raise SystemExit(main())

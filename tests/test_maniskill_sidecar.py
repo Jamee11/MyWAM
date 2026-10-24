@@ -7,20 +7,30 @@ from scipy.spatial.transform import Rotation
 
 from openwam.maniskill_sidecar_contract import build_targets
 from scripts.train_maniskill_sidecar import restore_saved_counter, validate_save_boundaries, write_maniskill_contract
-from tests.test_relational_sidecar import inputs, make  # noqa: F401
+from tests.test_relational_sidecar import inputs
+
+pytest_plugins = ["tests.test_relational_sidecar"]
 
 
 def trajectory():
     t = np.arange(41, dtype=np.float32)
     tcp = np.zeros((41, 7), np.float32)
-    tcp[:, 0], tcp[:, 3:] = .01 * t, Rotation.from_euler("z", 90, degrees=True).as_quat()[[3, 0, 1, 2]]
+    tcp[:, 0], tcp[:, 3:] = 0.01 * t, Rotation.from_euler("z", 90, degrees=True).as_quat()[[3, 0, 1, 2]]
     objects = tcp.copy()
-    objects[:, 0] += .05
-    goals = np.tile([.5, 0, 0], (41, 1)).astype(np.float32)
+    objects[:, 0] += 0.05
+    goals = np.tile([0.5, 0, 0], (41, 1)).astype(np.float32)
     boxes = np.tile([64, 64, 128, 128], (40, 2, 2, 1))
     visible = np.ones((40, 2, 2))
-    return dict(tcp=tcp, objects=objects, goals=goals, object_ids=np.ones(41),
-                goal_ids=np.ones(41) * 2, contact_force=np.zeros(41), boxes=boxes, visible=visible)
+    return dict(
+        tcp=tcp,
+        objects=objects,
+        goals=goals,
+        object_ids=np.ones(41),
+        goal_ids=np.ones(41) * 2,
+        contact_force=np.zeros(41),
+        boxes=boxes,
+        visible=visible,
+    )
 
 
 def test_local_direction_and_terminal_validity():
@@ -90,10 +100,15 @@ def test_single_arm_joint_loss_gradients_and_privileged_isolation(make):
     for _ in range(2):
         optimizer.zero_grad()
         loss = model.compute_loss(
-            actions=torch.randn(1, 32, 80), input_latents=x["latents"],
-            first_frame_latents=x["first_frame_latents"], context=x["context"], context_mask=x["context_mask"],
-            proprio=x["proprio"], proprio_mask=x["_proprio_sample_mask"],
-            fuse_vae_embedding_in_latents=True, ea_targets=targets,
+            actions=torch.randn(1, 32, 80),
+            input_latents=x["latents"],
+            first_frame_latents=x["first_frame_latents"],
+            context=x["context"],
+            context_mask=x["context_mask"],
+            proprio=x["proprio"],
+            proprio_mask=x["_proprio_sample_mask"],
+            fuse_vae_embedding_in_latents=True,
+            ea_targets=targets,
             action_is_pad=~x["_proprio_sample_mask"].expand(-1, 32, -1),
         )
         assert all(torch.isfinite(value).all() for value in loss.values())

@@ -1,21 +1,26 @@
 """Six remote policy slots consuming 24 untouched Sidecar42960 conditions."""
+
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
 import json
 import os
-from pathlib import Path
 import queue
 import signal
 import subprocess
 import sys
 import threading
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from benchmarks.robotwin.remote_eval import digest, probe, save
+from benchmarks.robotwin.remote_eval import (  # noqa: E402 - resolve project imports after the script path setup.
+    digest,
+    probe,
+    save,
+)
 
 PLAN = ROOT / "benchmarks/robotwin/plans/sidecar42960_remaining24_20261022.json"
 
@@ -41,8 +46,14 @@ def main():
     p.add_argument("--output", type=Path, required=True, help="new batch directory")
     p.add_argument("--sim-gpus", default="0,1,2,4,5,6")
     p.add_argument("--ports", default="22700,22701,22702,22710,22711,22712")
-    p.add_argument("--sessions", type=Path, nargs="+", help="Explicit sessions for a different number of independent slots")
-    p.add_argument("--wait-for-capacity", action="store_true", help="Wait for free memory before every condition instead of abandoning the queue")
+    p.add_argument(
+        "--sessions", type=Path, nargs="+", help="Explicit sessions for a different number of independent slots"
+    )
+    p.add_argument(
+        "--wait-for-capacity",
+        action="store_true",
+        help="Wait for free memory before every condition instead of abandoning the queue",
+    )
     p.add_argument("--sim-python", type=Path, default=ROOT / ".conda/robotwin-official/bin/python")
     p.add_argument("--robotwin-path", type=Path, default=ROOT / ".external/robotwin-official-20261018/RoboTwin")
     p.add_argument("--plan", type=Path, default=PLAN)
@@ -56,17 +67,39 @@ def main():
     if len(gpus) != count or len(ports) != count or len(set(ports)) != count or any(not 1 <= n <= 65535 for n in ports):
         p.error("GPU, port and session counts must match, with distinct valid ports")
     run, out = args.model_run.absolute(), args.output.absolute()
-    workers = [dict(index=i, gpu=gpus[i], port=ports[i],
-        session=str(args.sessions[i].absolute() if args.sessions else
-            run / f"model{5 if i < 3 else 6}" / f"session_slot{i % 3}.json")) for i in range(count)]
+    workers = [
+        dict(
+            index=i,
+            gpu=gpus[i],
+            port=ports[i],
+            session=str(
+                args.sessions[i].absolute()
+                if args.sessions
+                else run / f"model{5 if i < 3 else 6}" / f"session_slot{i % 3}.json"
+            ),
+        )
+        for i in range(count)
+    ]
     if args.dry_run:
-        print(json.dumps(dict(conditions=plan["conditions"], workers=workers,
-            episodes=args.episodes, total_episodes=len(plan["conditions"]) * args.episodes,
-            old_completed_overlap=0, old_partial_overlap=0, video=False), indent=2))
+        print(
+            json.dumps(
+                dict(
+                    conditions=plan["conditions"],
+                    workers=workers,
+                    episodes=args.episodes,
+                    total_episodes=len(plan["conditions"]) * args.episodes,
+                    old_completed_overlap=0,
+                    old_partial_overlap=0,
+                    video=False,
+                ),
+                indent=2,
+            )
+        )
         return 0
     # Run this dispatcher on the simulator machine, not on the model GPU host.
-    gpu_rows = subprocess.check_output(["nvidia-smi", "--query-gpu=index,name,memory.free",
-        "--format=csv,noheader,nounits"], text=True)
+    gpu_rows = subprocess.check_output(
+        ["nvidia-smi", "--query-gpu=index,name,memory.free", "--format=csv,noheader,nounits"], text=True
+    )
     free = {}
     for row in gpu_rows.splitlines():
         gpu, name, mib = [s.strip() for s in row.split(",")]
@@ -88,10 +121,19 @@ def main():
     # Save an immutable copy; old runs/results are never modified or appended.
     out.mkdir(parents=True, exist_ok=False)
     save(out / "selection.json", plan)
-    state = dict(status="running", started_utc=datetime.now(timezone.utc).isoformat(),
-        episodes_per_condition=args.episodes, scope="standard100" if args.episodes == 100 else "smoke_only",
-        gpu_snapshot=gpu_rows, workers=sessions, results=[], active={}, errors=[],
-        selection_sha256=digest(args.plan), source_sha256=digest(Path(__file__)))
+    state = dict(
+        status="running",
+        started_utc=datetime.now(timezone.utc).isoformat(),
+        episodes_per_condition=args.episodes,
+        scope="standard100" if args.episodes == 100 else "smoke_only",
+        gpu_snapshot=gpu_rows,
+        workers=sessions,
+        results=[],
+        active={},
+        errors=[],
+        selection_sha256=digest(args.plan),
+        source_sha256=digest(Path(__file__)),
+    )
     pending = queue.Queue()
     for case in plan["conditions"]:
         pending.put(case)
@@ -120,8 +162,12 @@ def main():
                 return
             if args.wait_for_capacity:
                 while not stopping.is_set():
-                    mib = int(subprocess.check_output(["nvidia-smi", "-i", w["gpu"],
-                        "--query-gpu=memory.free", "--format=csv,noheader,nounits"], text=True).strip())
+                    mib = int(
+                        subprocess.check_output(
+                            ["nvidia-smi", "-i", w["gpu"], "--query-gpu=memory.free", "--format=csv,noheader,nounits"],
+                            text=True,
+                        ).strip()
+                    )
                     with lock:
                         waiting = state.setdefault("waiting_capacity", {})
                         if mib >= args.min_free_mib * gpus.count(w["gpu"]):
@@ -141,19 +187,50 @@ def main():
             task, mode = case["task"], case["mode"]
             directory = out / mode / task
             directory.parent.mkdir(parents=True, exist_ok=True)
-            command = [str(args.sim_python.absolute()), "-u", str(ROOT / "benchmarks/robotwin/remote_eval.py"),
-                "sim", "--session", w["session"], "--port", str(w["port"]), "--gpu", w["gpu"],
-                "--robotwin-path", str(args.robotwin_path.absolute()), "--task", task, "--mode", mode,
-                "--episodes", str(args.episodes), "--output", str(directory)]
-            row = dict(task=task, mode=mode, worker=w["index"], gpu=w["gpu"], port=w["port"],
-                output=str(directory), complete=False)
+            command = [
+                str(args.sim_python.absolute()),
+                "-u",
+                str(ROOT / "benchmarks/robotwin/remote_eval.py"),
+                "sim",
+                "--session",
+                w["session"],
+                "--port",
+                str(w["port"]),
+                "--gpu",
+                w["gpu"],
+                "--robotwin-path",
+                str(args.robotwin_path.absolute()),
+                "--task",
+                task,
+                "--mode",
+                mode,
+                "--episodes",
+                str(args.episodes),
+                "--output",
+                str(directory),
+            ]
+            row = dict(
+                task=task,
+                mode=mode,
+                worker=w["index"],
+                gpu=w["gpu"],
+                port=w["port"],
+                output=str(directory),
+                complete=False,
+            )
             try:
                 with (directory.parent / f"{task}_launcher.log").open("w") as log:
                     with lock:
                         if stopping.is_set():
                             return
-                        child = subprocess.Popen(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
-                            stdin=subprocess.DEVNULL, start_new_session=True)
+                        child = subprocess.Popen(
+                            command,
+                            cwd=ROOT,
+                            stdout=log,
+                            stderr=subprocess.STDOUT,
+                            stdin=subprocess.DEVNULL,
+                            start_new_session=True,
+                        )
                         active[child.pid] = child
                         state["active"][str(w["index"])] = {**row, "pid": child.pid}
                         persist()
@@ -168,8 +245,13 @@ def main():
                     raise RuntimeError(f"Incomplete condition (exit {code}); inspect launcher/client logs")
                 if result["completed_episodes"] != args.episodes:
                     raise RuntimeError("Actual episode denominator mismatch")
-                row.update(complete=True, successes=result["successes"], episodes=args.episodes,
-                    success_rate=result["success_rate"], wall_seconds=native["wall_seconds"])
+                row.update(
+                    complete=True,
+                    successes=result["successes"],
+                    episodes=args.episodes,
+                    success_rate=result["success_rate"],
+                    wall_seconds=native["wall_seconds"],
+                )
             except Exception as exc:
                 row["error"] = repr(exc)
             with lock:
@@ -187,14 +269,25 @@ def main():
         for f in futures:
             f.result()
     rows = [r for r in state["results"] if r["complete"]]
-    state["status"] = "interrupted" if stopping.is_set() else (
-        "complete" if len(rows) == len(plan["conditions"]) else "finished_with_errors")
+    state["status"] = (
+        "interrupted"
+        if stopping.is_set()
+        else ("complete" if len(rows) == len(plan["conditions"]) else "finished_with_errors")
+    )
     state["finished_utc"] = datetime.now(timezone.utc).isoformat()
     persist()
     successes, episodes = sum(r["successes"] for r in rows), sum(r["episodes"] for r in rows)
-    summary = dict(status=state["status"], complete_conditions=len(rows), planned_conditions=len(plan["conditions"]),
-        successes=successes, episodes=episodes, success_rate=successes / episodes if episodes else None,
-        scope=state["scope"], results=state["results"], note="only complete conditions; old A100 results remain separate")
+    summary = dict(
+        status=state["status"],
+        complete_conditions=len(rows),
+        planned_conditions=len(plan["conditions"]),
+        successes=successes,
+        episodes=episodes,
+        success_rate=successes / episodes if episodes else None,
+        scope=state["scope"],
+        results=state["results"],
+        note="only complete conditions; old A100 results remain separate",
+    )
     save(out / "summary.json", summary)
     print(json.dumps({k: v for k, v in summary.items() if k != "results"}, indent=2))
     return 0 if state["status"] == "complete" else 1

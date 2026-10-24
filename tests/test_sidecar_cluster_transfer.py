@@ -1,12 +1,13 @@
 """Cluster allocation, metrics entry and actual archive preservation without GPUs."""
+
 import hashlib
 import importlib
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
 import tarfile
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -21,13 +22,19 @@ def test_cluster_launcher_preserves_slurm_allocation(tmp_path, profile):
     python = venv / "python"
     python.write_text('#!/bin/bash\nprintf "%s\\n" "$CUDA_VISIBLE_DEVICES" "$@"\n')
     python.chmod(0o755)
-    env = dict(os.environ, OPENWAM_VENV=str(venv.parent), CUDA_VISIBLE_DEVICES="GPU-slurm-a,GPU-slurm-b",
-               CHECK_ONLY="1", OPENWAM_FOUNDATION="/existing/foundation")
+    env = dict(
+        os.environ,
+        OPENWAM_VENV=str(venv.parent),
+        CUDA_VISIBLE_DEVICES="GPU-slurm-a,GPU-slurm-b",
+        CHECK_ONLY="1",
+        OPENWAM_FOUNDATION="/existing/foundation",
+    )
     env.pop("OPENWAM_TRAIN_CONFIG", None)
     if profile:
         env["OPENWAM_TRAIN_CONFIG"] = profile
-    output = subprocess.check_output(["bash", str(ROOT / "scripts/cluster/train_sidecar_isolated.sh")],
-                                     env=env, text=True)
+    output = subprocess.check_output(
+        ["bash", str(ROOT / "scripts/cluster/train_sidecar_isolated.sh")], env=env, text=True
+    )
     assert output.splitlines()[0] == "GPU-slurm-a,GPU-slurm-b"
     assert f"--config-name={profile or 'train_relational_sidecar_aloha50_isolated_10epochs'}" in output
     assert "training.finetune_ckpt_path=/existing/foundation" in output
@@ -38,17 +45,24 @@ def test_frozen_backbone_gpu8a100_submission_preserves_allocation(tmp_path):
     binaries = tmp_path / "bin"
     binaries.mkdir()
     srun = binaries / "srun"
-    srun.write_text('#!/bin/bash\nprintf "%s\\n" "$CUDA_VISIBLE_DEVICES" "$OPENWAM_TRAIN_CONFIG" "$OPENWAM_OUTPUT" "$NPROC_PER_NODE" "$@"\n')
+    srun.write_text(
+        '#!/bin/bash\nprintf "%s\\n" "$CUDA_VISIBLE_DEVICES" "$OPENWAM_TRAIN_CONFIG" "$OPENWAM_OUTPUT" "$NPROC_PER_NODE" "$@"\n'
+    )
     srun.chmod(0o755)
     smi = binaries / "nvidia-smi"
-    smi.write_text('#!/bin/bash\nexit 0\n')
+    smi.write_text("#!/bin/bash\nexit 0\n")
     smi.chmod(0o755)
     script = ROOT / "scripts/cluster/sidecar_frozen_backbone_gpu8a100.sbatch"
     text = script.read_text()
     assert "#SBATCH --partition=GPU-8A100" in text and "#SBATCH --gres=gpu:4" in text
     assert "#SBATCH --time=10-00:00:00" in text and "--nodelist" not in text
-    env = dict(os.environ, PATH=f'{binaries}:{os.environ["PATH"]}', OPENWAM_PROJECT=str(ROOT),
-               SLURM_JOB_ID="321", CUDA_VISIBLE_DEVICES="GPU-slurm-a,GPU-slurm-b,GPU-slurm-c,GPU-slurm-d")
+    env = dict(
+        os.environ,
+        PATH=f"{binaries}:{os.environ['PATH']}",
+        OPENWAM_PROJECT=str(ROOT),
+        SLURM_JOB_ID="321",
+        CUDA_VISIBLE_DEVICES="GPU-slurm-a,GPU-slurm-b,GPU-slurm-c,GPU-slurm-d",
+    )
     for key in ("OPENWAM_OUTPUT", "OPENWAM_CLUSTER_SETUP"):
         env.pop(key, None)
     output = subprocess.check_output(["bash", str(script), "training.max_steps=8"], env=env, text=True)
@@ -61,6 +75,7 @@ def test_frozen_backbone_gpu8a100_submission_preserves_allocation(tmp_path):
 @pytest.mark.parametrize("finite", [True, False])
 def test_cluster_metrics_entry(monkeypatch, tmp_path, finite):
     import torch
+
     from openwam.train.openwam_trainer import OpenWAMTrainer
     from scripts.cluster import train_sidecar_metrics as entry
 
@@ -72,8 +87,16 @@ def test_cluster_metrics_entry(monkeypatch, tmp_path, finite):
     trainer = SimpleNamespace(_rank=0, accelerator=SimpleNamespace(sync_gradients=True))
 
     def launch():
-        OpenWAMTrainer.log_step(trainer, metrics=dict(ea_isolation_warmup=1, loss_total=1 if finite else float("nan")),
-                               global_step=4, opt_step=2, epoch=0, steps_per_sec=2, lr=1e-4, output_path=tmp_path)
+        OpenWAMTrainer.log_step(
+            trainer,
+            metrics=dict(ea_isolation_warmup=1, loss_total=1 if finite else float("nan")),
+            global_step=4,
+            opt_step=2,
+            epoch=0,
+            steps_per_sec=2,
+            lr=1e-4,
+            output_path=tmp_path,
+        )
 
     monkeypatch.setitem(sys.modules, "train", SimpleNamespace(main=launch))
     if finite:
@@ -116,7 +139,16 @@ def test_collect_rejects_wrong_data_contract(monkeypatch, tmp_path):
     monkeypatch.syspath_prepend(str(ROOT / "scripts/cluster"))
     package = importlib.import_module("package_sidecar_transfer")
     manifest = tmp_path / "manifest.json"
-    manifest.write_text(json.dumps(dict(source_root="/old", tasks=[], total_episodes=0,
-                                        plan_steps=[8, 16, 32], video_anchors=list(range(0, 33, 4)))))
+    manifest.write_text(
+        json.dumps(
+            dict(
+                source_root="/old",
+                tasks=[],
+                total_episodes=0,
+                plan_steps=[8, 16, 32],
+                video_anchors=list(range(0, 33, 4)),
+            )
+        )
+    )
     with pytest.raises(ValueError, match="Aloha50"):
         package.collect_data(manifest)

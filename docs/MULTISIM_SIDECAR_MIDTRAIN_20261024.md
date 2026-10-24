@@ -8,7 +8,7 @@
 - 五类输入的正式验收清单已扫描，冻结 **52,204 个已验收外观轨迹版本**。
 - 10 条真实来源轨迹的独立 smoke 数据已构建，覆盖 RLBench、原 ManiSkill、hard ManiSkill、RoboTwin Aloha/Piper 与新 clutter；读取和全部 numeric hash/media stat 检查通过。
 - 最新指定回归集28项CPU检查通过，含四源单双臂混合 Action/Video/EA loss、完整反向、WAM 暂不更新→联合更新切换、epoch采样覆盖、训练统计排除held-out数据及恢复时world-size/预算身份检查。Hydra 配置解析及 shell 语法通过。
-- **全量数值/辅助标签构建正在进行，正式目录尚未发布 `manifest.ready.json`；这不等于全量数据已准备好。**
+- **全量52,204条已发布 `manifest.ready.json` 并通过全量numeric SHA/media stat和物理家族split一致性验收。train39,816 / val6,161 / test6,227。**
 - 本轮没有启动正式 mid-training，没有停止原 GPU0–3 训练或评估/真机服务；尚无全量 Foundation 混合训练速度、容量或策略成绩。
 
 ## 1. 改动前备份
@@ -150,7 +150,7 @@ CHECK_ONLY=0 bash scripts/train_multisim_sidecar_midtrain.sh \
 
 数据构建初期默认fork worker停止产出后改为spawn独立进程，保留既有产物；添加逐源异常证据与源码指纹。后续单条构建与manifest必须同revision，不将旧缓存默认为新逻辑已验证。
 
-尚需：全量生成/检查完成、完整Foundation多源短训和实际状态重载、各来源未见物理家族验证、正式训练吞吐/显存测量。CPU tiny模型、finite loss与数据格式通过都不能称midtrain有效或迁移成功。
+尚需：完整Foundation多源联合更新/保存与实际状态重载的GPU短测、各来源未见物理家族策略评估、正式训练吞吐/显存测量。全量数据生成与artifact检查现已完成。CPU tiny模型、finite loss与数据格式通过都不能称midtrain有效或迁移成功。
 
 科学比较需要相同预算的单源/多源、Vanilla/Sidecar对照，并记录每个来源的暴露量。**本阶段包含Randomized数据，因此后续不能把其成绩直接称为原始Clean-only→Random协议提升。** 已见任务/物体、跨仿真、跨本体和零真实示范应分别定义；目标真机SFT或部署必须使用相应checkpoint的统计、动作reference与显式臂mask，不默认20D双臂normalizer自动代表单臂硬件。
 
@@ -171,3 +171,27 @@ CHECK_ONLY=0 bash scripts/train_multisim_sidecar_midtrain.sh \
 当前Accelerate的CPU offload会创建新CPUAdam并丢弃原AdamW warmup hook，新入口因此拒绝`backbone_warmup_updates>0`且`offload_optimizer_device!=none`的组合；默认四卡无offload方案不变。不能将CPU offload当作保留该warmup语义的直接替代。
 
 全仓CPU检查在这次guard之前已通过2220项（18 skipped/21 deselected）；guard及相关混合数据/优化器测试另保留独立回归日志。GitHub旧缺依赖/fixture失败不等同本地全仓失败，二者环境边界分别记录。
+
+
+### 2026-10-24T17:57:11.267195+00:00：双卡Foundation工程短测容量结论
+
+第二次仅使用expandable_segments的同配置短测亦在WAM首次Adam更新失败，这次exp_avg_sq申请9.31GiB而实际free5.79GiB，缓存仅78.8MiB，确认现有双卡空余容量不足，不能归因纯碎片。两次前2步完整反向/Sidecar更新的全部metrics严格相同；不是数据/形状/nonfinite错误。两个torchrun均已退出，本次显存释放；不再同容量反复重试，不终止其他作业、不改默认四卡训练语义。保存/恢复未验收，须更多可用显存后完成。证据outputs/midtrain_audit_20261024/foundation_smoke_expandable/result.json。
+
+
+### 2026-10-24T18:02:16.864924+00:00：离线转换并发4→16，保持构造源码指纹
+
+原4worker在共享盘I/O等待为主且CPU/内存余量充足；仅核验并结束本任务原CPU parent/worker和验收watcher，保留冻结selection与逐条numeric/proof，未动GPU或原始数据。原准备脚本SHA d094e6f2、组合指纹3096f6cf保持不变，新16worker PID3802485/验收3802486复核复用旧结果。恢复阶段数十秒内完成旧缓存检查，之后新增转换从9600到11900，测得18.24条/秒；这是当前ManiSkill区段，不外推为全量固定ETA。证据outputs/midtrain_audit_20261024/parallel16_restart.json、parallel16_throughput.json、full_prepare_parallel16.log。正式release仍未发布，继续全量与验收。
+
+### 2026-10-24T18:06:01.871731+00:00：准备结果迁移独立读取检查
+
+10条真实来源smoke的numeric/media/stats硬链接到独立测试根，将测试manifest中的source_h5/source_numeric/marker/audit原始绝对路径全部改为不可用占位；四源12个训练锚点、全部numeric SHA及media stat检查通过。证明当前reader使用新根的相对artifact，不回读原始路径；来源provenance不作为训练依赖。仅验证10条smoke，不冒充全量迁移验收；未修改正式selection/manifest或原raw。证据outputs/midtrain_audit_20261024/relocation_smoke_result.json。
+
+## 最终数据发布验收：2026-10-24T20:49:16.316159+00:00
+
+四组：RLBench8204、ManiSkill20000、Aloha12000、Piper12000；RLBench当前源仍4093个已验收家族，没有新增可用家族被遗漏。ManiSkill精确满足原Clean5000+原random5000+hard10000。全量选择ID与发布ID相同，全部numeric SHA/media size/mtime、29101物理家族split检查通过；仅train拟合统计。
+
+训练集39816条，原生窗口7281973；等权混合补齐为7282176窗口，每个虚拟epoch28446次global-batch256更新。默认50000更新约1.76虚拟epoch；这不是对每条独立物理轨迹均匀重复的保证。完整mixture构建实测约3.94秒，epoch重排约0.62秒，均为本机当前状态，非跨机启动耗时承诺。实际正式启动脚本CHECK_ONLY=1通过；四源样本均为32×80动作和1×130辅助标签。
+
+Manifest SHA256：`6531627ba8c1ba5479f70c31652ab4780201c15253e14d1c0d5a2d0396219a19`；统计SHA256：`204c49cbf3c3d494581a419c2411218097ce62b0d72ac857dd44d9dab02291f2`。构造原始指纹为`3096f6cf32a50e8347a3f48ed6c09fe53de48fbf823b7275d53995a62f4b6ce9`；数据目录BUILD_SOURCE.json记录精确原始源码commit及四文件SHA。CI格式整理在构建结束后进行，不能把旧数据指纹错记为格式整理后的脚本SHA。
+
+验收结果见outputs/midtrain_audit_20261024/final_data_release_audit.json、automatic_acceptance.json和full_startup_preflight.log。双卡仅通过warmup完整反向和Sidecar更新，WAM首次Adam更新OOM；完整联合更新/保存恢复GPU验收仍待可用四卡，正式midtrain未启动。

@@ -5,23 +5,29 @@
   "source_parity_cases": 6,
   "preparation_sha256": "3096f6cf32a50e8347a3f48ed6c09fe53de48fbf823b7275d53995a62f4b6ce9",
   "selected_total": 52204,
-  "full_dataset_ready": false,
+  "full_dataset_ready": true,
   "full_foundation_gpu_training_tested": false,
   "formal_training_started": false,
   "implementation_scope": "new isolated dataset/converter/config/launcher; original architecture/trainer/math unchanged",
   "remaining": [
-    "complete all selected numeric/media conversion",
-    "full prepared-release artifact audit",
-    "full Foundation mixed-data GPU short training and reload not performed"
+    "full Foundation joint update/save/reload GPU smoke requires available memory",
+    "GitHub remote CI after repair"
   ],
-  "last_checked_utc": "2026-10-24T17:52:46.193265+00:00",
+  "last_checked_utc": "2026-10-24T20:49:16.316159+00:00",
   "cpu_test_command": "pytest -q tests/test_multisim_sidecar.py tests/test_sidecar_backbone_warmup.py tests/test_optimizer_groups.py",
-  "foundation_gpu_smoke_status": "first attempt: 2 warmup updates then OOM at WAM optimizer; allocator-only second attempt running",
+  "foundation_gpu_smoke_status": "both attempts passed 2 complete warmup backward/sidecar updates; first WAM Adam step OOM; no GPU joint/save/reload acceptance",
   "foundation_gpu_smoke_launch": "outputs/midtrain_audit_20261024/foundation_smoke_expandable/launch.json",
   "core_suite_before_offload_guard": {
     "passed": 2220,
     "skipped": 18,
     "deselected": 21
   },
-  "github_ci_initial": "failed: legacy Flask dependency and output fixture tests; legacy lint 370 plus new frozen preparer import ordering 5"
+  "github_ci_initial": "failed: legacy Flask dependency and output fixture tests; legacy lint 370 plus new frozen preparer import ordering 5",
+  "foundation_gpu_smoke_result": "outputs/midtrain_audit_20261024/foundation_smoke_expandable/result.json",
+  "full_dataset_artifact_audit_passed": true,
+  "full_dataset_episodes": 52204,
+  "train_episodes": 39816,
+  "formal_startup_data_preflight_passed": true,
+  "ci_repair_local_lint_passed": true,
+  "ci_repair_local_cpu_passed": 2221
 }

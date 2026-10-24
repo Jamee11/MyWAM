@@ -1,6 +1,7 @@
 """Exercise the actual trainer loop's restored counter across accumulated updates."""
 
 from contextlib import contextmanager
+
 import torch
 from omegaconf import OmegaConf
 
@@ -27,10 +28,18 @@ def test_restored_optimizer_counter_is_constant_within_accumulation(tmp_path):
             return model
 
     trainer = object.__new__(OpenWAMTrainer)
-    trainer.cfg = OmegaConf.create(dict(training=dict(
-        batch_size=1, gradient_accumulation_steps=2, num_epochs=None, max_steps=4004,
-        resume_ckpt_path="existing_state", save_steps=None,
-    )))
+    trainer.cfg = OmegaConf.create(
+        dict(
+            training=dict(
+                batch_size=1,
+                gradient_accumulation_steps=2,
+                num_epochs=None,
+                max_steps=4004,
+                resume_ckpt_path="existing_state",
+                save_steps=None,
+            )
+        )
+    )
     trainer.accelerator = Accelerator()
     trainer.architecture = torch.nn.Linear(1, 1)
     seen = []
@@ -43,7 +52,9 @@ def test_restored_optimizer_counter_is_constant_within_accumulation(tmp_path):
     trainer.prepare_accelerate = lambda *args: args
     trainer.resume_if_configured = lambda *args: (3998, 1999, 0, 0)
     trainer.compute_loss = lambda batch: {
-        "total": trainer.architecture(torch.ones(1, 1)).square().sum(), "video": 0.0, "action": 0.0
+        "total": trainer.architecture(torch.ones(1, 1)).square().sum(),
+        "video": 0.0,
+        "action": 0.0,
     }
     trainer.log_step = lambda **kwargs: None
     trainer.finish_training = lambda *args: None

@@ -1,8 +1,9 @@
 """Capture initial observations from sealed RoboTwin scenes without taking policy actions."""
+
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -17,7 +18,9 @@ def install_capture(module):
 
     manifest = json.loads(Path(os.environ["ROBOTWIN_EPISODE_MANIFEST"]).read_text())
     original = module.eval_function_decorator
-    module.eval_function_decorator = lambda policy, name: (lambda args: None) if name == "get_model" else original(policy, name)
+    module.eval_function_decorator = (
+        lambda policy, name: (lambda args: None) if name == "get_model" else original(policy, name)
+    )
 
     def capture(task_name, task_env, args, model, st_seed, test_num=100, video_size=None, instruction_type=None):
         rows = []
@@ -45,13 +48,22 @@ def install_capture(module):
                 )
                 path = output / f"episode{entry['episode']}.json"
                 path.write_text(json.dumps(payload))
-                rows.append(dict(task=task_name, mode=args["task_config"], episode=entry["episode"],
-                                 seed=seed, instruction=entry["instructions"]["unseen"], payload=str(path)))
+                rows.append(
+                    dict(
+                        task=task_name,
+                        mode=args["task_config"],
+                        episode=entry["episode"],
+                        seed=seed,
+                        instruction=entry["instructions"]["unseen"],
+                        payload=str(path),
+                    )
+                )
             finally:
                 with domain.activate():
                     task_env.close_env()
-        wrapper._write_labtasker_result(dict(operation="capture_initial_observations", rows=rows,
-                                            manifest_hash=manifest["manifest_hash"]))
+        wrapper._write_labtasker_result(
+            dict(operation="capture_initial_observations", rows=rows, manifest_hash=manifest["manifest_hash"])
+        )
         return manifest["entries"][-1]["seed"] + 1, 0
 
     module.eval_policy = capture
@@ -59,5 +71,6 @@ def install_capture(module):
 
 if __name__ == "__main__":
     from benchmarks.robotwin import eval_policy_wrapper as wrapper
+
     wrapper._install_eval = install_capture
     raise SystemExit(wrapper.main())
