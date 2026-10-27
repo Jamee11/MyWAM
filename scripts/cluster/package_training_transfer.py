@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """Build dereferenced, checksummed code/data/Foundation archives for this migration."""
 import argparse
-from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+import gzip
 import hashlib
 import io
 import json
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tarfile
 import time
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -50,9 +51,10 @@ def write_archive(destination, files, generated=(), expected=None):
     records = []
     with partial.open('xb', buffering=8 << 20) as out:
         writer = HashWriter(out)
-        with tarfile.open(fileobj=writer, mode='w|gz', format=tarfile.PAX_FORMAT,
-                          dereference=True, compresslevel=1, copybufsize=8 << 20,
-                          bufsize=8 << 20) as archive:
+        # Python 3.10's streaming tar mode cannot accept compresslevel itself.
+        with gzip.GzipFile(fileobj=writer, mode='wb', compresslevel=1, mtime=0) as compressed, \
+                tarfile.open(fileobj=compressed, mode='w|', format=tarfile.PAX_FORMAT,
+                             dereference=True, copybufsize=8 << 20, bufsize=8 << 20) as archive:
             for i, (source, name) in enumerate(files):
                 source = Path(source)
                 before = source.stat()  # follows symlinks deliberately

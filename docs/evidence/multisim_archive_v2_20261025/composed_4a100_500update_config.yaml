@@ -1,0 +1,126 @@
+model:
+  video_backbone:
+    encoder:
+      name: wan22_vae
+      model_path: /path/to/Wan2.2-TI2V-5B
+    name: wan22_ti2v_5b
+    model_path: /path/to/Wan2.2-TI2V-5B
+    from_scratch: false
+    shift_video: 5.0
+  action_backbone:
+    dim: 1024
+    ffn_dim: 4096
+    shift_action: 5.0
+  freeze:
+  - video_backbone.text_encoder
+  - video_backbone.reason1
+  - video_backbone.vae
+  - video_backbone.image_encoder
+  - video_backbone.video_encoder
+  architecture:
+    framework: dual_system
+    variant: joint_self_attn_relational_sidecar
+    action_dim: 80
+    use_proprioception: true
+    state_dim: 80
+    attention_mask_mode: mutual
+    video_attention_mask_mode: first_frame_causal
+    bridge_layers: null
+    bridge_interval: 1
+    mot_checkpoint_mixed_attn: true
+    detach_bridge: false
+    idm_video_cond_noise_prob: 0.5
+    relational_sidecar:
+      enabled: true
+      foundation_warmstart: true
+      stage: joint
+      tap_blocks:
+      - 7
+      - 15
+      - 23
+      latent_dim: 512
+      num_ea_tokens: 15
+      heads: 8
+      read_gate_init: 0.01
+      write_gate_init: 0.0
+      action_conditioning: true
+      ground_weight: 0.025
+      relation_weight: 0.01
+      plan_weight: 0.05
+      deep_supervision: 0.1
+      backbone_warmup_updates: 500
+      isolation_warmup_updates: 0
+      aux_loss_scale: 0.5
+dataloader:
+  type: multisim_sidecar
+  action_mode: eef
+  unify_action: true
+  unify_action_map:
+  - 0-9
+  - 34-43
+  normalize_mode: min-max
+  num_frames: 33
+  video_stride: 4
+  height: 384
+  width: 320
+  manifest_path: /remote-home/jinminghao/OpenWAM/datasets/multisim_sidecar_archive_v2_20261025/manifest.ready.json
+  weights:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  seed: 42
+  epoch_alignment: '512'
+  allow_smoke: false
+  color_jitter:
+    enabled: true
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.2
+    hue: 0.0
+training:
+  debug: false
+  learning_rate: 2.0e-05
+  adam_betas:
+  - 0.9
+  - 0.95
+  adam_foreach: false
+  adam_fused: true
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  num_epochs: 1
+  max_steps: null
+  batch_size: 32
+  gradient_accumulation_steps: 4
+  lr_scheduler: cosine
+  warmup_ratio: 0.05
+  lr_min_ratio: 0.01
+  action_lr: 2.0e-05
+  video_lr: 2.0e-05
+  mixed_precision: bf16
+  zero_stage: 2
+  use_gradient_checkpointing: true
+  use_gradient_checkpointing_offload: false
+  initialize_model_on_cpu: true
+  offload_optimizer_device: none
+  lambda_video: 1.0
+  lambda_action: 1.0
+  max_timestep_boundary: 1.0
+  min_timestep_boundary: 0.0
+  output_path: outputs/midtrain/multisim_sidecar
+  save_steps: 4000
+  save_full_states_for_resume: true
+  keep_final_resume_state: true
+  keep_last_k_ckpts: 3
+  finetune_ckpt_path: null
+  resume_ckpt_path: null
+  dataset_num_workers: 4
+  sidecar_lr: 1.0e-05
+project:
+  name: openwam
+  output_dir: outputs/2026-10-25_15-28-13
+  seed: 42
+  wandb:
+    project: null
+    run_name: null
+    entity: null

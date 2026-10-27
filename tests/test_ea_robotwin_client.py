@@ -1,5 +1,6 @@
-from pathlib import Path
 import json
+from pathlib import Path
+
 import numpy as np
 import pytest
 import yaml
@@ -18,7 +19,7 @@ def test_fk_rejects_actual_joint_contract(tmp_path):
         AlohaEEF(root / "assets/ea_robotwin/aloha.urdf", root / "assets/ea_robotwin/aloha_config.yml", path)
 
 
-def test_client_sends_only_deployable_context(monkeypatch):
+def test_client_sends_only_deployable_context(monkeypatch, tmp_path):
     class Client:
         def __init__(self, *args, **kwargs):
             self.payload = None
@@ -34,6 +35,7 @@ def test_client_sends_only_deployable_context(monkeypatch):
     monkeypatch.setattr(interface, "WSPolicyClient", Client)
     root = Path(__file__).resolve().parents[1]
     cfg = yaml.safe_load((root / "benchmarks/robotwin/policy_config_ea_rsig_v3.yml").read_text())
+    monkeypatch.chdir(tmp_path)
     model = interface.get_model(cfg)
     qpos = np.zeros(14, dtype=np.float32)
     qpos[[6, 13]] = [0.5, 0.7]

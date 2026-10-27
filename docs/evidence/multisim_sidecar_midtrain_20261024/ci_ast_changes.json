@@ -1,0 +1,224 @@
+[
+  {
+    "path": "benchmarks/maniskill/run_eval.py",
+    "before_sha256": "028935a99b8d019f96313614c3c07581fcb3cc9ec52bd9620317c74bf14dfea9",
+    "after_sha256": "63b63602c72ba54f9ce2cc6ee93791332033f10a32ef13b5ed23acbf9d158140",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/maniskill/serve_sidecar.py",
+    "before_sha256": "1de3ce5fa0e3d941547351be750c9c09790fbddadadc56bd84d46339270fb18a",
+    "after_sha256": "1d2592f15b854c1e4fbe7d23aab52ba01a4a7dc6369e70109a4fd8d2ac3eaeec",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/maniskill/single_eval.py",
+    "before_sha256": "04ed16ca198daefe736c078928372187f19575350ad9c67581c4a80e433054df",
+    "after_sha256": "ca4849947c037a0fbaf6a516104a717715b618348be83ff0f32533a8b915ea70",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/real_robot/infer_openwam.py",
+    "before_sha256": "a1d08d649ddc7b45ad04de76325130b359bde2ad1f0a350e33f0654a8d6d6ba1",
+    "after_sha256": "e548a69ba4835d925fb2cdee19735e61d674ad4eecd0de06aa6d504588e2472e",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/real_robot/infer_openwam_fix.py",
+    "before_sha256": "d12c68a5653ac27ed2841c9de349815581a621b5442d3275e39a58d5097a2725",
+    "after_sha256": "ed8c8ca31e91d3de603753bdf5a2d74ae0673783c439e0a0d634201528476f33",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/real_robot/openwam_robot_client.py",
+    "before_sha256": "c69b9359446955522b13b98ec5bf87368b78cd9899d12242bb9290588b661f9c",
+    "after_sha256": "a86781ba0f10a28715dc85442be07dc313fa146e6b172f70cf93ed593b2d6b08",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/real_robot/serve_maniskill_flask.py",
+    "before_sha256": "e4692f47d774dbc0d2bc6e2671764dc4d66564c79a874ed2660fe22ede6335d8",
+    "after_sha256": "62c01247f5430c23b4566cc7ce8881701be16035aa7cd08a0bb9ef4ba5a808fb",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/collect_sidecar_diagnostic_inputs.py",
+    "before_sha256": "9f547b188ad6c4c532b0907670d299d39804362138474e83b328307c5f8bd68c",
+    "after_sha256": "7a1b819ab186806b972146543b8fff80a85d413f2965e054f3b47ec5e094654b",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/collect_sidecar_expert_gt.py",
+    "before_sha256": "08f04a25ea5bebfea18c0b7b0594dea811c4efb5ca4489134262a02c038256d9",
+    "after_sha256": "4e78284226f95c0c24f3b456fb1082bf48874a6ab07175a76b888f8cc1cbb9f9",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/eval_remaining24.py",
+    "before_sha256": "5b40f20fedf817e745c6c5172e79f2e704d52cb416cb9c25c14b341dc089fbed",
+    "after_sha256": "614c390b438024b1dd7c25c765eeb3efbc124a3e960d225621e3fa6664ecefb0",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/launch_remaining24_from_a100.py",
+    "before_sha256": "b8ad543ed42b8e3cb60b5609757d564d29ab1502b8f56300d75b9d6e56d28e92",
+    "after_sha256": "abbe9b121128ac7de4dcf8d4bb5e2d09568bb83b8d8edb5ec54914820b8db7a9",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/remote_eval.py",
+    "before_sha256": "4a351d872490129817b4e0cb49d1afc79c403dc0526a024d1fd35cec8faaf243",
+    "after_sha256": "0dfc0fcbaa10e594865be1888ca6fcb5d173612c49f5acc94b15da4c5a43febf",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/sidecar_gradient32.py",
+    "before_sha256": "2ba1e3a43fcde6adfa791ebe896302dceee4c0be68a863f7e83b2673971eb7da",
+    "after_sha256": "517b9a124fa998cd2ea3ffb32c8b1127d62b82b2bcfae9628da2d23c88458a68",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/sidecar_gradient_probe.py",
+    "before_sha256": "c780c429581f2bfbc9073c3a8dadca14cbff521856bf40452075221a7ef00992",
+    "after_sha256": "2bee228ff1d1c00439fbad34b66148a36dfbbb2ca344f6c779f6c6de581b7463",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/sidecar_gt_diagnostics.py",
+    "before_sha256": "5bd86b9d99f3d2c277697396906e54402740811f8b53dbe947d3061187a36c55",
+    "after_sha256": "c65e94a52e767cb81880729e7e79d1432109dbedf1841a83040ab65577d5b4ed",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "benchmarks/robotwin/sidecar_write_diagnostics.py",
+    "before_sha256": "0b739511b178a1409c4e16048520279c57e2ac3815eff4436daa14e74c68d810",
+    "after_sha256": "9cac0c69205e47a6c1aef084d8b9f05658be219279657d220af0ab3e7e739bb9",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "openwam/dataloader/maniskill_absolute.py",
+    "before_sha256": "71a45c77010189ce1edde375c286f63bb40aac8380ac4523219e3e0b7b332bf9",
+    "after_sha256": "61f564ef31c4d25aab33fa6430bfa917b9c9cfa6fe8294ef9ab1eb4ca2e6b27f",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "scripts/check_maniskill_baseline_data.py",
+    "before_sha256": "358fca56bdda225ead5f43ac3d25a3ff2346512ec5b6b4165a5a7796bba27bdc",
+    "after_sha256": "afd17d7e933f354dbabac70670e2ebc2dfdbe32d5bba00dc24d770724eb83d7e",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "scripts/check_maniskill_controller.py",
+    "before_sha256": "f5a84dffb297f688b63dc814263be401ea4a4c8c01593cdb4043fe9227ca33ba",
+    "after_sha256": "cba5f8478776c74284d694aa6f286b958fbfa41d8125a59229be305e6d81d1b2",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "scripts/check_maniskill_expert_replay.py",
+    "before_sha256": "ebdf3fc8896a7ea60572e426d76cf6c9cc5ebb29358d280e2d02cd49fa748ad6",
+    "after_sha256": "775747fbf0f56f1f72a5369ee188e1fe64efec5e895ef79d54e93d9d04a7b6ba",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "scripts/cluster/train_sidecar_metrics.py",
+    "before_sha256": "f38419cbde568263822d5d62a4312e569f18a134099fcf7e22556fe8e8bb129c",
+    "after_sha256": "57bc898dd8a7dc77da89833954e7cb45804a6b58ee295a809b01ad5120c0de7b",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "scripts/prepare_maniskill_baseline_data.py",
+    "before_sha256": "a4a621fb66062a12e6e8b262c31c764ee3afab64628064553ede84afbbb30ee2",
+    "after_sha256": "594d3d068cb3d81e5f521b0c55f38c8c1feddf0295af5abbbb72c2896a843439",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "scripts/prepare_multisim_sidecar_data.py",
+    "before_sha256": "d094e6f29dacd8e089cb6313ac860cf9ab6a3d12e75f7d9d47f97bf23f67779a",
+    "after_sha256": "36a91df71ad2aa50d79e430fd5bbb618e8c3023d628178580e4a02fd0562ed16",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "scripts/train_maniskill_baseline.py",
+    "before_sha256": "9711648f5d605a7fe144d1a9fa37168aad162ad2286abfc0c05f5e857f3845f7",
+    "after_sha256": "a3207a60452f5e15fb34443161933cac3f3c2d1ec049545c2f22aeb220d96993",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/benchmarks/test_maniskill_eval.py",
+    "before_sha256": "59df9c3e6236f89740644f4fa8eb21014e04252dddc4f7555f63311d03930806",
+    "after_sha256": "cce4f54aff1415a4f43286da7084927083a287cc78b83f36b9b69f3219069cbc",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/benchmarks/test_real_robot_http.py",
+    "before_sha256": "132344716cbd71eee9220d26953c80bf71a9d6d1381f87b1694577aec2c6a2cc",
+    "after_sha256": "04e224cbd70d291b06708e0e5341abb416665ae663bc44b1cfefbe2370d698f0",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/benchmarks/test_sidecar_gradient32.py",
+    "before_sha256": "9dc68feb8dee61352d672cdd0e7244cb1f630f7bd106d2d54461ef22a75a7c4e",
+    "after_sha256": "a1ff29ea5687e5e1d86001e133ccfe7670bb45d081474cdfd1068354b7859370",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/benchmarks/test_sidecar_write_diagnostics.py",
+    "before_sha256": "19160639fbf606dcf5f47abd27ad70158bd1af7c765e755c9c817e3b8dc305e8",
+    "after_sha256": "03c07fd632cf0ac938ad5b5cd3b67464eab2e691c6e0255cc547418df68353ef",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/benchmarks/test_simple_real_infer.py",
+    "before_sha256": "0cc69f39ac105700f88e22c995d765d472fdb5d5df6a5b574eedcf6c0aa6f7f4",
+    "after_sha256": "cd9b4959461a28678f3e73147a408925c3d64fc5c8adb7d176ebe1845f111ada",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/sidecar_backbone_warmup_zero_smoke.py",
+    "before_sha256": "4f464468bc894a58faea4c4232d8ff4478876a92c54a06418605076334bb4321",
+    "after_sha256": "41cf2f10bd610fe0a9caa3db555661c23c15ca44b7eb0eada811a757e07e8a83",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/test_maniskill_sidecar.py",
+    "before_sha256": "cbc1c697fee877fd6c8ee989c0051c2a4241cf789d74b0397a1692129a7ce04c",
+    "after_sha256": "bb376cc97dc15c7d8401e0636d01d84272906592407cdb672fcec18dd638035c",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/test_optimizer_groups.py",
+    "before_sha256": "b118e14ff651a0d500da4731db009ee3ce74e7cb2f3d511e296a4c17110fd603",
+    "after_sha256": "cb9b277ccb629dcc9c6c2624eab482a5488c22a35408583bae6ce81d5108f89b",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/test_sidecar_backbone_warmup.py",
+    "before_sha256": "340fa8467cdcf56174a75175a97ffad5c79985fd8669c033cf7b93fd5ba3176c",
+    "after_sha256": "fa4099a6bb80c53b091b70b5ad8e1fd40186c2f690d53d3b827dbda823d72306",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/test_sidecar_cluster_transfer.py",
+    "before_sha256": "a0a5fd2dc9c20f9994b9123d988217c19acde538224ceb0810891a8f7e232d26",
+    "after_sha256": "82c39d68569a0ca6096f27659861b11abec7482da268f41ad2bd4be5dfb80b0d",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "tests/test_sidecar_isolation_trainer.py",
+    "before_sha256": "db9060c7f1849b1c0a48154cb062bff26aebe7fc733115f76a21a353a602f411",
+    "after_sha256": "453d4a8451bdf89080e9b907f17e2393a61f5e7dc1b0cddb70a3f6b014c9f905",
+    "scope": "format/import/fixture registration; executable computation AST unchanged"
+  },
+  {
+    "path": "pyproject.toml",
+    "before_sha256": "1f10f4d4eb8477778c7aef6123e10da07287e36d15667a54d07a46179f98f054",
+    "after_sha256": "ff23b5eadc39c233e2ad6ee3060b6b8f6d6c2001ef4a52383078fdedc854e93b",
+    "scope": "dependency/fixture repair"
+  },
+  {
+    "path": "tests/test_robotwin_remote_queue.py",
+    "before_sha256": "fecbedddd29f2610e0870d12f0faa3299ad4e1e3478453c917f37ef8a351b449",
+    "after_sha256": "95047e4c3cc1a2d12ceea0e89184399a821c5a628c35edf27308e6d4bd22fe26",
+    "scope": "dependency/fixture repair"
+  }
+]

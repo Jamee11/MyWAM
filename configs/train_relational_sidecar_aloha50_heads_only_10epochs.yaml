@@ -1,0 +1,13 @@
+defaults:
+  - train_relational_sidecar_aloha50_frozen_backbone_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      aux_heads_only_after_warmup: true
+
+training:
+  finetune_ckpt_path: null
+  resume_ckpt_path: ${oc.env:HEADS_ONLY_FORK_RUN}
+  output_path: ${oc.env:HEADS_ONLY_FORK_RUN}

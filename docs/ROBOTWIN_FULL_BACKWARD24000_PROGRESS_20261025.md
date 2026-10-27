@@ -1,0 +1,6 @@
+
+
+## 2026-10-25T04:52:53.968170+00:00：full-backward24k主实验85条件阶段
+
+{"all": {"conditions": 85, "episodes": 2550, "successes": 1757, "rate": 68.90196078431373, "official_same_subset": 71.6, "gap_pp": -2.698039215686265, "old24k_same_subset": 70.94117647058826, "delta_vs_24k_pp": -2.039215686274531}, "demo_clean": {"conditions": 44, "episodes": 1320, "successes": 1142, "rate": 86.51515151515152, "official_same_subset": 90.0909090909091, "gap_pp": -3.575757575757578, "old24k_same_subset": 87.95454545454544, "delta_vs_24k_pp": -1.4393939393939235}, "demo_randomized": {"conditions": 41, "episodes": 1230, "successes": 615, "rate": 50.0, "official_same_subset": 51.75609756097561, "gap_pp": -1.7560975609756113, "old24k_same_subset": 52.68292682926828, "delta_vs_24k_pp": -2.6829268292682826}}
+2637/3000当前attempt覆盖，85完整/9运行/6排队。当前完整子集68.90%，官方同范围71.60（−2.70pp），isolation24k同范围70.94（−2.04pp）；Random50 vs官方51.76/旧24k52.68，Clean86.52 vs90.09/87.95。仅同85项，不能拿68.90对旧全100项68.20得出收益；剩余任务分布不同。hanging_mug Clean2/30=6.67较旧24k36.67差30pp，stack_blocks_three Random40较63.33低23.33pp，hammer Random33.33较26.67有所恢复但距官方55仍大。一次GPU显存保护中断重跑已自动完成，无最终failed项；部分中断5条保留不混SR。近15分钟316.7条/h线性剩约1.15h，尾部排队/长任务可拉长，非承诺ETA。继续既定30×100队列，不改预算/成功判据/原结果；结束原生完整30复验。证据/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/full_backward24000_4090_all100_30ep_20261024T144937Z/progress_snapshot_20261025T0453.json。

@@ -156,3 +156,27 @@ seed0指原生仿真的seed group；launcher不对模型服务逐episode重置�
 新入口与单项PID/端口检查能识别共享pool的manifest与PONG slot/token，验证端口真实归属于模型进程；配置与checkpoint不匹配拒绝。新的CPU测试专门覆盖真实WAMPolicy/SyncExecutor的跨会话reset隔离和共享推理互斥，真实17路闭环/完整100条与全量分数仍在验收中。
 
 本轮模型和队列命令保存在日志/运行记录中。停止时须现场核对这些PID/命令，不照抄历史PID，不使用全局pkill。原DiT4DiT git diff hash再次复核与开始时一致；旧环境未安装/替换依赖。
+
+
+## 2026-10-16T13:18Z 正式队列中期快照
+
+官方Clean2Random checkpoint、既定100条协议与17路队列继续运行；现场ps确认master、共享模型及17个原生仿真客户端存活，日志更新。状态：14项complete、17项running、69项queued；日志累计完成约2187/10000条（实时采样有条数漂移）。下列完成项均result.json complete=true、errors=[]且100条。
+
+| 域 | 任务 | 成功/完成 |
+|---|---|---|
+| demo_clean | adjust_bottle | 95/100 |
+| demo_clean | beat_block_hammer | 77/100 |
+| demo_randomized | beat_block_hammer | 42/100 |
+| demo_clean | click_alarmclock | 99/100 |
+| demo_randomized | click_alarmclock | 79/100 |
+| demo_clean | click_bell | 100/100 |
+| demo_randomized | click_bell | 78/100 |
+| demo_clean | dump_bin_bigbin | 97/100 |
+| demo_randomized | dump_bin_bigbin | 51/100 |
+| demo_clean | grab_roller | 100/100 |
+| demo_randomized | grab_roller | 37/100 |
+| demo_clean | handover_block | 86/100 |
+| demo_clean | lift_pot | 100/100 |
+| demo_clean | move_can_pot | 97/100 |
+
+已有双域完整结果的五任务（beat_block_hammer、click_alarmclock、click_bell、dump_bin_bigbin、grab_roller）Clean 473/500=94.6%，Randomized 287/500=57.4%。这是非随机选取的中期任务子集，不能当50任务总体SR；仅说明目前这些任务随机域明显更难，不能单独归因模型或版本差异。下一步保持队列与原协议，继续收集余下任务并核验最终coverage。此前用户回复中约1060条为人工求和错误，已更正；本快照程序求和。原DiT4DiT未作本轮修改。

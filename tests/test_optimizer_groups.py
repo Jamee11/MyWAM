@@ -5,6 +5,7 @@ top-level ``video_backbone`` + ``action_backbone`` children) so mock drift
 can't mask the optimizer-misses-video-DiT bug we hit before.
 """
 
+import pytest
 import torch
 
 
@@ -59,6 +60,49 @@ class _FakeTrainer:
         # Mirror freeze_modules: text_encoder / vae already frozen at the nested level.
         self.architecture.video_backbone._pipe.text_encoder.requires_grad_(False)
         self.architecture.video_backbone._pipe.vae.requires_grad_(False)
+
+
+def test_sidecar_override_is_complete_and_keeps_other_learning_rates():
+    from openwam.train.utils.optimizer_groups import build_trainable_parameters
+
+    trainer = _FakeTrainer()
+    trainer.architecture.sidecar = torch.nn.Linear(4, 4)
+    groups = build_trainable_parameters(trainer, action_lr=1e-4, video_lr=1e-4, sidecar_lr=5e-5)
+    optimizer = torch.optim.AdamW(groups, lr=1e-4)
+    surfaced = [id(p) for group in optimizer.param_groups for p in group["params"]]
+    expected = [id(p) for p in trainer.architecture.parameters() if p.requires_grad]
+    assert sorted(surfaced) == sorted(expected)
+    sidecar_ids = {id(p) for p in trainer.architecture.sidecar.parameters()}
+    for group in optimizer.param_groups:
+        assert group["lr"] == (5e-5 if id(group["params"][0]) in sidecar_ids else 1e-4)
+
+
+@pytest.mark.parametrize("lr", [0, -1e-4, float("nan"), float("inf")])
+def test_invalid_sidecar_lr(lr):
+    from openwam.train.utils.optimizer_groups import build_trainable_parameters
+
+    with pytest.raises(ValueError, match="sidecar_lr"):
+        build_trainable_parameters(_FakeTrainer(), sidecar_lr=lr)
+
+
+def test_sidecar_cosine_lr_never_exceeds_backbone_lr():
+    from types import SimpleNamespace
+
+    from openwam.train.utils.optimizer_groups import build_trainable_parameters
+    from openwam.train.utils.training_utils import build_cosine_scheduler
+
+    trainer = _FakeTrainer()
+    trainer.architecture.sidecar = torch.nn.Linear(4, 4)
+    optimizer = torch.optim.AdamW(
+        build_trainable_parameters(trainer, action_lr=1e-4, video_lr=1e-4, sidecar_lr=5e-5), lr=1e-4
+    )
+    cfg = SimpleNamespace(training=SimpleNamespace(learning_rate=1e-4, warmup_ratio=0.05, lr_min_ratio=0.01))
+    scheduler = build_cosine_scheduler(optimizer, total_opt_steps=100, cfg=cfg, num_processes=4)
+    for step in range(401):
+        assert optimizer.param_groups[2]["lr"] <= optimizer.param_groups[0]["lr"] + 1e-15
+        if step < 400:
+            optimizer.step()
+            scheduler.step()
 
 
 def test_pipe_params_include_video_dit():

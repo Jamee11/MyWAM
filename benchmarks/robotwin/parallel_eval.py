@@ -2,20 +2,22 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
 import json
 import os
-from pathlib import Path
 import queue
 import signal
 import subprocess
 import sys
 import threading
-import time
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from benchmarks.robotwin.standard_eval import save, task_names
+from benchmarks.robotwin.standard_eval import (  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+    save,
+    task_names,
+)
 
 
 def main():
@@ -32,6 +34,11 @@ def main():
     p.add_argument("--episodes", type=int, default=100)
     p.add_argument("--cuda-home", type=Path, required=True)
     p.add_argument("--cuda-arch", default="8.9")
+    p.add_argument("--deploy-config", type=Path, default=ROOT / "configs/deploy.yaml")
+    p.add_argument("--policy-config", type=Path, default=ROOT / "benchmarks/robotwin/policy_config.yml")
+    p.add_argument("--robotwin-path", type=Path, default=ROOT / ".external/RoboTwin")
+    p.add_argument("--sim-python", type=Path, default=ROOT / ".venv-robotwin/bin/python")
+    p.add_argument("--tasks", default="all")
     args = p.parse_args()
     output = args.output.absolute()
     output.mkdir(parents=True, exist_ok=True)
@@ -41,7 +48,10 @@ def main():
     state = {"status": "running", "episodes": args.episodes, "jobs": [], "workers": {},
              "pool_pid": args.pool_pid, "pool_manifest": str(args.pool_manifest.absolute())}
     jobs = queue.Queue()
-    for task in task_names():
+    selected_tasks = task_names() if args.tasks == "all" else list(dict.fromkeys(args.tasks.split(",")))
+    if not selected_tasks or set(selected_tasks) - set(task_names()):
+        p.error("unknown task names")
+    for task in selected_tasks:
         for mode in ("demo_clean", "demo_randomized"):
             row = {"task": task, "mode": mode, "status": "queued"}
             state["jobs"].append(row)
@@ -103,7 +113,11 @@ def main():
                            "--tasks", row["task"], "--modes", row["mode"], "--episodes", str(args.episodes),
                            "--server-gpu", server_gpu, "--sim-gpu", sim_gpu, "--port", str(port),
                            "--reuse-server-pid", str(server_pid), "--cuda-home", str(args.cuda_home.absolute()),
-                           "--cuda-arch", args.cuda_arch]
+                           "--cuda-arch", args.cuda_arch,
+                           "--deploy-config", str(args.deploy_config.absolute()),
+                           "--policy-config", str(args.policy_config.absolute()),
+                           "--robotwin-path", str(args.robotwin_path.absolute()),
+                           "--sim-python", str(args.sim_python.absolute())]
                 log_path = output / "logs" / f"{row['mode']}_{row['task']}.log"
                 with log_path.open("w") as log:
                     process = subprocess.Popen(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
@@ -155,13 +169,14 @@ def main():
         for future in futures:
             future.result()
     completed = [row for row in state["jobs"] if row["status"] == "complete"]
-    state["status"] = "complete" if len(completed) == 100 else "incomplete"
+    expected_jobs = len(selected_tasks) * 2
+    state["status"] = "complete" if len(completed) == expected_jobs else "incomplete"
     state["completed_splits"] = len(completed)
     state["full_50_task_benchmark"] = len(completed) == 100 and args.episodes == 100
     state["macro_success_rate"] = {
-        mode: sum(row["result"]["success_rate"] for row in completed if row["mode"] == mode) / 50
+        mode: sum(row["result"]["success_rate"] for row in completed if row["mode"] == mode) / len(selected_tasks)
         for mode in ("demo_clean", "demo_randomized")
-    } if len(completed) == 100 else None
+    } if len(completed) == expected_jobs else None
     snapshot()
     print(json.dumps({key: state[key] for key in ("status", "completed_splits", "full_50_task_benchmark", "macro_success_rate")}), flush=True)
     return 0 if state["status"] == "complete" else 1

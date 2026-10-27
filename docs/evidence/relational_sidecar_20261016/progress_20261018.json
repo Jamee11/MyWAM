@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-18T06:10:58.022686+00:00",
+  "run": "outputs/sidecar/aloha50_C_joint_10epochs_20261016T131709Z/runs/2026-10-16_13-50-52",
+  "last": {
+    "micro_step": 21743,
+    "optimizer_step": 10871,
+    "epoch": 5,
+    "seconds_micro": 6.532979015260935,
+    "lr": 5.35920064611049e-05,
+    "metrics": {
+      "loss_total": 0.1934397667646408,
+      "loss_video": 0.096651591360569,
+      "loss_action": 0.00038807644159533083,
+      "grad_norm": 0.0,
+      "ea_read_gate_0": 0.03271484375,
+      "ea_read_gate_1": 0.08935546875,
+      "ea_read_gate_2": 0.0400390625,
+      "ea_write_gate_0": 0.0001583099365234375,
+      "ea_write_gate_1": 0.00012111663818359375,
+      "ea_write_gate_2": -0.0001277923583984375,
+      "loss_ea": 0.09640009701251984,
+      "loss_ea_deep": 0.08568199723958969,
+      "loss_ea_ground": 3.3875131607055664,
+      "loss_ea_plan": 0.06011439859867096,
+      "loss_ea_relation": 0.013834899291396141
+    },
+    "peak_allocated_bytes": 60517690880,
+    "peak_reserved_bytes": 65638760448
+  },
+  "rank0_all_metrics_finite": true,
+  "recent_100_mean_micro_seconds": 6.610672386400402,
+  "recent_100_mean_metrics": {
+    "loss_total": 0.1855388531088829,
+    "loss_video": 0.08909773774445057,
+    "loss_action": 0.0006142862877459265,
+    "loss_ea": 0.09582683004438877
+  },
+  "checkpoint_state_markers": {
+    "accel_state_step_20000": {
+      "global_step": 20000,
+      "opt_step": 10000,
+      "epoch": 4
+    },
+    "accel_state_step_16000": {
+      "global_step": 16000,
+      "opt_step": 8000,
+      "epoch": 3
+    }
+  },
+  "resume_reloaded_this_run": false,
+  "closed_loop_evaluated_this_run": false
+}

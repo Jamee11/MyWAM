@@ -3,8 +3,8 @@
 import argparse
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
@@ -12,13 +12,16 @@ os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import numpy as np
-from omegaconf import OmegaConf
-import torch
-from openwam.dataloader import build_dataset
-from openwam.deploy.engine import JointInferenceEngine
-from openwam.deploy.model_loader import load_from_checkpoint_dir
-from openwam.deploy.server import merge_deploy_cfg
+import numpy as np  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+import torch  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+from omegaconf import OmegaConf  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+
+from openwam.dataloader import build_dataset  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+from openwam.deploy.engine import JointInferenceEngine  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+from openwam.deploy.model_loader import (  # noqa: E402 -- source-tree imports follow sys.path bootstrap
+    load_from_checkpoint_dir,
+)
+from openwam.deploy.server import merge_deploy_cfg  # noqa: E402 -- source-tree imports follow sys.path bootstrap
 
 
 def main():

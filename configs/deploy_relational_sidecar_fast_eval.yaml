@@ -1,0 +1,26 @@
+# Opt-in benchmarks/robotwin/sidecar_fast_runtime.py only. Default deployment is unchanged.
+checkpoint_path: null
+device: cuda:0
+server:
+  host: "0.0.0.0"
+  port: 19600
+inference:
+  denoise_steps: 10
+  denoise_mode: sync
+  inference_mode: sync
+  lead_modality: video
+  num_frames: 33
+  video_num_frames: 9
+  inference_horizon: 32
+  cfg_scale: 1.0
+optimization:
+  decode_video: false
+  compile:
+    enabled: true
+  dit_cache:
+    enabled: true
+    cosine_threshold: 0.99
+    max_skips: 3
+  prompt_embed_cache:
+    enabled: true
+    maxsize: 32

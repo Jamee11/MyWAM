@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "scope": "real Foundation CPU warmstart only",
+  "warmstart": {
+    "loaded_tensors": 2089,
+    "reset_policy_heads": [],
+    "new_ea_tensors": 140
+  },
+  "total_parameters": 12431044415,
+  "sidecar_parameters": 24290323,
+  "trainable_parameters": 24290323,
+  "tap_blocks": [
+    7,
+    15,
+    23
+  ],
+  "gpu_capacity": "not_tested",
+  "closed_loop": "not_tested"
+}

@@ -294,6 +294,9 @@ class OpenWAMTrainer:
         pbar = tqdm(total=total_steps, desc="Training", unit="step", initial=min(global_step, total_steps))
 
         assert self.accelerator is not None, "OpenWAMTrainer requires an Accelerator"
+        set_training_progress = getattr(
+            self.accelerator.unwrap_model(self.architecture), "set_training_progress", None
+        )
 
         # Per-step manual_seed makes timestep + noise sampling in compute_loss
         # reproducible across runs and ZeRO stages: same (rank, step) -> same RNG,
@@ -319,6 +322,8 @@ class OpenWAMTrainer:
                     if torch.cuda.is_available():
                         torch.cuda.manual_seed_all(step_seed)
                 with self.accelerator.accumulate(self.architecture):
+                    if set_training_progress is not None:
+                        set_training_progress(opt_step)
                     losses = self.compute_loss(batch)
                     loss = losses["total"]
                     self.accelerator.backward(loss)
@@ -382,10 +387,20 @@ class OpenWAMTrainer:
             self,
             action_lr=float(t.action_lr) if getattr(t, "action_lr", None) else None,
             video_lr=float(t.video_lr) if getattr(t, "video_lr", None) else None,
+            sidecar_lr=float(t.sidecar_lr) if getattr(t, "sidecar_lr", None) is not None else None,
         )
         betas = tuple(getattr(t, "adam_betas", [0.9, 0.95]))
-        return torch.optim.AdamW(params, lr=float(t.learning_rate), weight_decay=float(t.weight_decay), betas=betas,
-                                 foreach=getattr(t, "adam_foreach", None), fused=getattr(t, "adam_fused", None))
+        optimizer = torch.optim.AdamW(params, lr=float(t.learning_rate), weight_decay=float(t.weight_decay), betas=betas,
+                                      foreach=getattr(t, "adam_foreach", None), fused=getattr(t, "adam_fused", None))
+        if getattr(self.architecture, "backbone_warmup_updates", 0):
+            from openwam.train.utils.sidecar_warmup import install_backbone_warmup
+
+            install_backbone_warmup(optimizer, self.architecture)
+        if getattr(t, "sidecar_lr_screen", None):
+            from openwam.train.utils.sidecar_lr_screen import SidecarLRScreen
+
+            self.sidecar_lr_screen = SidecarLRScreen(optimizer, self.architecture, t.sidecar_lr_screen)
+        return optimizer
 
     # (4) Called by train() — build the training DataLoader (seeded generator when reproducible).
     def build_dataloader(self, batch_size: int) -> torch.utils.data.DataLoader:

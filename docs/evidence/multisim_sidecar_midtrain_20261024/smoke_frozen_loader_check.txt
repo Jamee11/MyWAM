@@ -1,0 +1,43 @@
+{
+  "manifest": "/remote-home/jinminghao/datasets/openwam_sidecar_multisim_smoke_frozen_20261024/manifest.ready.json",
+  "sources": [
+    {
+      "group": "rlbench_franka",
+      "episodes": 2,
+      "windows": 331,
+      "checked_anchors": 3
+    },
+    {
+      "group": "maniskill_franka",
+      "episodes": 4,
+      "windows": 745,
+      "checked_anchors": 3
+    },
+    {
+      "group": "robotwin_aloha",
+      "episodes": 2,
+      "windows": 634,
+      "checked_anchors": 3
+    },
+    {
+      "group": "robotwin_piper",
+      "episodes": 2,
+      "windows": 416,
+      "checked_anchors": 3
+    }
+  ],
+  "scope": "all_numeric_hashes_and_media_stats",
+  "source_counts": {
+    "rlbench": 2,
+    "maniskill_base": 2,
+    "maniskill_hard": 2,
+    "robotwin_base": 2,
+    "robotwin_clutter": 2
+  },
+  "splits": {
+    "train": 10
+  },
+  "total_episodes": 10,
+  "gpu_model_forward_tested": false,
+  "formal_training_started": false
+}

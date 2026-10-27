@@ -1,0 +1,36 @@
+[
+  {
+    "id": "84128e1550fc8e27ccef50f8",
+    "group": "maniskill_franka",
+    "targets_vs_existing_maniskill_builder": "allclose1e-6"
+  },
+  {
+    "id": "733e1e9acd0f7830667da199",
+    "group": "maniskill_franka",
+    "targets_vs_existing_maniskill_builder": "allclose1e-6"
+  },
+  {
+    "id": "6548b7cf4cb9e1691578df45",
+    "group": "robotwin_aloha",
+    "numeric_vs_existing_reader": "allclose1e-6",
+    "rgb_vs_existing_reader": "bitwise_equal"
+  },
+  {
+    "id": "7ddf9db14b2a37b23160c862",
+    "group": "robotwin_piper",
+    "numeric_vs_existing_reader": "allclose1e-6",
+    "rgb_vs_existing_reader": "bitwise_equal"
+  },
+  {
+    "id": "86651f88f901d1e82799f4c4",
+    "group": "robotwin_aloha",
+    "numeric_vs_existing_reader": "allclose1e-6",
+    "rgb_vs_existing_reader": "bitwise_equal"
+  },
+  {
+    "id": "61359d24783a4afac73da85b",
+    "group": "robotwin_piper",
+    "numeric_vs_existing_reader": "allclose1e-6",
+    "rgb_vs_existing_reader": "bitwise_equal"
+  }
+]

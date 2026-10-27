@@ -339,6 +339,10 @@ class JointInferenceEngine(BaseInferenceEngine):
         )
 
         ea_kwargs = {}
+        if getattr(self.architecture, "sidecar", None) is not None:
+            observation = conditions.get("observation") or {}
+            if "ea_targets" in observation or "ea_targets" in conditions:
+                raise ValueError("EA oracle targets are forbidden in Sidecar deployment")
         if getattr(self.architecture, "ea_bridge", None) is not None:
             observation = conditions.get("observation") or {}
             if "ea_targets" in observation or "ea_targets" in conditions:

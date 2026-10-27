@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "blocked_original_dataset_roots": [
+    "/remote-home/jinminghao/datasets",
+    "/remote-home/jinminghao/DiT4DiT/datasets"
+  ],
+  "sources": [
+    {
+      "group": "rlbench_franka",
+      "windows_checked": 3
+    },
+    {
+      "group": "maniskill_franka",
+      "windows_checked": 3
+    },
+    {
+      "group": "robotwin_aloha",
+      "windows_checked": 3
+    },
+    {
+      "group": "robotwin_piper",
+      "windows_checked": 3
+    }
+  ],
+  "scope": "12 real train windows with Python file and h5py opens guarded; not syscall sandbox/native simulator replay"
+}

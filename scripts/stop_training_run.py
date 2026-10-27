@@ -3,8 +3,8 @@
 import argparse
 import json
 import os
-from pathlib import Path
 import signal
+from pathlib import Path
 
 
 def inspect(record, stop=False):

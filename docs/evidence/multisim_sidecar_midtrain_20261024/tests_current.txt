@@ -1,0 +1,8 @@
+............................                                             [100%]
+=============================== warnings summary ===============================
+tests/test_optimizer_groups.py::test_sidecar_cosine_lr_never_exceeds_backbone_lr
+  /dev/shm/openwam-sidecar-runtime-20261016.3vRKd9/venv/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:198: UserWarning: The epoch parameter in `scheduler.step()` was not necessary and is being deprecated where possible. Please use `scheduler.step()` to step the scheduler. During the deprecation, if epoch is different from None, the closed form is used instead of the new chainable form, where available. Please open an issue if you are unable to replicate your use case: https://github.com/pytorch/pytorch/issues/new/choose.
+    warnings.warn(EPOCH_DEPRECATION_WARNING, UserWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+28 passed, 1 warning in 16.69s

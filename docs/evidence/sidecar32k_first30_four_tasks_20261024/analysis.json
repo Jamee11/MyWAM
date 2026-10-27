@@ -1,0 +1,4168 @@
+{
+  "rows": [
+    {
+      "task": "adjust_bottle",
+      "mode": "demo_clean",
+      "full100": 97,
+      "first30_successes": 29,
+      "first30_rate": 96.66666666666667,
+      "delta_first30_vs100_pp": -0.3333333333333286,
+      "official": 90.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu0/queue/jobs/demo_clean/adjust_bottle/demo_clean/adjust_bottle/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100001,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100002,
+          "success": 1
+        },
+        {
+          "episode": 2,
+          "seed": 100005,
+          "success": 1
+        },
+        {
+          "episode": 3,
+          "seed": 100006,
+          "success": 1
+        },
+        {
+          "episode": 4,
+          "seed": 100008,
+          "success": 1
+        },
+        {
+          "episode": 5,
+          "seed": 100010,
+          "success": 1
+        },
+        {
+          "episode": 6,
+          "seed": 100011,
+          "success": 1
+        },
+        {
+          "episode": 7,
+          "seed": 100012,
+          "success": 1
+        },
+        {
+          "episode": 8,
+          "seed": 100013,
+          "success": 1
+        },
+        {
+          "episode": 9,
+          "seed": 100015,
+          "success": 1
+        },
+        {
+          "episode": 10,
+          "seed": 100016,
+          "success": 1
+        },
+        {
+          "episode": 11,
+          "seed": 100021,
+          "success": 1
+        },
+        {
+          "episode": 12,
+          "seed": 100022,
+          "success": 0
+        },
+        {
+          "episode": 13,
+          "seed": 100023,
+          "success": 1
+        },
+        {
+          "episode": 14,
+          "seed": 100024,
+          "success": 1
+        },
+        {
+          "episode": 15,
+          "seed": 100025,
+          "success": 1
+        },
+        {
+          "episode": 16,
+          "seed": 100026,
+          "success": 1
+        },
+        {
+          "episode": 17,
+          "seed": 100027,
+          "success": 1
+        },
+        {
+          "episode": 18,
+          "seed": 100028,
+          "success": 1
+        },
+        {
+          "episode": 19,
+          "seed": 100030,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100031,
+          "success": 1
+        },
+        {
+          "episode": 21,
+          "seed": 100033,
+          "success": 1
+        },
+        {
+          "episode": 22,
+          "seed": 100034,
+          "success": 1
+        },
+        {
+          "episode": 23,
+          "seed": 100035,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100036,
+          "success": 1
+        },
+        {
+          "episode": 25,
+          "seed": 100039,
+          "success": 1
+        },
+        {
+          "episode": 26,
+          "seed": 100040,
+          "success": 1
+        },
+        {
+          "episode": 27,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 28,
+          "seed": 100042,
+          "success": 1
+        },
+        {
+          "episode": 29,
+          "seed": 100043,
+          "success": 1
+        },
+        {
+          "episode": 30,
+          "seed": 100044,
+          "success": 1
+        },
+        {
+          "episode": 31,
+          "seed": 100045,
+          "success": 1
+        },
+        {
+          "episode": 32,
+          "seed": 100046,
+          "success": 1
+        },
+        {
+          "episode": 33,
+          "seed": 100049,
+          "success": 1
+        },
+        {
+          "episode": 34,
+          "seed": 100051,
+          "success": 1
+        },
+        {
+          "episode": 35,
+          "seed": 100053,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100054,
+          "success": 1
+        },
+        {
+          "episode": 37,
+          "seed": 100055,
+          "success": 1
+        },
+        {
+          "episode": 38,
+          "seed": 100056,
+          "success": 1
+        },
+        {
+          "episode": 39,
+          "seed": 100057,
+          "success": 1
+        },
+        {
+          "episode": 40,
+          "seed": 100058,
+          "success": 1
+        },
+        {
+          "episode": 41,
+          "seed": 100063,
+          "success": 1
+        },
+        {
+          "episode": 42,
+          "seed": 100064,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100065,
+          "success": 1
+        },
+        {
+          "episode": 44,
+          "seed": 100066,
+          "success": 1
+        },
+        {
+          "episode": 45,
+          "seed": 100067,
+          "success": 1
+        },
+        {
+          "episode": 46,
+          "seed": 100070,
+          "success": 1
+        },
+        {
+          "episode": 47,
+          "seed": 100071,
+          "success": 1
+        },
+        {
+          "episode": 48,
+          "seed": 100072,
+          "success": 1
+        },
+        {
+          "episode": 49,
+          "seed": 100073,
+          "success": 1
+        },
+        {
+          "episode": 50,
+          "seed": 100074,
+          "success": 1
+        },
+        {
+          "episode": 51,
+          "seed": 100075,
+          "success": 1
+        },
+        {
+          "episode": 52,
+          "seed": 100076,
+          "success": 1
+        },
+        {
+          "episode": 53,
+          "seed": 100077,
+          "success": 1
+        },
+        {
+          "episode": 54,
+          "seed": 100078,
+          "success": 1
+        },
+        {
+          "episode": 55,
+          "seed": 100079,
+          "success": 1
+        },
+        {
+          "episode": 56,
+          "seed": 100080,
+          "success": 1
+        },
+        {
+          "episode": 57,
+          "seed": 100081,
+          "success": 1
+        },
+        {
+          "episode": 58,
+          "seed": 100083,
+          "success": 1
+        },
+        {
+          "episode": 59,
+          "seed": 100084,
+          "success": 1
+        },
+        {
+          "episode": 60,
+          "seed": 100085,
+          "success": 1
+        },
+        {
+          "episode": 61,
+          "seed": 100087,
+          "success": 1
+        },
+        {
+          "episode": 62,
+          "seed": 100088,
+          "success": 1
+        },
+        {
+          "episode": 63,
+          "seed": 100089,
+          "success": 0
+        },
+        {
+          "episode": 64,
+          "seed": 100091,
+          "success": 1
+        },
+        {
+          "episode": 65,
+          "seed": 100092,
+          "success": 1
+        },
+        {
+          "episode": 66,
+          "seed": 100094,
+          "success": 1
+        },
+        {
+          "episode": 67,
+          "seed": 100095,
+          "success": 1
+        },
+        {
+          "episode": 68,
+          "seed": 100096,
+          "success": 1
+        },
+        {
+          "episode": 69,
+          "seed": 100099,
+          "success": 1
+        },
+        {
+          "episode": 70,
+          "seed": 100100,
+          "success": 1
+        },
+        {
+          "episode": 71,
+          "seed": 100101,
+          "success": 1
+        },
+        {
+          "episode": 72,
+          "seed": 100102,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100103,
+          "success": 1
+        },
+        {
+          "episode": 74,
+          "seed": 100104,
+          "success": 1
+        },
+        {
+          "episode": 75,
+          "seed": 100105,
+          "success": 1
+        },
+        {
+          "episode": 76,
+          "seed": 100108,
+          "success": 1
+        },
+        {
+          "episode": 77,
+          "seed": 100109,
+          "success": 1
+        },
+        {
+          "episode": 78,
+          "seed": 100111,
+          "success": 1
+        },
+        {
+          "episode": 79,
+          "seed": 100112,
+          "success": 1
+        },
+        {
+          "episode": 80,
+          "seed": 100113,
+          "success": 1
+        },
+        {
+          "episode": 81,
+          "seed": 100115,
+          "success": 1
+        },
+        {
+          "episode": 82,
+          "seed": 100116,
+          "success": 1
+        },
+        {
+          "episode": 83,
+          "seed": 100117,
+          "success": 1
+        },
+        {
+          "episode": 84,
+          "seed": 100119,
+          "success": 1
+        },
+        {
+          "episode": 85,
+          "seed": 100120,
+          "success": 1
+        },
+        {
+          "episode": 86,
+          "seed": 100121,
+          "success": 1
+        },
+        {
+          "episode": 87,
+          "seed": 100123,
+          "success": 0
+        },
+        {
+          "episode": 88,
+          "seed": 100124,
+          "success": 1
+        },
+        {
+          "episode": 89,
+          "seed": 100125,
+          "success": 1
+        },
+        {
+          "episode": 90,
+          "seed": 100126,
+          "success": 1
+        },
+        {
+          "episode": 91,
+          "seed": 100127,
+          "success": 1
+        },
+        {
+          "episode": 92,
+          "seed": 100128,
+          "success": 1
+        },
+        {
+          "episode": 93,
+          "seed": 100130,
+          "success": 1
+        },
+        {
+          "episode": 94,
+          "seed": 100132,
+          "success": 1
+        },
+        {
+          "episode": 95,
+          "seed": 100133,
+          "success": 1
+        },
+        {
+          "episode": 96,
+          "seed": 100135,
+          "success": 1
+        },
+        {
+          "episode": 97,
+          "seed": 100136,
+          "success": 1
+        },
+        {
+          "episode": 98,
+          "seed": 100138,
+          "success": 1
+        },
+        {
+          "episode": 99,
+          "seed": 100139,
+          "success": 1
+        }
+      ],
+      "warmup24k30": 90.0,
+      "full_backward20k30": 100.0,
+      "first30_seed_overlap_with20k": 30,
+      "first30_seed_order_equal20k": true
+    },
+    {
+      "task": "adjust_bottle",
+      "mode": "demo_randomized",
+      "full100": 37,
+      "first30_successes": 10,
+      "first30_rate": 33.33333333333333,
+      "delta_first30_vs100_pp": -3.6666666666666714,
+      "official": 51.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu0/queue/jobs/demo_randomized/adjust_bottle/demo_randomized/adjust_bottle/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100000,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100002,
+          "success": 0
+        },
+        {
+          "episode": 2,
+          "seed": 100003,
+          "success": 0
+        },
+        {
+          "episode": 3,
+          "seed": 100004,
+          "success": 1
+        },
+        {
+          "episode": 4,
+          "seed": 100005,
+          "success": 0
+        },
+        {
+          "episode": 5,
+          "seed": 100006,
+          "success": 0
+        },
+        {
+          "episode": 6,
+          "seed": 100007,
+          "success": 0
+        },
+        {
+          "episode": 7,
+          "seed": 100008,
+          "success": 0
+        },
+        {
+          "episode": 8,
+          "seed": 100010,
+          "success": 0
+        },
+        {
+          "episode": 9,
+          "seed": 100012,
+          "success": 0
+        },
+        {
+          "episode": 10,
+          "seed": 100013,
+          "success": 0
+        },
+        {
+          "episode": 11,
+          "seed": 100015,
+          "success": 0
+        },
+        {
+          "episode": 12,
+          "seed": 100016,
+          "success": 1
+        },
+        {
+          "episode": 13,
+          "seed": 100017,
+          "success": 0
+        },
+        {
+          "episode": 14,
+          "seed": 100018,
+          "success": 1
+        },
+        {
+          "episode": 15,
+          "seed": 100020,
+          "success": 1
+        },
+        {
+          "episode": 16,
+          "seed": 100022,
+          "success": 0
+        },
+        {
+          "episode": 17,
+          "seed": 100023,
+          "success": 1
+        },
+        {
+          "episode": 18,
+          "seed": 100024,
+          "success": 1
+        },
+        {
+          "episode": 19,
+          "seed": 100025,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100028,
+          "success": 0
+        },
+        {
+          "episode": 21,
+          "seed": 100029,
+          "success": 0
+        },
+        {
+          "episode": 22,
+          "seed": 100030,
+          "success": 0
+        },
+        {
+          "episode": 23,
+          "seed": 100031,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100032,
+          "success": 0
+        },
+        {
+          "episode": 25,
+          "seed": 100033,
+          "success": 0
+        },
+        {
+          "episode": 26,
+          "seed": 100034,
+          "success": 0
+        },
+        {
+          "episode": 27,
+          "seed": 100036,
+          "success": 0
+        },
+        {
+          "episode": 28,
+          "seed": 100040,
+          "success": 0
+        },
+        {
+          "episode": 29,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 30,
+          "seed": 100042,
+          "success": 0
+        },
+        {
+          "episode": 31,
+          "seed": 100043,
+          "success": 0
+        },
+        {
+          "episode": 32,
+          "seed": 100044,
+          "success": 0
+        },
+        {
+          "episode": 33,
+          "seed": 100045,
+          "success": 0
+        },
+        {
+          "episode": 34,
+          "seed": 100046,
+          "success": 0
+        },
+        {
+          "episode": 35,
+          "seed": 100048,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100049,
+          "success": 0
+        },
+        {
+          "episode": 37,
+          "seed": 100050,
+          "success": 0
+        },
+        {
+          "episode": 38,
+          "seed": 100051,
+          "success": 0
+        },
+        {
+          "episode": 39,
+          "seed": 100052,
+          "success": 1
+        },
+        {
+          "episode": 40,
+          "seed": 100054,
+          "success": 1
+        },
+        {
+          "episode": 41,
+          "seed": 100055,
+          "success": 1
+        },
+        {
+          "episode": 42,
+          "seed": 100056,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100057,
+          "success": 1
+        },
+        {
+          "episode": 44,
+          "seed": 100058,
+          "success": 0
+        },
+        {
+          "episode": 45,
+          "seed": 100059,
+          "success": 0
+        },
+        {
+          "episode": 46,
+          "seed": 100061,
+          "success": 1
+        },
+        {
+          "episode": 47,
+          "seed": 100062,
+          "success": 1
+        },
+        {
+          "episode": 48,
+          "seed": 100063,
+          "success": 0
+        },
+        {
+          "episode": 49,
+          "seed": 100064,
+          "success": 0
+        },
+        {
+          "episode": 50,
+          "seed": 100065,
+          "success": 0
+        },
+        {
+          "episode": 51,
+          "seed": 100066,
+          "success": 0
+        },
+        {
+          "episode": 52,
+          "seed": 100068,
+          "success": 0
+        },
+        {
+          "episode": 53,
+          "seed": 100069,
+          "success": 0
+        },
+        {
+          "episode": 54,
+          "seed": 100070,
+          "success": 0
+        },
+        {
+          "episode": 55,
+          "seed": 100072,
+          "success": 1
+        },
+        {
+          "episode": 56,
+          "seed": 100073,
+          "success": 0
+        },
+        {
+          "episode": 57,
+          "seed": 100074,
+          "success": 1
+        },
+        {
+          "episode": 58,
+          "seed": 100075,
+          "success": 0
+        },
+        {
+          "episode": 59,
+          "seed": 100077,
+          "success": 1
+        },
+        {
+          "episode": 60,
+          "seed": 100078,
+          "success": 1
+        },
+        {
+          "episode": 61,
+          "seed": 100079,
+          "success": 0
+        },
+        {
+          "episode": 62,
+          "seed": 100080,
+          "success": 0
+        },
+        {
+          "episode": 63,
+          "seed": 100081,
+          "success": 0
+        },
+        {
+          "episode": 64,
+          "seed": 100082,
+          "success": 0
+        },
+        {
+          "episode": 65,
+          "seed": 100086,
+          "success": 1
+        },
+        {
+          "episode": 66,
+          "seed": 100087,
+          "success": 0
+        },
+        {
+          "episode": 67,
+          "seed": 100089,
+          "success": 0
+        },
+        {
+          "episode": 68,
+          "seed": 100090,
+          "success": 1
+        },
+        {
+          "episode": 69,
+          "seed": 100091,
+          "success": 1
+        },
+        {
+          "episode": 70,
+          "seed": 100092,
+          "success": 1
+        },
+        {
+          "episode": 71,
+          "seed": 100095,
+          "success": 0
+        },
+        {
+          "episode": 72,
+          "seed": 100096,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100097,
+          "success": 0
+        },
+        {
+          "episode": 74,
+          "seed": 100100,
+          "success": 0
+        },
+        {
+          "episode": 75,
+          "seed": 100101,
+          "success": 0
+        },
+        {
+          "episode": 76,
+          "seed": 100102,
+          "success": 0
+        },
+        {
+          "episode": 77,
+          "seed": 100103,
+          "success": 0
+        },
+        {
+          "episode": 78,
+          "seed": 100105,
+          "success": 0
+        },
+        {
+          "episode": 79,
+          "seed": 100106,
+          "success": 1
+        },
+        {
+          "episode": 80,
+          "seed": 100107,
+          "success": 0
+        },
+        {
+          "episode": 81,
+          "seed": 100108,
+          "success": 0
+        },
+        {
+          "episode": 82,
+          "seed": 100109,
+          "success": 1
+        },
+        {
+          "episode": 83,
+          "seed": 100110,
+          "success": 1
+        },
+        {
+          "episode": 84,
+          "seed": 100111,
+          "success": 0
+        },
+        {
+          "episode": 85,
+          "seed": 100114,
+          "success": 1
+        },
+        {
+          "episode": 86,
+          "seed": 100116,
+          "success": 1
+        },
+        {
+          "episode": 87,
+          "seed": 100118,
+          "success": 0
+        },
+        {
+          "episode": 88,
+          "seed": 100119,
+          "success": 0
+        },
+        {
+          "episode": 89,
+          "seed": 100122,
+          "success": 0
+        },
+        {
+          "episode": 90,
+          "seed": 100123,
+          "success": 1
+        },
+        {
+          "episode": 91,
+          "seed": 100124,
+          "success": 0
+        },
+        {
+          "episode": 92,
+          "seed": 100125,
+          "success": 1
+        },
+        {
+          "episode": 93,
+          "seed": 100127,
+          "success": 0
+        },
+        {
+          "episode": 94,
+          "seed": 100128,
+          "success": 1
+        },
+        {
+          "episode": 95,
+          "seed": 100129,
+          "success": 0
+        },
+        {
+          "episode": 96,
+          "seed": 100130,
+          "success": 1
+        },
+        {
+          "episode": 97,
+          "seed": 100131,
+          "success": 0
+        },
+        {
+          "episode": 98,
+          "seed": 100132,
+          "success": 1
+        },
+        {
+          "episode": 99,
+          "seed": 100133,
+          "success": 0
+        }
+      ],
+      "warmup24k30": 50.0,
+      "full_backward20k30": 53.333333333333336,
+      "first30_seed_overlap_with20k": 30,
+      "first30_seed_order_equal20k": true
+    },
+    {
+      "task": "beat_block_hammer",
+      "mode": "demo_clean",
+      "full100": 98,
+      "first30_successes": 30,
+      "first30_rate": 100.0,
+      "delta_first30_vs100_pp": 2.0,
+      "official": 99.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu4/queue/jobs/demo_clean/beat_block_hammer/demo_clean/beat_block_hammer/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100002,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100003,
+          "success": 1
+        },
+        {
+          "episode": 2,
+          "seed": 100006,
+          "success": 1
+        },
+        {
+          "episode": 3,
+          "seed": 100007,
+          "success": 1
+        },
+        {
+          "episode": 4,
+          "seed": 100008,
+          "success": 1
+        },
+        {
+          "episode": 5,
+          "seed": 100010,
+          "success": 1
+        },
+        {
+          "episode": 6,
+          "seed": 100012,
+          "success": 1
+        },
+        {
+          "episode": 7,
+          "seed": 100013,
+          "success": 1
+        },
+        {
+          "episode": 8,
+          "seed": 100014,
+          "success": 1
+        },
+        {
+          "episode": 9,
+          "seed": 100015,
+          "success": 1
+        },
+        {
+          "episode": 10,
+          "seed": 100020,
+          "success": 1
+        },
+        {
+          "episode": 11,
+          "seed": 100021,
+          "success": 1
+        },
+        {
+          "episode": 12,
+          "seed": 100022,
+          "success": 1
+        },
+        {
+          "episode": 13,
+          "seed": 100023,
+          "success": 1
+        },
+        {
+          "episode": 14,
+          "seed": 100026,
+          "success": 1
+        },
+        {
+          "episode": 15,
+          "seed": 100029,
+          "success": 1
+        },
+        {
+          "episode": 16,
+          "seed": 100030,
+          "success": 1
+        },
+        {
+          "episode": 17,
+          "seed": 100032,
+          "success": 1
+        },
+        {
+          "episode": 18,
+          "seed": 100034,
+          "success": 1
+        },
+        {
+          "episode": 19,
+          "seed": 100035,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100037,
+          "success": 1
+        },
+        {
+          "episode": 21,
+          "seed": 100038,
+          "success": 1
+        },
+        {
+          "episode": 22,
+          "seed": 100040,
+          "success": 1
+        },
+        {
+          "episode": 23,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100042,
+          "success": 1
+        },
+        {
+          "episode": 25,
+          "seed": 100044,
+          "success": 1
+        },
+        {
+          "episode": 26,
+          "seed": 100046,
+          "success": 1
+        },
+        {
+          "episode": 27,
+          "seed": 100047,
+          "success": 1
+        },
+        {
+          "episode": 28,
+          "seed": 100048,
+          "success": 1
+        },
+        {
+          "episode": 29,
+          "seed": 100049,
+          "success": 1
+        },
+        {
+          "episode": 30,
+          "seed": 100051,
+          "success": 1
+        },
+        {
+          "episode": 31,
+          "seed": 100052,
+          "success": 1
+        },
+        {
+          "episode": 32,
+          "seed": 100053,
+          "success": 1
+        },
+        {
+          "episode": 33,
+          "seed": 100054,
+          "success": 1
+        },
+        {
+          "episode": 34,
+          "seed": 100055,
+          "success": 1
+        },
+        {
+          "episode": 35,
+          "seed": 100056,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100057,
+          "success": 1
+        },
+        {
+          "episode": 37,
+          "seed": 100059,
+          "success": 1
+        },
+        {
+          "episode": 38,
+          "seed": 100060,
+          "success": 0
+        },
+        {
+          "episode": 39,
+          "seed": 100061,
+          "success": 1
+        },
+        {
+          "episode": 40,
+          "seed": 100063,
+          "success": 1
+        },
+        {
+          "episode": 41,
+          "seed": 100064,
+          "success": 1
+        },
+        {
+          "episode": 42,
+          "seed": 100065,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100067,
+          "success": 1
+        },
+        {
+          "episode": 44,
+          "seed": 100068,
+          "success": 1
+        },
+        {
+          "episode": 45,
+          "seed": 100069,
+          "success": 1
+        },
+        {
+          "episode": 46,
+          "seed": 100070,
+          "success": 1
+        },
+        {
+          "episode": 47,
+          "seed": 100071,
+          "success": 1
+        },
+        {
+          "episode": 48,
+          "seed": 100072,
+          "success": 1
+        },
+        {
+          "episode": 49,
+          "seed": 100073,
+          "success": 1
+        },
+        {
+          "episode": 50,
+          "seed": 100074,
+          "success": 1
+        },
+        {
+          "episode": 51,
+          "seed": 100075,
+          "success": 1
+        },
+        {
+          "episode": 52,
+          "seed": 100077,
+          "success": 1
+        },
+        {
+          "episode": 53,
+          "seed": 100079,
+          "success": 1
+        },
+        {
+          "episode": 54,
+          "seed": 100080,
+          "success": 1
+        },
+        {
+          "episode": 55,
+          "seed": 100084,
+          "success": 1
+        },
+        {
+          "episode": 56,
+          "seed": 100085,
+          "success": 1
+        },
+        {
+          "episode": 57,
+          "seed": 100086,
+          "success": 1
+        },
+        {
+          "episode": 58,
+          "seed": 100087,
+          "success": 1
+        },
+        {
+          "episode": 59,
+          "seed": 100089,
+          "success": 1
+        },
+        {
+          "episode": 60,
+          "seed": 100090,
+          "success": 1
+        },
+        {
+          "episode": 61,
+          "seed": 100092,
+          "success": 1
+        },
+        {
+          "episode": 62,
+          "seed": 100095,
+          "success": 1
+        },
+        {
+          "episode": 63,
+          "seed": 100096,
+          "success": 1
+        },
+        {
+          "episode": 64,
+          "seed": 100097,
+          "success": 1
+        },
+        {
+          "episode": 65,
+          "seed": 100098,
+          "success": 0
+        },
+        {
+          "episode": 66,
+          "seed": 100100,
+          "success": 1
+        },
+        {
+          "episode": 67,
+          "seed": 100101,
+          "success": 1
+        },
+        {
+          "episode": 68,
+          "seed": 100102,
+          "success": 1
+        },
+        {
+          "episode": 69,
+          "seed": 100103,
+          "success": 1
+        },
+        {
+          "episode": 70,
+          "seed": 100104,
+          "success": 1
+        },
+        {
+          "episode": 71,
+          "seed": 100105,
+          "success": 1
+        },
+        {
+          "episode": 72,
+          "seed": 100107,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100109,
+          "success": 1
+        },
+        {
+          "episode": 74,
+          "seed": 100110,
+          "success": 1
+        },
+        {
+          "episode": 75,
+          "seed": 100112,
+          "success": 1
+        },
+        {
+          "episode": 76,
+          "seed": 100113,
+          "success": 1
+        },
+        {
+          "episode": 77,
+          "seed": 100114,
+          "success": 1
+        },
+        {
+          "episode": 78,
+          "seed": 100115,
+          "success": 1
+        },
+        {
+          "episode": 79,
+          "seed": 100116,
+          "success": 1
+        },
+        {
+          "episode": 80,
+          "seed": 100117,
+          "success": 1
+        },
+        {
+          "episode": 81,
+          "seed": 100118,
+          "success": 1
+        },
+        {
+          "episode": 82,
+          "seed": 100119,
+          "success": 1
+        },
+        {
+          "episode": 83,
+          "seed": 100120,
+          "success": 1
+        },
+        {
+          "episode": 84,
+          "seed": 100121,
+          "success": 1
+        },
+        {
+          "episode": 85,
+          "seed": 100122,
+          "success": 1
+        },
+        {
+          "episode": 86,
+          "seed": 100123,
+          "success": 1
+        },
+        {
+          "episode": 87,
+          "seed": 100124,
+          "success": 1
+        },
+        {
+          "episode": 88,
+          "seed": 100125,
+          "success": 1
+        },
+        {
+          "episode": 89,
+          "seed": 100126,
+          "success": 1
+        },
+        {
+          "episode": 90,
+          "seed": 100127,
+          "success": 1
+        },
+        {
+          "episode": 91,
+          "seed": 100128,
+          "success": 1
+        },
+        {
+          "episode": 92,
+          "seed": 100129,
+          "success": 1
+        },
+        {
+          "episode": 93,
+          "seed": 100130,
+          "success": 1
+        },
+        {
+          "episode": 94,
+          "seed": 100131,
+          "success": 1
+        },
+        {
+          "episode": 95,
+          "seed": 100132,
+          "success": 1
+        },
+        {
+          "episode": 96,
+          "seed": 100133,
+          "success": 1
+        },
+        {
+          "episode": 97,
+          "seed": 100134,
+          "success": 1
+        },
+        {
+          "episode": 98,
+          "seed": 100136,
+          "success": 1
+        },
+        {
+          "episode": 99,
+          "seed": 100137,
+          "success": 1
+        }
+      ],
+      "warmup24k30": 93.33333333333333,
+      "full_backward20k30": 100.0,
+      "first30_seed_overlap_with20k": 23,
+      "first30_seed_order_equal20k": false
+    },
+    {
+      "task": "beat_block_hammer",
+      "mode": "demo_randomized",
+      "full100": 33,
+      "first30_successes": 8,
+      "first30_rate": 26.666666666666668,
+      "delta_first30_vs100_pp": -6.333333333333332,
+      "official": 55.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu4/queue/jobs/demo_randomized/beat_block_hammer/demo_randomized/beat_block_hammer/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100000,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100001,
+          "success": 1
+        },
+        {
+          "episode": 2,
+          "seed": 100002,
+          "success": 0
+        },
+        {
+          "episode": 3,
+          "seed": 100003,
+          "success": 1
+        },
+        {
+          "episode": 4,
+          "seed": 100005,
+          "success": 0
+        },
+        {
+          "episode": 5,
+          "seed": 100006,
+          "success": 0
+        },
+        {
+          "episode": 6,
+          "seed": 100007,
+          "success": 0
+        },
+        {
+          "episode": 7,
+          "seed": 100009,
+          "success": 0
+        },
+        {
+          "episode": 8,
+          "seed": 100011,
+          "success": 0
+        },
+        {
+          "episode": 9,
+          "seed": 100012,
+          "success": 0
+        },
+        {
+          "episode": 10,
+          "seed": 100015,
+          "success": 0
+        },
+        {
+          "episode": 11,
+          "seed": 100018,
+          "success": 0
+        },
+        {
+          "episode": 12,
+          "seed": 100020,
+          "success": 0
+        },
+        {
+          "episode": 13,
+          "seed": 100021,
+          "success": 0
+        },
+        {
+          "episode": 14,
+          "seed": 100023,
+          "success": 0
+        },
+        {
+          "episode": 15,
+          "seed": 100025,
+          "success": 0
+        },
+        {
+          "episode": 16,
+          "seed": 100026,
+          "success": 1
+        },
+        {
+          "episode": 17,
+          "seed": 100027,
+          "success": 0
+        },
+        {
+          "episode": 18,
+          "seed": 100028,
+          "success": 1
+        },
+        {
+          "episode": 19,
+          "seed": 100031,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100032,
+          "success": 0
+        },
+        {
+          "episode": 21,
+          "seed": 100036,
+          "success": 0
+        },
+        {
+          "episode": 22,
+          "seed": 100037,
+          "success": 0
+        },
+        {
+          "episode": 23,
+          "seed": 100038,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 25,
+          "seed": 100043,
+          "success": 0
+        },
+        {
+          "episode": 26,
+          "seed": 100044,
+          "success": 0
+        },
+        {
+          "episode": 27,
+          "seed": 100046,
+          "success": 0
+        },
+        {
+          "episode": 28,
+          "seed": 100048,
+          "success": 0
+        },
+        {
+          "episode": 29,
+          "seed": 100051,
+          "success": 0
+        },
+        {
+          "episode": 30,
+          "seed": 100052,
+          "success": 1
+        },
+        {
+          "episode": 31,
+          "seed": 100053,
+          "success": 0
+        },
+        {
+          "episode": 32,
+          "seed": 100054,
+          "success": 0
+        },
+        {
+          "episode": 33,
+          "seed": 100056,
+          "success": 0
+        },
+        {
+          "episode": 34,
+          "seed": 100057,
+          "success": 1
+        },
+        {
+          "episode": 35,
+          "seed": 100058,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100059,
+          "success": 1
+        },
+        {
+          "episode": 37,
+          "seed": 100062,
+          "success": 0
+        },
+        {
+          "episode": 38,
+          "seed": 100063,
+          "success": 0
+        },
+        {
+          "episode": 39,
+          "seed": 100064,
+          "success": 0
+        },
+        {
+          "episode": 40,
+          "seed": 100065,
+          "success": 0
+        },
+        {
+          "episode": 41,
+          "seed": 100066,
+          "success": 0
+        },
+        {
+          "episode": 42,
+          "seed": 100067,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100068,
+          "success": 1
+        },
+        {
+          "episode": 44,
+          "seed": 100071,
+          "success": 0
+        },
+        {
+          "episode": 45,
+          "seed": 100072,
+          "success": 0
+        },
+        {
+          "episode": 46,
+          "seed": 100077,
+          "success": 1
+        },
+        {
+          "episode": 47,
+          "seed": 100078,
+          "success": 0
+        },
+        {
+          "episode": 48,
+          "seed": 100079,
+          "success": 0
+        },
+        {
+          "episode": 49,
+          "seed": 100080,
+          "success": 0
+        },
+        {
+          "episode": 50,
+          "seed": 100081,
+          "success": 0
+        },
+        {
+          "episode": 51,
+          "seed": 100082,
+          "success": 0
+        },
+        {
+          "episode": 52,
+          "seed": 100083,
+          "success": 1
+        },
+        {
+          "episode": 53,
+          "seed": 100086,
+          "success": 0
+        },
+        {
+          "episode": 54,
+          "seed": 100087,
+          "success": 1
+        },
+        {
+          "episode": 55,
+          "seed": 100088,
+          "success": 1
+        },
+        {
+          "episode": 56,
+          "seed": 100089,
+          "success": 0
+        },
+        {
+          "episode": 57,
+          "seed": 100090,
+          "success": 0
+        },
+        {
+          "episode": 58,
+          "seed": 100093,
+          "success": 0
+        },
+        {
+          "episode": 59,
+          "seed": 100094,
+          "success": 1
+        },
+        {
+          "episode": 60,
+          "seed": 100095,
+          "success": 0
+        },
+        {
+          "episode": 61,
+          "seed": 100096,
+          "success": 0
+        },
+        {
+          "episode": 62,
+          "seed": 100098,
+          "success": 0
+        },
+        {
+          "episode": 63,
+          "seed": 100099,
+          "success": 0
+        },
+        {
+          "episode": 64,
+          "seed": 100100,
+          "success": 0
+        },
+        {
+          "episode": 65,
+          "seed": 100102,
+          "success": 0
+        },
+        {
+          "episode": 66,
+          "seed": 100104,
+          "success": 0
+        },
+        {
+          "episode": 67,
+          "seed": 100105,
+          "success": 0
+        },
+        {
+          "episode": 68,
+          "seed": 100106,
+          "success": 1
+        },
+        {
+          "episode": 69,
+          "seed": 100109,
+          "success": 0
+        },
+        {
+          "episode": 70,
+          "seed": 100110,
+          "success": 1
+        },
+        {
+          "episode": 71,
+          "seed": 100111,
+          "success": 0
+        },
+        {
+          "episode": 72,
+          "seed": 100112,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100113,
+          "success": 1
+        },
+        {
+          "episode": 74,
+          "seed": 100114,
+          "success": 0
+        },
+        {
+          "episode": 75,
+          "seed": 100115,
+          "success": 0
+        },
+        {
+          "episode": 76,
+          "seed": 100117,
+          "success": 1
+        },
+        {
+          "episode": 77,
+          "seed": 100118,
+          "success": 0
+        },
+        {
+          "episode": 78,
+          "seed": 100119,
+          "success": 0
+        },
+        {
+          "episode": 79,
+          "seed": 100122,
+          "success": 0
+        },
+        {
+          "episode": 80,
+          "seed": 100124,
+          "success": 1
+        },
+        {
+          "episode": 81,
+          "seed": 100125,
+          "success": 1
+        },
+        {
+          "episode": 82,
+          "seed": 100127,
+          "success": 1
+        },
+        {
+          "episode": 83,
+          "seed": 100128,
+          "success": 0
+        },
+        {
+          "episode": 84,
+          "seed": 100130,
+          "success": 0
+        },
+        {
+          "episode": 85,
+          "seed": 100131,
+          "success": 0
+        },
+        {
+          "episode": 86,
+          "seed": 100132,
+          "success": 0
+        },
+        {
+          "episode": 87,
+          "seed": 100133,
+          "success": 1
+        },
+        {
+          "episode": 88,
+          "seed": 100134,
+          "success": 1
+        },
+        {
+          "episode": 89,
+          "seed": 100135,
+          "success": 1
+        },
+        {
+          "episode": 90,
+          "seed": 100136,
+          "success": 0
+        },
+        {
+          "episode": 91,
+          "seed": 100137,
+          "success": 0
+        },
+        {
+          "episode": 92,
+          "seed": 100138,
+          "success": 0
+        },
+        {
+          "episode": 93,
+          "seed": 100139,
+          "success": 1
+        },
+        {
+          "episode": 94,
+          "seed": 100140,
+          "success": 0
+        },
+        {
+          "episode": 95,
+          "seed": 100141,
+          "success": 0
+        },
+        {
+          "episode": 96,
+          "seed": 100142,
+          "success": 0
+        },
+        {
+          "episode": 97,
+          "seed": 100143,
+          "success": 1
+        },
+        {
+          "episode": 98,
+          "seed": 100144,
+          "success": 0
+        },
+        {
+          "episode": 99,
+          "seed": 100148,
+          "success": 1
+        }
+      ],
+      "warmup24k30": 26.666666666666668,
+      "full_backward20k30": 26.666666666666668,
+      "first30_seed_overlap_with20k": 25,
+      "first30_seed_order_equal20k": false
+    },
+    {
+      "task": "place_shoe",
+      "mode": "demo_clean",
+      "full100": 92,
+      "first30_successes": 29,
+      "first30_rate": 96.66666666666667,
+      "delta_first30_vs100_pp": 4.666666666666671,
+      "official": 98.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu5/queue/jobs/demo_clean/place_shoe/demo_clean/place_shoe/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100000,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100001,
+          "success": 1
+        },
+        {
+          "episode": 2,
+          "seed": 100002,
+          "success": 1
+        },
+        {
+          "episode": 3,
+          "seed": 100003,
+          "success": 1
+        },
+        {
+          "episode": 4,
+          "seed": 100004,
+          "success": 1
+        },
+        {
+          "episode": 5,
+          "seed": 100005,
+          "success": 1
+        },
+        {
+          "episode": 6,
+          "seed": 100006,
+          "success": 1
+        },
+        {
+          "episode": 7,
+          "seed": 100007,
+          "success": 1
+        },
+        {
+          "episode": 8,
+          "seed": 100008,
+          "success": 1
+        },
+        {
+          "episode": 9,
+          "seed": 100009,
+          "success": 1
+        },
+        {
+          "episode": 10,
+          "seed": 100010,
+          "success": 1
+        },
+        {
+          "episode": 11,
+          "seed": 100011,
+          "success": 1
+        },
+        {
+          "episode": 12,
+          "seed": 100012,
+          "success": 1
+        },
+        {
+          "episode": 13,
+          "seed": 100013,
+          "success": 1
+        },
+        {
+          "episode": 14,
+          "seed": 100014,
+          "success": 1
+        },
+        {
+          "episode": 15,
+          "seed": 100015,
+          "success": 1
+        },
+        {
+          "episode": 16,
+          "seed": 100016,
+          "success": 1
+        },
+        {
+          "episode": 17,
+          "seed": 100017,
+          "success": 1
+        },
+        {
+          "episode": 18,
+          "seed": 100018,
+          "success": 1
+        },
+        {
+          "episode": 19,
+          "seed": 100019,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100020,
+          "success": 1
+        },
+        {
+          "episode": 21,
+          "seed": 100021,
+          "success": 0
+        },
+        {
+          "episode": 22,
+          "seed": 100022,
+          "success": 1
+        },
+        {
+          "episode": 23,
+          "seed": 100023,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100024,
+          "success": 1
+        },
+        {
+          "episode": 25,
+          "seed": 100025,
+          "success": 1
+        },
+        {
+          "episode": 26,
+          "seed": 100026,
+          "success": 1
+        },
+        {
+          "episode": 27,
+          "seed": 100028,
+          "success": 1
+        },
+        {
+          "episode": 28,
+          "seed": 100030,
+          "success": 1
+        },
+        {
+          "episode": 29,
+          "seed": 100031,
+          "success": 1
+        },
+        {
+          "episode": 30,
+          "seed": 100032,
+          "success": 1
+        },
+        {
+          "episode": 31,
+          "seed": 100033,
+          "success": 0
+        },
+        {
+          "episode": 32,
+          "seed": 100034,
+          "success": 0
+        },
+        {
+          "episode": 33,
+          "seed": 100035,
+          "success": 1
+        },
+        {
+          "episode": 34,
+          "seed": 100037,
+          "success": 0
+        },
+        {
+          "episode": 35,
+          "seed": 100038,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100040,
+          "success": 1
+        },
+        {
+          "episode": 37,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 38,
+          "seed": 100042,
+          "success": 1
+        },
+        {
+          "episode": 39,
+          "seed": 100043,
+          "success": 1
+        },
+        {
+          "episode": 40,
+          "seed": 100044,
+          "success": 1
+        },
+        {
+          "episode": 41,
+          "seed": 100045,
+          "success": 1
+        },
+        {
+          "episode": 42,
+          "seed": 100046,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100047,
+          "success": 0
+        },
+        {
+          "episode": 44,
+          "seed": 100048,
+          "success": 1
+        },
+        {
+          "episode": 45,
+          "seed": 100049,
+          "success": 1
+        },
+        {
+          "episode": 46,
+          "seed": 100050,
+          "success": 1
+        },
+        {
+          "episode": 47,
+          "seed": 100051,
+          "success": 1
+        },
+        {
+          "episode": 48,
+          "seed": 100052,
+          "success": 1
+        },
+        {
+          "episode": 49,
+          "seed": 100053,
+          "success": 1
+        },
+        {
+          "episode": 50,
+          "seed": 100054,
+          "success": 1
+        },
+        {
+          "episode": 51,
+          "seed": 100055,
+          "success": 1
+        },
+        {
+          "episode": 52,
+          "seed": 100056,
+          "success": 1
+        },
+        {
+          "episode": 53,
+          "seed": 100057,
+          "success": 1
+        },
+        {
+          "episode": 54,
+          "seed": 100058,
+          "success": 0
+        },
+        {
+          "episode": 55,
+          "seed": 100059,
+          "success": 0
+        },
+        {
+          "episode": 56,
+          "seed": 100060,
+          "success": 1
+        },
+        {
+          "episode": 57,
+          "seed": 100061,
+          "success": 1
+        },
+        {
+          "episode": 58,
+          "seed": 100062,
+          "success": 1
+        },
+        {
+          "episode": 59,
+          "seed": 100064,
+          "success": 1
+        },
+        {
+          "episode": 60,
+          "seed": 100065,
+          "success": 1
+        },
+        {
+          "episode": 61,
+          "seed": 100067,
+          "success": 1
+        },
+        {
+          "episode": 62,
+          "seed": 100069,
+          "success": 1
+        },
+        {
+          "episode": 63,
+          "seed": 100070,
+          "success": 1
+        },
+        {
+          "episode": 64,
+          "seed": 100071,
+          "success": 1
+        },
+        {
+          "episode": 65,
+          "seed": 100072,
+          "success": 1
+        },
+        {
+          "episode": 66,
+          "seed": 100073,
+          "success": 1
+        },
+        {
+          "episode": 67,
+          "seed": 100074,
+          "success": 0
+        },
+        {
+          "episode": 68,
+          "seed": 100075,
+          "success": 1
+        },
+        {
+          "episode": 69,
+          "seed": 100076,
+          "success": 1
+        },
+        {
+          "episode": 70,
+          "seed": 100077,
+          "success": 1
+        },
+        {
+          "episode": 71,
+          "seed": 100079,
+          "success": 1
+        },
+        {
+          "episode": 72,
+          "seed": 100080,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100083,
+          "success": 1
+        },
+        {
+          "episode": 74,
+          "seed": 100084,
+          "success": 1
+        },
+        {
+          "episode": 75,
+          "seed": 100086,
+          "success": 1
+        },
+        {
+          "episode": 76,
+          "seed": 100088,
+          "success": 1
+        },
+        {
+          "episode": 77,
+          "seed": 100089,
+          "success": 1
+        },
+        {
+          "episode": 78,
+          "seed": 100091,
+          "success": 1
+        },
+        {
+          "episode": 79,
+          "seed": 100095,
+          "success": 1
+        },
+        {
+          "episode": 80,
+          "seed": 100096,
+          "success": 1
+        },
+        {
+          "episode": 81,
+          "seed": 100097,
+          "success": 1
+        },
+        {
+          "episode": 82,
+          "seed": 100098,
+          "success": 1
+        },
+        {
+          "episode": 83,
+          "seed": 100099,
+          "success": 1
+        },
+        {
+          "episode": 84,
+          "seed": 100101,
+          "success": 1
+        },
+        {
+          "episode": 85,
+          "seed": 100102,
+          "success": 1
+        },
+        {
+          "episode": 86,
+          "seed": 100103,
+          "success": 1
+        },
+        {
+          "episode": 87,
+          "seed": 100104,
+          "success": 1
+        },
+        {
+          "episode": 88,
+          "seed": 100105,
+          "success": 1
+        },
+        {
+          "episode": 89,
+          "seed": 100106,
+          "success": 1
+        },
+        {
+          "episode": 90,
+          "seed": 100108,
+          "success": 1
+        },
+        {
+          "episode": 91,
+          "seed": 100110,
+          "success": 1
+        },
+        {
+          "episode": 92,
+          "seed": 100111,
+          "success": 1
+        },
+        {
+          "episode": 93,
+          "seed": 100112,
+          "success": 1
+        },
+        {
+          "episode": 94,
+          "seed": 100113,
+          "success": 1
+        },
+        {
+          "episode": 95,
+          "seed": 100114,
+          "success": 1
+        },
+        {
+          "episode": 96,
+          "seed": 100115,
+          "success": 1
+        },
+        {
+          "episode": 97,
+          "seed": 100116,
+          "success": 1
+        },
+        {
+          "episode": 98,
+          "seed": 100117,
+          "success": 1
+        },
+        {
+          "episode": 99,
+          "seed": 100118,
+          "success": 1
+        }
+      ],
+      "warmup24k30": 100.0,
+      "full_backward20k30": 93.33333333333333,
+      "first30_seed_overlap_with20k": 30,
+      "first30_seed_order_equal20k": true
+    },
+    {
+      "task": "place_shoe",
+      "mode": "demo_randomized",
+      "full100": 66,
+      "first30_successes": 20,
+      "first30_rate": 66.66666666666666,
+      "delta_first30_vs100_pp": 0.6666666666666572,
+      "official": 51.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu5/queue/jobs/demo_randomized/place_shoe/demo_randomized/place_shoe/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100001,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100002,
+          "success": 1
+        },
+        {
+          "episode": 2,
+          "seed": 100003,
+          "success": 0
+        },
+        {
+          "episode": 3,
+          "seed": 100004,
+          "success": 1
+        },
+        {
+          "episode": 4,
+          "seed": 100005,
+          "success": 1
+        },
+        {
+          "episode": 5,
+          "seed": 100006,
+          "success": 1
+        },
+        {
+          "episode": 6,
+          "seed": 100008,
+          "success": 1
+        },
+        {
+          "episode": 7,
+          "seed": 100010,
+          "success": 0
+        },
+        {
+          "episode": 8,
+          "seed": 100012,
+          "success": 0
+        },
+        {
+          "episode": 9,
+          "seed": 100013,
+          "success": 1
+        },
+        {
+          "episode": 10,
+          "seed": 100014,
+          "success": 1
+        },
+        {
+          "episode": 11,
+          "seed": 100015,
+          "success": 0
+        },
+        {
+          "episode": 12,
+          "seed": 100016,
+          "success": 1
+        },
+        {
+          "episode": 13,
+          "seed": 100017,
+          "success": 0
+        },
+        {
+          "episode": 14,
+          "seed": 100018,
+          "success": 1
+        },
+        {
+          "episode": 15,
+          "seed": 100019,
+          "success": 0
+        },
+        {
+          "episode": 16,
+          "seed": 100021,
+          "success": 0
+        },
+        {
+          "episode": 17,
+          "seed": 100022,
+          "success": 1
+        },
+        {
+          "episode": 18,
+          "seed": 100024,
+          "success": 0
+        },
+        {
+          "episode": 19,
+          "seed": 100026,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100027,
+          "success": 1
+        },
+        {
+          "episode": 21,
+          "seed": 100029,
+          "success": 1
+        },
+        {
+          "episode": 22,
+          "seed": 100030,
+          "success": 0
+        },
+        {
+          "episode": 23,
+          "seed": 100031,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100032,
+          "success": 0
+        },
+        {
+          "episode": 25,
+          "seed": 100033,
+          "success": 1
+        },
+        {
+          "episode": 26,
+          "seed": 100034,
+          "success": 1
+        },
+        {
+          "episode": 27,
+          "seed": 100035,
+          "success": 1
+        },
+        {
+          "episode": 28,
+          "seed": 100037,
+          "success": 1
+        },
+        {
+          "episode": 29,
+          "seed": 100038,
+          "success": 1
+        },
+        {
+          "episode": 30,
+          "seed": 100039,
+          "success": 0
+        },
+        {
+          "episode": 31,
+          "seed": 100040,
+          "success": 1
+        },
+        {
+          "episode": 32,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 33,
+          "seed": 100042,
+          "success": 1
+        },
+        {
+          "episode": 34,
+          "seed": 100043,
+          "success": 1
+        },
+        {
+          "episode": 35,
+          "seed": 100044,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100045,
+          "success": 1
+        },
+        {
+          "episode": 37,
+          "seed": 100047,
+          "success": 1
+        },
+        {
+          "episode": 38,
+          "seed": 100048,
+          "success": 1
+        },
+        {
+          "episode": 39,
+          "seed": 100049,
+          "success": 1
+        },
+        {
+          "episode": 40,
+          "seed": 100051,
+          "success": 0
+        },
+        {
+          "episode": 41,
+          "seed": 100053,
+          "success": 0
+        },
+        {
+          "episode": 42,
+          "seed": 100056,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100058,
+          "success": 1
+        },
+        {
+          "episode": 44,
+          "seed": 100059,
+          "success": 0
+        },
+        {
+          "episode": 45,
+          "seed": 100060,
+          "success": 1
+        },
+        {
+          "episode": 46,
+          "seed": 100061,
+          "success": 1
+        },
+        {
+          "episode": 47,
+          "seed": 100064,
+          "success": 1
+        },
+        {
+          "episode": 48,
+          "seed": 100065,
+          "success": 1
+        },
+        {
+          "episode": 49,
+          "seed": 100067,
+          "success": 1
+        },
+        {
+          "episode": 50,
+          "seed": 100069,
+          "success": 1
+        },
+        {
+          "episode": 51,
+          "seed": 100070,
+          "success": 1
+        },
+        {
+          "episode": 52,
+          "seed": 100071,
+          "success": 1
+        },
+        {
+          "episode": 53,
+          "seed": 100072,
+          "success": 0
+        },
+        {
+          "episode": 54,
+          "seed": 100074,
+          "success": 0
+        },
+        {
+          "episode": 55,
+          "seed": 100075,
+          "success": 0
+        },
+        {
+          "episode": 56,
+          "seed": 100076,
+          "success": 0
+        },
+        {
+          "episode": 57,
+          "seed": 100078,
+          "success": 1
+        },
+        {
+          "episode": 58,
+          "seed": 100079,
+          "success": 1
+        },
+        {
+          "episode": 59,
+          "seed": 100080,
+          "success": 1
+        },
+        {
+          "episode": 60,
+          "seed": 100082,
+          "success": 1
+        },
+        {
+          "episode": 61,
+          "seed": 100084,
+          "success": 0
+        },
+        {
+          "episode": 62,
+          "seed": 100085,
+          "success": 0
+        },
+        {
+          "episode": 63,
+          "seed": 100088,
+          "success": 1
+        },
+        {
+          "episode": 64,
+          "seed": 100089,
+          "success": 1
+        },
+        {
+          "episode": 65,
+          "seed": 100090,
+          "success": 0
+        },
+        {
+          "episode": 66,
+          "seed": 100093,
+          "success": 1
+        },
+        {
+          "episode": 67,
+          "seed": 100094,
+          "success": 1
+        },
+        {
+          "episode": 68,
+          "seed": 100096,
+          "success": 1
+        },
+        {
+          "episode": 69,
+          "seed": 100097,
+          "success": 1
+        },
+        {
+          "episode": 70,
+          "seed": 100098,
+          "success": 1
+        },
+        {
+          "episode": 71,
+          "seed": 100101,
+          "success": 1
+        },
+        {
+          "episode": 72,
+          "seed": 100102,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100104,
+          "success": 0
+        },
+        {
+          "episode": 74,
+          "seed": 100106,
+          "success": 1
+        },
+        {
+          "episode": 75,
+          "seed": 100107,
+          "success": 1
+        },
+        {
+          "episode": 76,
+          "seed": 100108,
+          "success": 0
+        },
+        {
+          "episode": 77,
+          "seed": 100109,
+          "success": 0
+        },
+        {
+          "episode": 78,
+          "seed": 100110,
+          "success": 1
+        },
+        {
+          "episode": 79,
+          "seed": 100111,
+          "success": 0
+        },
+        {
+          "episode": 80,
+          "seed": 100112,
+          "success": 0
+        },
+        {
+          "episode": 81,
+          "seed": 100114,
+          "success": 1
+        },
+        {
+          "episode": 82,
+          "seed": 100115,
+          "success": 1
+        },
+        {
+          "episode": 83,
+          "seed": 100116,
+          "success": 1
+        },
+        {
+          "episode": 84,
+          "seed": 100117,
+          "success": 0
+        },
+        {
+          "episode": 85,
+          "seed": 100118,
+          "success": 1
+        },
+        {
+          "episode": 86,
+          "seed": 100119,
+          "success": 0
+        },
+        {
+          "episode": 87,
+          "seed": 100121,
+          "success": 0
+        },
+        {
+          "episode": 88,
+          "seed": 100122,
+          "success": 0
+        },
+        {
+          "episode": 89,
+          "seed": 100123,
+          "success": 1
+        },
+        {
+          "episode": 90,
+          "seed": 100124,
+          "success": 0
+        },
+        {
+          "episode": 91,
+          "seed": 100125,
+          "success": 1
+        },
+        {
+          "episode": 92,
+          "seed": 100126,
+          "success": 1
+        },
+        {
+          "episode": 93,
+          "seed": 100127,
+          "success": 1
+        },
+        {
+          "episode": 94,
+          "seed": 100129,
+          "success": 1
+        },
+        {
+          "episode": 95,
+          "seed": 100130,
+          "success": 1
+        },
+        {
+          "episode": 96,
+          "seed": 100131,
+          "success": 1
+        },
+        {
+          "episode": 97,
+          "seed": 100132,
+          "success": 0
+        },
+        {
+          "episode": 98,
+          "seed": 100134,
+          "success": 0
+        },
+        {
+          "episode": 99,
+          "seed": 100135,
+          "success": 0
+        }
+      ],
+      "warmup24k30": 70.0,
+      "full_backward20k30": 73.33333333333333,
+      "first30_seed_overlap_with20k": 29,
+      "first30_seed_order_equal20k": false
+    },
+    {
+      "task": "click_alarmclock",
+      "mode": "demo_clean",
+      "full100": 98,
+      "first30_successes": 30,
+      "first30_rate": 100.0,
+      "delta_first30_vs100_pp": 2.0,
+      "official": 99.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu5/queue/jobs/demo_clean/click_alarmclock/demo_clean/click_alarmclock/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100000,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100002,
+          "success": 1
+        },
+        {
+          "episode": 2,
+          "seed": 100003,
+          "success": 1
+        },
+        {
+          "episode": 3,
+          "seed": 100004,
+          "success": 1
+        },
+        {
+          "episode": 4,
+          "seed": 100007,
+          "success": 1
+        },
+        {
+          "episode": 5,
+          "seed": 100008,
+          "success": 1
+        },
+        {
+          "episode": 6,
+          "seed": 100009,
+          "success": 1
+        },
+        {
+          "episode": 7,
+          "seed": 100010,
+          "success": 1
+        },
+        {
+          "episode": 8,
+          "seed": 100011,
+          "success": 1
+        },
+        {
+          "episode": 9,
+          "seed": 100012,
+          "success": 1
+        },
+        {
+          "episode": 10,
+          "seed": 100013,
+          "success": 1
+        },
+        {
+          "episode": 11,
+          "seed": 100014,
+          "success": 1
+        },
+        {
+          "episode": 12,
+          "seed": 100015,
+          "success": 1
+        },
+        {
+          "episode": 13,
+          "seed": 100016,
+          "success": 1
+        },
+        {
+          "episode": 14,
+          "seed": 100018,
+          "success": 1
+        },
+        {
+          "episode": 15,
+          "seed": 100019,
+          "success": 1
+        },
+        {
+          "episode": 16,
+          "seed": 100020,
+          "success": 1
+        },
+        {
+          "episode": 17,
+          "seed": 100021,
+          "success": 1
+        },
+        {
+          "episode": 18,
+          "seed": 100022,
+          "success": 1
+        },
+        {
+          "episode": 19,
+          "seed": 100023,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100024,
+          "success": 1
+        },
+        {
+          "episode": 21,
+          "seed": 100025,
+          "success": 1
+        },
+        {
+          "episode": 22,
+          "seed": 100026,
+          "success": 1
+        },
+        {
+          "episode": 23,
+          "seed": 100027,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100028,
+          "success": 1
+        },
+        {
+          "episode": 25,
+          "seed": 100029,
+          "success": 1
+        },
+        {
+          "episode": 26,
+          "seed": 100030,
+          "success": 1
+        },
+        {
+          "episode": 27,
+          "seed": 100031,
+          "success": 1
+        },
+        {
+          "episode": 28,
+          "seed": 100032,
+          "success": 1
+        },
+        {
+          "episode": 29,
+          "seed": 100034,
+          "success": 1
+        },
+        {
+          "episode": 30,
+          "seed": 100036,
+          "success": 1
+        },
+        {
+          "episode": 31,
+          "seed": 100037,
+          "success": 1
+        },
+        {
+          "episode": 32,
+          "seed": 100038,
+          "success": 1
+        },
+        {
+          "episode": 33,
+          "seed": 100039,
+          "success": 1
+        },
+        {
+          "episode": 34,
+          "seed": 100040,
+          "success": 1
+        },
+        {
+          "episode": 35,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100042,
+          "success": 1
+        },
+        {
+          "episode": 37,
+          "seed": 100044,
+          "success": 1
+        },
+        {
+          "episode": 38,
+          "seed": 100045,
+          "success": 1
+        },
+        {
+          "episode": 39,
+          "seed": 100046,
+          "success": 1
+        },
+        {
+          "episode": 40,
+          "seed": 100047,
+          "success": 1
+        },
+        {
+          "episode": 41,
+          "seed": 100048,
+          "success": 1
+        },
+        {
+          "episode": 42,
+          "seed": 100049,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100051,
+          "success": 1
+        },
+        {
+          "episode": 44,
+          "seed": 100052,
+          "success": 1
+        },
+        {
+          "episode": 45,
+          "seed": 100053,
+          "success": 1
+        },
+        {
+          "episode": 46,
+          "seed": 100054,
+          "success": 1
+        },
+        {
+          "episode": 47,
+          "seed": 100055,
+          "success": 1
+        },
+        {
+          "episode": 48,
+          "seed": 100056,
+          "success": 1
+        },
+        {
+          "episode": 49,
+          "seed": 100057,
+          "success": 1
+        },
+        {
+          "episode": 50,
+          "seed": 100058,
+          "success": 1
+        },
+        {
+          "episode": 51,
+          "seed": 100059,
+          "success": 1
+        },
+        {
+          "episode": 52,
+          "seed": 100060,
+          "success": 1
+        },
+        {
+          "episode": 53,
+          "seed": 100061,
+          "success": 1
+        },
+        {
+          "episode": 54,
+          "seed": 100062,
+          "success": 1
+        },
+        {
+          "episode": 55,
+          "seed": 100063,
+          "success": 1
+        },
+        {
+          "episode": 56,
+          "seed": 100064,
+          "success": 1
+        },
+        {
+          "episode": 57,
+          "seed": 100066,
+          "success": 1
+        },
+        {
+          "episode": 58,
+          "seed": 100067,
+          "success": 1
+        },
+        {
+          "episode": 59,
+          "seed": 100068,
+          "success": 1
+        },
+        {
+          "episode": 60,
+          "seed": 100069,
+          "success": 1
+        },
+        {
+          "episode": 61,
+          "seed": 100070,
+          "success": 1
+        },
+        {
+          "episode": 62,
+          "seed": 100071,
+          "success": 1
+        },
+        {
+          "episode": 63,
+          "seed": 100072,
+          "success": 1
+        },
+        {
+          "episode": 64,
+          "seed": 100073,
+          "success": 1
+        },
+        {
+          "episode": 65,
+          "seed": 100074,
+          "success": 1
+        },
+        {
+          "episode": 66,
+          "seed": 100075,
+          "success": 1
+        },
+        {
+          "episode": 67,
+          "seed": 100077,
+          "success": 1
+        },
+        {
+          "episode": 68,
+          "seed": 100079,
+          "success": 1
+        },
+        {
+          "episode": 69,
+          "seed": 100080,
+          "success": 1
+        },
+        {
+          "episode": 70,
+          "seed": 100082,
+          "success": 1
+        },
+        {
+          "episode": 71,
+          "seed": 100083,
+          "success": 0
+        },
+        {
+          "episode": 72,
+          "seed": 100084,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100085,
+          "success": 0
+        },
+        {
+          "episode": 74,
+          "seed": 100086,
+          "success": 1
+        },
+        {
+          "episode": 75,
+          "seed": 100087,
+          "success": 1
+        },
+        {
+          "episode": 76,
+          "seed": 100088,
+          "success": 1
+        },
+        {
+          "episode": 77,
+          "seed": 100089,
+          "success": 1
+        },
+        {
+          "episode": 78,
+          "seed": 100090,
+          "success": 1
+        },
+        {
+          "episode": 79,
+          "seed": 100092,
+          "success": 1
+        },
+        {
+          "episode": 80,
+          "seed": 100093,
+          "success": 1
+        },
+        {
+          "episode": 81,
+          "seed": 100094,
+          "success": 1
+        },
+        {
+          "episode": 82,
+          "seed": 100095,
+          "success": 1
+        },
+        {
+          "episode": 83,
+          "seed": 100096,
+          "success": 1
+        },
+        {
+          "episode": 84,
+          "seed": 100097,
+          "success": 1
+        },
+        {
+          "episode": 85,
+          "seed": 100098,
+          "success": 1
+        },
+        {
+          "episode": 86,
+          "seed": 100100,
+          "success": 1
+        },
+        {
+          "episode": 87,
+          "seed": 100101,
+          "success": 1
+        },
+        {
+          "episode": 88,
+          "seed": 100102,
+          "success": 1
+        },
+        {
+          "episode": 89,
+          "seed": 100103,
+          "success": 1
+        },
+        {
+          "episode": 90,
+          "seed": 100104,
+          "success": 1
+        },
+        {
+          "episode": 91,
+          "seed": 100105,
+          "success": 1
+        },
+        {
+          "episode": 92,
+          "seed": 100107,
+          "success": 1
+        },
+        {
+          "episode": 93,
+          "seed": 100108,
+          "success": 1
+        },
+        {
+          "episode": 94,
+          "seed": 100109,
+          "success": 1
+        },
+        {
+          "episode": 95,
+          "seed": 100110,
+          "success": 1
+        },
+        {
+          "episode": 96,
+          "seed": 100111,
+          "success": 1
+        },
+        {
+          "episode": 97,
+          "seed": 100112,
+          "success": 1
+        },
+        {
+          "episode": 98,
+          "seed": 100113,
+          "success": 1
+        },
+        {
+          "episode": 99,
+          "seed": 100114,
+          "success": 1
+        }
+      ],
+      "warmup24k30": 100.0,
+      "full_backward20k30": 100.0,
+      "first30_seed_overlap_with20k": 30,
+      "first30_seed_order_equal20k": true
+    },
+    {
+      "task": "click_alarmclock",
+      "mode": "demo_randomized",
+      "full100": 65,
+      "first30_successes": 23,
+      "first30_rate": 76.66666666666667,
+      "delta_first30_vs100_pp": 11.666666666666671,
+      "official": 77.0,
+      "log": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/expanded_queue56/jobs/demo_randomized/click_alarmclock/demo_randomized/click_alarmclock/client.log",
+      "events": [
+        {
+          "episode": 0,
+          "seed": 100000,
+          "success": 1
+        },
+        {
+          "episode": 1,
+          "seed": 100001,
+          "success": 1
+        },
+        {
+          "episode": 2,
+          "seed": 100003,
+          "success": 1
+        },
+        {
+          "episode": 3,
+          "seed": 100004,
+          "success": 0
+        },
+        {
+          "episode": 4,
+          "seed": 100005,
+          "success": 1
+        },
+        {
+          "episode": 5,
+          "seed": 100006,
+          "success": 0
+        },
+        {
+          "episode": 6,
+          "seed": 100007,
+          "success": 0
+        },
+        {
+          "episode": 7,
+          "seed": 100009,
+          "success": 1
+        },
+        {
+          "episode": 8,
+          "seed": 100011,
+          "success": 1
+        },
+        {
+          "episode": 9,
+          "seed": 100012,
+          "success": 1
+        },
+        {
+          "episode": 10,
+          "seed": 100013,
+          "success": 1
+        },
+        {
+          "episode": 11,
+          "seed": 100014,
+          "success": 1
+        },
+        {
+          "episode": 12,
+          "seed": 100015,
+          "success": 1
+        },
+        {
+          "episode": 13,
+          "seed": 100016,
+          "success": 1
+        },
+        {
+          "episode": 14,
+          "seed": 100017,
+          "success": 1
+        },
+        {
+          "episode": 15,
+          "seed": 100018,
+          "success": 1
+        },
+        {
+          "episode": 16,
+          "seed": 100019,
+          "success": 1
+        },
+        {
+          "episode": 17,
+          "seed": 100020,
+          "success": 1
+        },
+        {
+          "episode": 18,
+          "seed": 100021,
+          "success": 0
+        },
+        {
+          "episode": 19,
+          "seed": 100022,
+          "success": 1
+        },
+        {
+          "episode": 20,
+          "seed": 100023,
+          "success": 1
+        },
+        {
+          "episode": 21,
+          "seed": 100024,
+          "success": 1
+        },
+        {
+          "episode": 22,
+          "seed": 100025,
+          "success": 1
+        },
+        {
+          "episode": 23,
+          "seed": 100026,
+          "success": 1
+        },
+        {
+          "episode": 24,
+          "seed": 100027,
+          "success": 0
+        },
+        {
+          "episode": 25,
+          "seed": 100028,
+          "success": 0
+        },
+        {
+          "episode": 26,
+          "seed": 100029,
+          "success": 1
+        },
+        {
+          "episode": 27,
+          "seed": 100030,
+          "success": 0
+        },
+        {
+          "episode": 28,
+          "seed": 100031,
+          "success": 1
+        },
+        {
+          "episode": 29,
+          "seed": 100032,
+          "success": 1
+        },
+        {
+          "episode": 30,
+          "seed": 100034,
+          "success": 1
+        },
+        {
+          "episode": 31,
+          "seed": 100036,
+          "success": 0
+        },
+        {
+          "episode": 32,
+          "seed": 100037,
+          "success": 1
+        },
+        {
+          "episode": 33,
+          "seed": 100038,
+          "success": 1
+        },
+        {
+          "episode": 34,
+          "seed": 100040,
+          "success": 1
+        },
+        {
+          "episode": 35,
+          "seed": 100041,
+          "success": 1
+        },
+        {
+          "episode": 36,
+          "seed": 100042,
+          "success": 1
+        },
+        {
+          "episode": 37,
+          "seed": 100043,
+          "success": 0
+        },
+        {
+          "episode": 38,
+          "seed": 100047,
+          "success": 1
+        },
+        {
+          "episode": 39,
+          "seed": 100048,
+          "success": 0
+        },
+        {
+          "episode": 40,
+          "seed": 100049,
+          "success": 1
+        },
+        {
+          "episode": 41,
+          "seed": 100051,
+          "success": 0
+        },
+        {
+          "episode": 42,
+          "seed": 100052,
+          "success": 1
+        },
+        {
+          "episode": 43,
+          "seed": 100054,
+          "success": 1
+        },
+        {
+          "episode": 44,
+          "seed": 100056,
+          "success": 1
+        },
+        {
+          "episode": 45,
+          "seed": 100057,
+          "success": 1
+        },
+        {
+          "episode": 46,
+          "seed": 100058,
+          "success": 0
+        },
+        {
+          "episode": 47,
+          "seed": 100059,
+          "success": 1
+        },
+        {
+          "episode": 48,
+          "seed": 100060,
+          "success": 0
+        },
+        {
+          "episode": 49,
+          "seed": 100062,
+          "success": 0
+        },
+        {
+          "episode": 50,
+          "seed": 100064,
+          "success": 0
+        },
+        {
+          "episode": 51,
+          "seed": 100065,
+          "success": 0
+        },
+        {
+          "episode": 52,
+          "seed": 100066,
+          "success": 0
+        },
+        {
+          "episode": 53,
+          "seed": 100067,
+          "success": 1
+        },
+        {
+          "episode": 54,
+          "seed": 100068,
+          "success": 1
+        },
+        {
+          "episode": 55,
+          "seed": 100069,
+          "success": 0
+        },
+        {
+          "episode": 56,
+          "seed": 100071,
+          "success": 0
+        },
+        {
+          "episode": 57,
+          "seed": 100072,
+          "success": 1
+        },
+        {
+          "episode": 58,
+          "seed": 100074,
+          "success": 1
+        },
+        {
+          "episode": 59,
+          "seed": 100076,
+          "success": 0
+        },
+        {
+          "episode": 60,
+          "seed": 100077,
+          "success": 1
+        },
+        {
+          "episode": 61,
+          "seed": 100080,
+          "success": 0
+        },
+        {
+          "episode": 62,
+          "seed": 100081,
+          "success": 1
+        },
+        {
+          "episode": 63,
+          "seed": 100082,
+          "success": 0
+        },
+        {
+          "episode": 64,
+          "seed": 100083,
+          "success": 1
+        },
+        {
+          "episode": 65,
+          "seed": 100084,
+          "success": 1
+        },
+        {
+          "episode": 66,
+          "seed": 100085,
+          "success": 1
+        },
+        {
+          "episode": 67,
+          "seed": 100086,
+          "success": 1
+        },
+        {
+          "episode": 68,
+          "seed": 100087,
+          "success": 0
+        },
+        {
+          "episode": 69,
+          "seed": 100089,
+          "success": 1
+        },
+        {
+          "episode": 70,
+          "seed": 100090,
+          "success": 0
+        },
+        {
+          "episode": 71,
+          "seed": 100092,
+          "success": 1
+        },
+        {
+          "episode": 72,
+          "seed": 100094,
+          "success": 1
+        },
+        {
+          "episode": 73,
+          "seed": 100096,
+          "success": 1
+        },
+        {
+          "episode": 74,
+          "seed": 100098,
+          "success": 1
+        },
+        {
+          "episode": 75,
+          "seed": 100099,
+          "success": 1
+        },
+        {
+          "episode": 76,
+          "seed": 100100,
+          "success": 1
+        },
+        {
+          "episode": 77,
+          "seed": 100101,
+          "success": 0
+        },
+        {
+          "episode": 78,
+          "seed": 100102,
+          "success": 0
+        },
+        {
+          "episode": 79,
+          "seed": 100103,
+          "success": 0
+        },
+        {
+          "episode": 80,
+          "seed": 100104,
+          "success": 0
+        },
+        {
+          "episode": 81,
+          "seed": 100105,
+          "success": 0
+        },
+        {
+          "episode": 82,
+          "seed": 100107,
+          "success": 0
+        },
+        {
+          "episode": 83,
+          "seed": 100108,
+          "success": 0
+        },
+        {
+          "episode": 84,
+          "seed": 100109,
+          "success": 1
+        },
+        {
+          "episode": 85,
+          "seed": 100110,
+          "success": 1
+        },
+        {
+          "episode": 86,
+          "seed": 100111,
+          "success": 0
+        },
+        {
+          "episode": 87,
+          "seed": 100112,
+          "success": 1
+        },
+        {
+          "episode": 88,
+          "seed": 100113,
+          "success": 1
+        },
+        {
+          "episode": 89,
+          "seed": 100114,
+          "success": 1
+        },
+        {
+          "episode": 90,
+          "seed": 100115,
+          "success": 1
+        },
+        {
+          "episode": 91,
+          "seed": 100117,
+          "success": 1
+        },
+        {
+          "episode": 92,
+          "seed": 100118,
+          "success": 0
+        },
+        {
+          "episode": 93,
+          "seed": 100119,
+          "success": 0
+        },
+        {
+          "episode": 94,
+          "seed": 100121,
+          "success": 1
+        },
+        {
+          "episode": 95,
+          "seed": 100123,
+          "success": 1
+        },
+        {
+          "episode": 96,
+          "seed": 100124,
+          "success": 1
+        },
+        {
+          "episode": 97,
+          "seed": 100125,
+          "success": 1
+        },
+        {
+          "episode": 98,
+          "seed": 100126,
+          "success": 0
+        },
+        {
+          "episode": 99,
+          "seed": 100128,
+          "success": 1
+        }
+      ],
+      "warmup24k30": 76.66666666666667,
+      "full_backward20k30": 83.33333333333333,
+      "first30_seed_overlap_with20k": 30,
+      "first30_seed_order_equal20k": true
+    }
+  ],
+  "utc": "2026-10-24T08:20:04.804402+00:00",
+  "selection": "previously reported4 tasks x Clean/Randomized; fixed8 conditions, not current expanded completed set",
+  "method": "First30 chronological native policy episodes after upstream expert accepted-seed filtering. Cumulative success delta parsed for100 episodes, validated against canonical run.json count/success/accepted_seeds; not first30 candidate expert seeds, not sampling new episodes.",
+  "summary": {
+    "all": {
+      "full100": 73.25,
+      "first30_rate": 74.58333333333333,
+      "official": 77.5,
+      "warmup24k30": 75.83333333333333,
+      "full_backward20k30": 78.75,
+      "conditions": 8,
+      "first30_successes": 179,
+      "first30_episodes": 240
+    },
+    "demo_clean": {
+      "full100": 96.25,
+      "first30_rate": 98.33333333333334,
+      "official": 96.5,
+      "warmup24k30": 95.83333333333333,
+      "full_backward20k30": 98.33333333333333,
+      "conditions": 4,
+      "first30_successes": 118,
+      "first30_episodes": 120
+    },
+    "demo_randomized": {
+      "full100": 50.25,
+      "first30_rate": 50.83333333333333,
+      "official": 58.5,
+      "warmup24k30": 55.833333333333336,
+      "full_backward20k30": 59.166666666666664,
+      "conditions": 4,
+      "first30_successes": 61,
+      "first30_episodes": 120
+    }
+  },
+  "limitations": "Same N does not ensure matched accepted seeds/scenes/instructions/RNG; different checkpoints,training budgets and hardware/compile configurations."
+}

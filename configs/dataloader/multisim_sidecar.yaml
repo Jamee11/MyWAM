@@ -1,0 +1,20 @@
+type: multisim_sidecar
+action_mode: eef
+unify_action: true
+unify_action_map: ["0-9", "34-43"]
+normalize_mode: min-max
+num_frames: 33
+video_stride: 4
+height: 384
+width: 320
+manifest_path: ${oc.env:MIDTRAIN_MANIFEST,/remote-home/jinminghao/datasets/openwam_sidecar_multisim_midtrain_v1_20261024/manifest.ready.json}
+weights: [1.0, 1.0, 1.0, 1.0]  # RLBench Franka, ManiSkill Franka, RoboTwin Aloha, RoboTwin Piper.
+seed: 42
+epoch_alignment: ${oc.env:MIDTRAIN_GLOBAL_BATCH,256}
+allow_smoke: false
+color_jitter:
+  enabled: true
+  brightness: 0.2
+  contrast: 0.2
+  saturation: 0.2
+  hue: 0.0

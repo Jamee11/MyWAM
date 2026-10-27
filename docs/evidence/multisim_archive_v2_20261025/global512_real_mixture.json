@@ -1,0 +1,34 @@
+{
+  "manifest": "/remote-home/jinminghao/OpenWAM/datasets/multisim_sidecar_archive_v2_20261025/manifest.ready.json",
+  "windows": 7282176,
+  "global_batch": 512,
+  "updates_per_epoch": 14223,
+  "microsteps_per_epoch": 56892,
+  "epochs": [
+    1,
+    2
+  ],
+  "updates": [
+    14223,
+    28446
+  ],
+  "sources": [
+    {
+      "episodes": 4666,
+      "windows": 1080908
+    },
+    {
+      "episodes": 16000,
+      "windows": 2671589
+    },
+    {
+      "episodes": 9584,
+      "windows": 2124695
+    },
+    {
+      "episodes": 9566,
+      "windows": 1404781
+    }
+  ],
+  "gpu_model_test": false
+}

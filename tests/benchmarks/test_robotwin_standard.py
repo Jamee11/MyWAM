@@ -1,7 +1,6 @@
 """Result accounting and independent-copy checks without SAPIEN or a GPU."""
 import importlib.util
 import subprocess
-from pathlib import Path
 
 import pytest
 

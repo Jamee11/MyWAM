@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-24T17:16:47.053616+00:00",
+  "selected": 52204,
+  "collections": {
+    "rlbench": 8204,
+    "maniskill_base": 10000,
+    "maniskill_hard": 10000,
+    "robotwin_base": 20000,
+    "robotwin_clutter": 4000
+  },
+  "maniskill_base_domains": {
+    "Clean": 5000,
+    "B": 1000,
+    "C": 1000,
+    "O": 1000,
+    "D": 1000,
+    "M": 1000
+  },
+  "maniskill_total_splits": {
+    "test": 2000,
+    "train": 16000,
+    "val": 2000
+  },
+  "input_physical_family_split_leak": false,
+  "robotwin_split_assignment": "pending_numeric_physical_signatures",
+  "rlbench_target_fulfilled": false
+}

@@ -1,4 +1,5 @@
 /data/*
+/datasets/
 !/data/robotwin/
 /models
 /diffusers
@@ -231,3 +232,4 @@ assets/*
 # Independent local RoboTwin checkout/assets and simulator environment.
 .external/
 .venv-robotwin/
+.conda/

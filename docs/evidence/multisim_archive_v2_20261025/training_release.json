@@ -1,0 +1,11 @@
+{
+  "time": "2026-10-25T15:33:59.180216+00:00",
+  "status": "TRAINING_DATA_READY",
+  "manifest": "/remote-home/jinminghao/OpenWAM/datasets/multisim_sidecar_archive_v2_20261025/manifest.ready.json",
+  "manifest_sha256": "a96d7f13dcb243f9429303a667d76d02151098a83c2946d996a31b21bf4a07aa",
+  "preflight_log": "/remote-home/jinminghao/OpenWAM/outputs/archive_v2_20261025/archive_release_preflight.log",
+  "integrity_scope": "All numeric SHA256 identities matched verified physical-copy ledgers; current independent file size/mtime/inode and family splits checked for all52204; twelve real training anchors loaded",
+  "gpu_joint_update_save_resume_verified": false,
+  "native_replay_dependency_closure_verified": false,
+  "source_cleanup_authorized": false
+}

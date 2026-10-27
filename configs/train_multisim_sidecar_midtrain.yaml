@@ -1,0 +1,33 @@
+defaults:
+  - train_relational_sidecar_4gpu
+  - override dataloader: multisim_sidecar
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      stage: joint
+      action_conditioning: true
+      backbone_warmup_updates: 500  # Full backward/read/write; delay only WAM optimizer updates.
+      isolation_warmup_updates: 0
+      aux_loss_scale: 0.5
+
+training:
+  learning_rate: 2e-5
+  action_lr: 2e-5
+  video_lr: 2e-5
+  sidecar_lr: 1e-5
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  num_epochs: null
+  max_steps: 100000  # Microsteps; 50000 optimizer updates at accumulation=2.
+  warmup_ratio: 0.05
+  save_steps: 4000
+  keep_last_k_ckpts: 3
+  dataset_num_workers: 4
+  output_path: ${oc.env:MIDTRAIN_OUTPUT_DIR,outputs/midtrain/multisim_sidecar}
+
+project:
+  seed: 42
+  wandb:
+    project: null

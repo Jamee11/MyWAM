@@ -1,0 +1,19 @@
+{
+  "created_utc": "20261024T162442Z",
+  "base_head": "4d7f642b841913ea3c176010b692b1de3d5ef180",
+  "snapshot_tree": "702163ce79c323a1f232679cf0d471d271dac2b3",
+  "commit": "3737261be932cdf23b9d46035576238fc588aa31",
+  "branch": "backup/pre-multisim-midtrain-20261024T162442Z",
+  "remote": "mywam",
+  "repository": "Jamee11/MyWAM",
+  "files": 883,
+  "archive": "/remote-home/jinminghao/OpenWAM/outputs/backups/pre_midtrain_20261024T162442Z/OpenWAM_pre_midtrain_code.tar.gz",
+  "archive_bytes": 9667625,
+  "archive_sha256": "7dd6f1eb9d4b8623a94b129fa394d6c306996ed263de33403a693bffa03dca7a",
+  "working_tree_branch_unchanged": "main",
+  "remote_commit": "0bf6aef0212184703803ff7e3aacaa919d6aaf2e",
+  "remote_tree": "702163ce79c323a1f232679cf0d471d271dac2b3",
+  "remote_verified": true,
+  "github_url": "https://github.com/Jamee11/MyWAM/tree/backup/pre-multisim-midtrain-20261024T162442Z",
+  "upload_method": "Connected GitHub app; exact tree match; existing branches untouched"
+}
