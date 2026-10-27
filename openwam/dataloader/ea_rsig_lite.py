@@ -24,6 +24,28 @@ MASK_RANDOM_GOALS = frozenset(("blocks_ranking_rgb", "blocks_ranking_size"))
 
 class LiteRoboTwinSource(RoboTwinDataset):
     """Declare this raw collection's wxyz encoding at the reader boundary."""
+    def __init__(self, *args, patchwam_augmentation=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._patchwam_augmentation = None
+        if patchwam_augmentation and patchwam_augmentation.get('enabled', True) and self.split == 'train':
+            if self._color_jitter is not None or not self.multiview:
+                raise ValueError('PatchWAM requires multiview=true and the old color_jitter disabled')
+            from openwam.dataloader.transforms.patchwam_video import PatchWAMVideoAugment
+
+            self._patchwam_augmentation = PatchWAMVideoAugment(patchwam_augmentation)
+
+    def _read_multiview_frames(self, file, cameras, start, end):
+        if self._patchwam_augmentation is not None:
+            # Do not infer camera validity from black pixels inside a real view.
+            self._patchwam_camera_present = [f'observation/{camera}/rgb' in file for camera in self.camera_layout]
+        return super()._read_multiview_frames(file, cameras, start, end)
+
+    def __getitem__(self, index):
+        sample = super().__getitem__(index)
+        if self._patchwam_augmentation is not None:
+            sample = self._patchwam_augmentation(sample, self._patchwam_camera_present)
+        return sample
+
     def _read_eef_actions(self, file, start, end):
         arms = []
         for arm in ("left", "right"):
@@ -119,7 +141,8 @@ class EARSIGLiteDataset(BaseDataset):
     """Wrap the official reader; A/B/C share the same samples/actions/stats."""
     action_dim = 80
 
-    def __init__(self, manifest_path, *, tasks=None, auxiliary=True, color_jitter=None, startup_mode="auto"):
+    def __init__(self, manifest_path, *, tasks=None, auxiliary=True, color_jitter=None, startup_mode="auto",
+                 patchwam_augmentation=None):
         self.manifest_path = str(Path(manifest_path).resolve())
         manifest = json.loads(Path(manifest_path).read_text())
         if manifest.get("contract") != "openwam_alpha_eef32_ea_lite_v1" or manifest.get("split") != "Clean":
@@ -162,7 +185,8 @@ class EARSIGLiteDataset(BaseDataset):
                 height=384, width=320, split="train", task_name=entry["name"],
                 normalization_stats_path=self.normalization_stats_path, normalize_mode="min-max",
                 multiview=True, camera_layout=list(CAMERAS), action_mode="eef", unify_action=True,
-                unify_action_map=["0-9", "34-43"], color_jitter=color_jitter, prepared_metadata=metadata)
+                unify_action_map=["0-9", "34-43"], color_jitter=color_jitter, prepared_metadata=metadata,
+                patchwam_augmentation=patchwam_augmentation)
             if reader._normalizer is None:
                 raise ValueError("Official EEF normalization is mandatory")
             recorded = {ep["path"]: ep for ep in entry["episodes"]}
@@ -188,7 +212,8 @@ class EARSIGLiteDataset(BaseDataset):
         if any(cfg.get(k, v) != v for k, v in expected.items()):
             raise ValueError("Lite must preserve the official Alpha EEF/temporal contract")
         return cls(cfg["manifest_path"], tasks=cfg.get("tasks"), auxiliary=cfg.get("auxiliary", True),
-                   color_jitter=cfg.get("color_jitter"), startup_mode=cfg.get("startup_mode", "prepared"))
+                   color_jitter=cfg.get("color_jitter"), startup_mode=cfg.get("startup_mode", "prepared"),
+                   patchwam_augmentation=cfg.get("patchwam_augmentation"))
 
     def __len__(self):
         return self.ends[-1]

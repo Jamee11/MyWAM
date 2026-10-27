@@ -16,6 +16,7 @@ height: 384
 width: 320
 multiview: true
 camera_layout: [head_camera, left_camera, right_camera]
+patchwam_augmentation: null  # Opt-in; the existing ColorJitter path stays unchanged.
 color_jitter:
   enabled: true  # Clean2Random paper protocol; use the same augmentation for A/B/C.
   brightness: 0.2

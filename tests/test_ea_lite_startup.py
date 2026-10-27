@@ -116,6 +116,54 @@ def test_prepared_constructor_opens_no_hdf5_and_does_not_discover_files(prepared
     assert dataset.readers[0]._instructions["episode0.json"]["seen"] == ["pick object", "move object"]
 
 
+def test_patchwam_hdf5_route_preserves_actions_masks_targets_and_first_frame(prepared):
+    import torch
+
+    _, ready, _, _, _ = prepared
+    plain = EARSIGLiteDataset(ready, startup_mode='prepared')
+    augmented = EARSIGLiteDataset(ready, startup_mode='prepared',
+        patchwam_augmentation=dict(enabled=True, p=1, style=dict(enabled=True), fourier=dict(enabled=True)))
+    random.seed(42)
+    source = plain[0]
+    random.seed(42)
+    torch.manual_seed(42)
+    result = augmented[0]
+    assert result.keys() == source.keys()
+    for key, value in source.items():
+        if key in ('video', 'first_frame_image'):
+            continue
+        if isinstance(value, torch.Tensor):
+            assert torch.equal(result[key], value), key
+        else:
+            assert result[key] == value, key
+    assert len(result['video']) == 9 and result['video'][0].size == (320, 384)
+    assert result['first_frame_image'][0] is result['video'][0]
+    assert not np.array_equal(np.asarray(source['video'][0]), np.asarray(result['video'][0]))
+
+
+def test_patchwam_disabled_is_exact_existing_jitter_path_and_rng(prepared):
+    import torch
+
+    _, ready, _, _, _ = prepared
+    jitter = dict(enabled=True, brightness=.2, contrast=.2, saturation=.2)
+    datasets = [EARSIGLiteDataset(ready, startup_mode='prepared', color_jitter=jitter,
+                patchwam_augmentation=cfg) for cfg in (None, dict(enabled=False))]
+    results, states = [], []
+    for dataset in datasets:
+        random.seed(123)
+        torch.manual_seed(123)
+        results.append(dataset[10])
+        states.append((random.getstate(), torch.get_rng_state()))
+    assert states[0][0] == states[1][0] and torch.equal(states[0][1], states[1][1])
+    assert all(np.array_equal(np.asarray(a), np.asarray(b)) for a, b in zip(results[0]['video'], results[1]['video']))
+
+
+def test_patchwam_refuses_accidental_double_jitter(prepared):
+    _, ready, _, _, _ = prepared
+    with pytest.raises(ValueError, match='old color_jitter disabled'):
+        EARSIGLiteDataset(ready, color_jitter=dict(enabled=True), patchwam_augmentation=dict(enabled=True))
+
+
 def test_prepared_and_scan_paths_have_identical_real_samples(prepared):
     _, ready, _, _, _ = prepared
     scanned = EARSIGLiteDataset(ready, startup_mode="scan")

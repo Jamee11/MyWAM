@@ -660,3 +660,16 @@ E于08:43:14Z正常结束且完整3K已保存，原离线诊断继续。A在0–
 必要GPU/ZeRO恢复存在不可消除的交接时间；通过提前CPU加载缩短空窗，不声称零耗时。当前真实C4K恢复和首次4001更新仍待队列，工程测试与控制流模拟不等于GPU/SR证据。待评估结论仍保留near-plane、EEF replay、匹配Vanilla、少量GT/闭环样本等边界；不引入新trick或自动超参搜索。
 
 工程验收补记 2026-10-27T09:24:46.822810+00:00：20项CPU合同/真实子进程守卫回归/完整队列模拟通过，Ruff与编译通过。监督PID4137756已启动且状态waiting_for_C_preload_threshold；前序训练/离线诊断/Loss监督均核验存活，未提前加载额外GPU模型或停止现有作业。真实C4K恢复仍待执行。
+
+
+### 2026-10-27T14:25:10.048560+00:00 — 用户授权保留A/C，先GitHub备份再移植PatchWAM C2R增强
+
+原因：只用Clean训练的外观泛化候选；用户要求按PatchWAM参数做最小接入，不中断当前短训和C正式续训。GitHub原版本备份分支backup/pre-patchwam-c2r-20261027T140234Z、远端66bb8d2056c84c55757f1d3c7a43edc0bced57ad，tree8b99554366c67bf534657bf2f2d33811a09ad1d1与本地完整快照相等。直接git push的VS Code凭据失效，已通过连接GitHub App完成，不导出token、不改旧分支。
+
+具体改动：固定官方PatchWAM dea19d21182a26a8ee16efc2c4125ee7aecf44fb，完整源码1.8MB在.external/PatchWAM；appearance.py按MIT字节原样vendoring，新增PIL三相机clip适配。EARSIGLiteDataset/LiteRoboTwinSource增加默认null的patchwam_augmentation，只在train且启用时接入；新recipe逐项匹配官方p=.8、photometric、AdaIN p=.5和Fourier p=.5及全部细参数，关闭旧jitter并拒绝双开。不改模型/action/EA/mask/归一化/几何/数据文件。缺失相机由HDF5存在性识别、排除统计/增强且保留黑槽，真实黑像素不排除。当前multisim reader的旧缺失黑槽问题仍未解决；本修复保护范围仅新Aloha增强路线。
+
+独立训练配置及scripts/train_sidecar_patchwam_c2r_4gpu.sh沿用当前C的2K full-backward/WAM延迟更新、原300-update ramp、global256、10epochs、4000微步=2000更新保存；不叠报告的100-step ramp/结构/额外3D监督。默认从Foundation新开独立run，不覆盖旧A/C，不声称已实现共同2K state短训分叉。GPU资源尚待用户指定，本轮无新GPU模型/训练启停。
+
+验收：32项CPU回归、Ruff/shell/Hydra通过；12seed×3相机×9帧独立上游oracle逐元素相等；真实三任务窗口所有非图像字段相等，关闭新开关与Git备份旧reader的图像/监督/Python及Torch RNG一致；真实OmegaConf/registry构造50reader549775窗口，2worker3批共6样本输入合同通过。官方tensor类原样；OpenWAM采用既有resize后增强/PIL uint8量化，非PatchWAM整条数据管线逐像素复现。热缓存9样本单线程reader中位旧.095s、新.491s，强制增强约.398s/样本；不是GPU稳态step-time/SR验证，后续需观测loader等待。
+
+证据/remote-home/jinminghao/OpenWAM/outputs/patchwam_c2r_implementation_20261027T140234Z；分析与启动docs/PATCHWAM_C2R_AUGMENTATION_20261027.md。颜色语义任务、强噪声/可见性、CPU吞吐、clip统计耦合仍有风险，不承诺涨点。继续保留near-plane、EEF replay、matched Vanilla、有限GT和真机标定边界；旧C与续训监督均在运行，未给它们打开新增强。
