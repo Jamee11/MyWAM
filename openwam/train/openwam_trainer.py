@@ -399,7 +399,10 @@ class OpenWAMTrainer:
         if getattr(t, "sidecar_lr_screen", None):
             from openwam.train.utils.sidecar_lr_screen import SidecarLRScreen
 
-            self.sidecar_lr_screen = SidecarLRScreen(optimizer, self.architecture, t.sidecar_lr_screen)
+            self.sidecar_lr_screen = SidecarLRScreen(
+                optimizer, self.architecture, t.sidecar_lr_screen,
+                ramp_updates=int(getattr(t, "sidecar_wam_ramp_updates", 300)),
+            )
         return optimizer
 
     # (4) Called by train() — build the training DataLoader (seeded generator when reproducible).

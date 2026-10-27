@@ -1,6 +1,6 @@
 # PatchWAM C2R 外观增强接入与验证
 
-日期：2026-10-27 UTC。范围：实现调研报告 `deep-research-report (2).md` 中的 PatchWAM 外观增强；不实现本轮报告中的 Grounding 路由、2.5D、100-step ramp 或部署修改。
+日期：2026-10-27 UTC。范围：实现调研报告 `deep-research-report (2).md` 中的 PatchWAM 外观增强；根据用户后续授权加入100-step WAM LR ramp及完整训练接续。不实现本轮报告中的Grounding路由、2.5D或部署修改。
 
 ## 1. 先保存原版本
 
@@ -56,7 +56,9 @@
 
 新配置：`configs/train_relational_sidecar_aloha50_patchwam_c2r_10epochs.yaml`。
 
-沿用当前C的训练结构：正常Read/Write及完整反向，前2000 optimizer updates跳过WAM参数更新，随后joint；WAM LR的0.1→1 ramp仍为原300次更新。报告建议的100-update ramp本轮不叠加，以免同时改变两个候选因素。
+沿用当前C的训练结构：正常Read/Write及完整反向，前2000 optimizer updates跳过WAM参数更新，随后joint。用户后续明确选择“增强＋100-update ramp”完整训练，因此新配置设置 `training.sidecar_wam_ramp_updates: 100`；旧配置未指定时仍默认300，当前C短训不变。
+
+设u为已完成optimizer更新数，新WAM实际LR为 `scheduled_cosine_lr × (0.1 + 0.9 × clamp((u-2000)/100,0,1))`。第2001次更新使用0.1倍，u=2050时0.55倍，u=2100后为1倍。Sidecar LR不受此倍率影响；optimizer step后恢复scheduled LR，避免把倍率递归混入cosine scheduler。它改变解冻更新的步长，不直接改变首个backward的梯度。100-step与300-step的实际Adam更新/状态恢复及训练工厂传参均有CPU测试。
 
 - 同一Clean50任务/2500轨迹、549775窗口及prepared manifest。
 - 每卡batch32 × 4卡 × accumulation2 = global batch256。
@@ -75,13 +77,19 @@ CHECK_ONLY=1 bash scripts/train_sidecar_patchwam_c2r_4gpu.sh
 
 正式启动时在**另行分配的空闲四卡**上将CHECK_ONLY改0；CUDA_VISIBLE_DEVICES必须由调用者设置。脚本复用现有通用cluster训练入口，保持Slurm/手工分配的GPU编号，不固定抢0–3。另一机器把OPENWAM_VENV设为本机环境目录，并相应设置OPENWAM_MANIFEST/OPENWAM_FOUNDATION即可，不下载新的预训练模型。
 
-本轮用户要求保留0–3原A/C短训及C正式续训。新增强GPU实验的卡/机器尚待指定，所以目前只执行配置和真实CPU数据检查；没有另启GPU模型或改变原队列。
+早先本轮保留0–3原A/C短训及C正式续训，新增强未获得独立四卡。用户后续明确替换接续计划：保留C本次3K→4K的1K短训与评估，取消原C4K→10epoch长训，GPU0–3接入从Foundation重新开始的增强＋100-step ramp完整10epoch实验。
+
+新队列根目录：`outputs/sidecar/aloha50_patchwam_c2r_ramp100_10epochs_20261027T144939Z`，入口指针 `outputs/sidecar/patchwam_ramp100_current.json`。监督 `scripts/supervise_sidecar_patchwam_after_c.py` 已启动四rank正式入口CPU预加载；仅核验C真实exit0、8000微步/4000更新的配套权重和完整state后才写接卡标记，正式入口再检查0–3每卡≥70000MiB。不会加载C权重或Adam历史，所有新训练计数从0开始。C离线评估在原评估队列并行继续，不占0–3或作为新训练额外等待门槛。
+
+原C长训监督4137756在尚未创建任何子模型时按PID/start-ticks/命令身份核验停止，原目录保留并记录cancelled.json。新监督4168818、新torchrun4168821；实际状态以新root的job_status.json、handover/cpu_contract.json、cpu_acceptance.json及startup_acceptance.json为准，不把CPU预加载称为已完成GPU更新。
+
+原图/旧ColorJitter/PatchWAM对比：`outputs/patchwam_c2r_implementation_20261027T140234Z/preview_{adjust_bottle,beat_block_hammer,place_shoe}.png`。用户要求展示后补充 `preview_adjust_bottle_multiseed.png`（seed0/2/11/42，42为未增强样本）和 `preview_adjust_bottle_temporal.png`（相对帧0/16/32）。这些是增强预览，不是新模型成功率证据。
 
 ## 5. 已完成的验证
 
 证据根目录：`outputs/patchwam_c2r_implementation_20261027T140234Z`。
 
-1. **32项CPU回归通过**：官方文件hash、完整recipe、时序/seed/范围、PIL相机适配、skip样本不量化、缺失视角、真实黑像素、双增强拒绝、真实微型HDF5及既有A/C续训合同；Ruff、shell语法和Hydra配置解析通过。
+1. **首版32项CPU回归通过；100-step接续版本51项通过**：官方文件hash、完整recipe、时序/seed/范围、PIL相机适配、skip样本不量化、缺失视角、真实黑像素、双增强拒绝、真实微型HDF5、既有A/C续训合同、100-step Adam更新/恢复及新队列接卡控制流；Ruff、shell语法、Hydra配置解析和fast preflight通过。
 2. **独立上游oracle**：直接导入固定revision的官方源码，与vendored类在12个seed、3相机×9帧上逐元素完全相等。
 3. **真实Aloha数据**：adjust_bottle、beat_block_hammer、place_shoe各一窗口。增强后仍9帧、384×320、action[32,80]、EA[1,130]；逐项核对所有非图像字段完全相等。预览保存在 `preview_*.png`。
 4. **原路径保真**：将Git备份里的旧reader动态载入，与当前新开关关闭的reader对比上述真实窗口，图像、监督和Python/Torch RNG状态均一致。范围是这些窗口，不冒称全量视觉审计。
@@ -98,3 +106,5 @@ CHECK_ONLY=1 bash scripts/train_sidecar_patchwam_c2r_4gpu.sh
 后续在空闲四卡上先检查真实稳定更新、loader等待和保存/重载，再用配对Clean/Randomized闭环判断收益，不按更高或更低的训练loss直接选胜者。若做正式论文比较，Vanilla也要有同增强控制；增强引入新的随机过程，不宣称与旧增强具有完全相同的prompt/noise全程随机序列。
 
 既有near-plane差异、RoboTwin EEF物理replay、matched Vanilla、少量GT窗口和sim-to-real标定边界仍保留，本轮没有解决或绕过。
+
+验收补记 2026-10-27T15:01:01.391132+00:00：四rank CPU预加载于14:57:16Z完成，真实cpu_contract核验Foundation来源、resume=null、completed_optimizer_updates=0、WAM warmup2000、ramp100、PatchWAM augmentation实际启用、global256全部通过。新监督4168818及torchrun4168821按start-ticks核验存活；原C短训/诊断/Loss监督也均存活，当前约3630更新；原C长训监督已停止且从未生成子模型。GPU release与predecessor_verified尚不存在是按计划等待C短训结束，并非新训练已经更新。证据engineering/final_scheduling_acceptance.json。

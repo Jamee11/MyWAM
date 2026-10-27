@@ -1,17 +1,19 @@
 """Effective LR interventions must preserve moments, unrelated params and schedules."""
 from copy import deepcopy
+from types import SimpleNamespace
 
 import pytest
 import torch
 
+from openwam.train.openwam_trainer import OpenWAMTrainer
 from openwam.train.utils.sidecar_lr_screen import SidecarLRScreen
 from tests.test_sidecar_backbone_warmup import loss, optimizer_for
 
 pytest_plugins = ["tests.test_relational_sidecar"]
 
 
-@pytest.mark.parametrize("mode", ["control", "wam_ramp", "write2"])
-def test_matches_actual_per_parameter_lr_and_resume(make, tmp_path, mode):
+@pytest.mark.parametrize("mode,ramp_updates", [("control", 300), ("wam_ramp", 300), ("wam_ramp", 100), ("write2", 300)])
+def test_matches_actual_per_parameter_lr_and_resume(make, tmp_path, mode, ramp_updates):
     original = make(backbone_updates=2)
     optimizer = optimizer_for(original)
     for u in range(2):
@@ -33,8 +35,8 @@ def test_matches_actual_per_parameter_lr_and_resume(make, tmp_path, mode):
                 reference_state[ref] = deepcopy(optimizer.state[parameter])
     reference = torch.optim.AdamW(reference_groups)
     reference.state.update(reference_state)
-    controller = SidecarLRScreen(optimizer, original, mode)
-    for u in (2, 3, 302):
+    controller = SidecarLRScreen(optimizer, original, mode, ramp_updates=ramp_updates)
+    for u in (2, 3, 2 + ramp_updates):
         original.set_training_progress(u)
         expected.set_training_progress(u)
         for model in (original, expected):
@@ -61,7 +63,7 @@ def test_matches_actual_per_parameter_lr_and_resume(make, tmp_path, mode):
     torch.save(dict(model=original.state_dict(), optimizer=optimizer.state_dict()), path)
     restored = make(backbone_updates=2)
     restored_opt = optimizer_for(restored)
-    SidecarLRScreen(restored_opt, restored, mode)
+    SidecarLRScreen(restored_opt, restored, mode, ramp_updates=ramp_updates)
     data = torch.load(path, weights_only=True)
     restored.load_state_dict(data['model'])
     restored_opt.load_state_dict(data['optimizer'])
@@ -72,3 +74,22 @@ def test_matches_actual_per_parameter_lr_and_resume(make, tmp_path, mode):
         opt.step()
     for n, p in original.named_parameters():
         torch.testing.assert_close(p, restored.get_parameter(n), rtol=0, atol=0, msg=n)
+
+
+@pytest.mark.parametrize('ramp_updates', [None, 100])
+def test_training_factory_passes_selected_ramp_and_preserves_old_default(make, ramp_updates):
+    model = make(backbone_updates=2000)
+    options = dict(learning_rate=1e-3, action_lr=1e-3, video_lr=1e-3, sidecar_lr=5e-4,
+                   weight_decay=.1, adam_fused=False, sidecar_lr_screen='wam_ramp')
+    if ramp_updates is not None:
+        options['sidecar_wam_ramp_updates'] = ramp_updates
+    trainer = SimpleNamespace(architecture=model, cfg=SimpleNamespace(training=SimpleNamespace(**options)))
+    OpenWAMTrainer.build_optimizer(trainer)
+    controller = trainer.sidecar_lr_screen
+    assert controller.ramp_updates == (300 if ramp_updates is None else ramp_updates)
+    model.set_training_progress(2000)
+    assert controller.factor() == .1
+    model.set_training_progress(2050)
+    assert controller.factor() == pytest.approx(.55 if ramp_updates == 100 else .25)
+    model.set_training_progress(2100)
+    assert controller.factor() == pytest.approx(1 if ramp_updates == 100 else .4)

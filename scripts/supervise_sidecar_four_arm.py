@@ -65,8 +65,11 @@ def start(root, name, plan):
                EA_SIDECAR_MANIFEST=str(ROOT / 'outputs/sidecar/aloha_4350/manifest.ready.json'))
     for key in ('PYTHONPATH', 'PYTHONHOME', 'EA_PREDECESSOR_DONE_FILE', 'EA_STOP_AFTER_OPT_STEPS'):
         env.pop(key, None)
+    if plan.get('predecessor_done_file'):
+        env['EA_PREDECESSOR_DONE_FILE'] = plan['predecessor_done_file']
     command = [plan['python'], '-m', 'torch.distributed.run', '--nproc_per_node=4', f'--master_port={port}',
-               'scripts/train_sidecar_four_arm.py', f'--config-path={arm}', '--config-name=config']
+               plan.get('entrypoint', 'scripts/train_sidecar_four_arm.py'),
+               f'--config-path={arm}', '--config-name=config']
     with (arm / 'launch.log').open('xb') as log:
         child = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
     save(arm / 'launch.json', dict(pid=child.pid, start_ticks=Path(f'/proc/{child.pid}/stat').read_text().split()[21],

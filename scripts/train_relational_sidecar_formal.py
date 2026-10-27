@@ -83,6 +83,13 @@ def main():
                 backbone_warmup_updates=getattr(self.architecture, "backbone_warmup_updates", 0),
                 aux_shared_gradient_scale=getattr(self.architecture, "aux_shared_gradient_scale", 1.0),
                 aux_gradient_anneal_updates=getattr(self.architecture, "aux_gradient_anneal_updates", 0),
+                completed_optimizer_updates=getattr(self.architecture, "completed_optimizer_updates", 0),
+                wam_ramp_updates=getattr(getattr(self, "sidecar_lr_screen", None), "ramp_updates", None),
+                finetune_ckpt_path=str(self.cfg.training.finetune_ckpt_path),
+                resume_ckpt_path=getattr(self.cfg.training, "resume_ckpt_path", None),
+                patchwam_augmentation_active=bool(getattr(self.dataset, "readers", None)) and all(
+                    getattr(reader, "_patchwam_augmentation", None) is not None for reader in self.dataset.readers
+                ),
             ))
             wait_for_gpu_release(handover)
         else:
@@ -101,6 +108,9 @@ def main():
             peak_allocated_bytes=torch.cuda.max_memory_allocated(),
             peak_reserved_bytes=torch.cuda.max_memory_reserved(),
         )
+        controller = getattr(self, "sidecar_lr_screen", None)
+        if controller is not None:
+            row["optimizer_lr"] = controller.trace
         with Path(kwargs["output_path"], f"metrics_rank{self._rank}.jsonl").open("a") as stream:
             stream.write(json.dumps(row) + "\n")
         original_log(self, **kwargs)

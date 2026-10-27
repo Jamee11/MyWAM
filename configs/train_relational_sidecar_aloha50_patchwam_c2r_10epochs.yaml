@@ -1,4 +1,4 @@
-# PatchWAM C2R appearance recipe; all other settings follow the current C recipe.
+# PatchWAM C2R appearance recipe with the user-selected 100-update WAM LR ramp.
 defaults:
 - train_relational_sidecar_aloha50_frozen_backbone_10epochs
 - _self_
@@ -51,5 +51,6 @@ dataloader:
       enabled: false
 training:
   sidecar_lr_screen: wam_ramp
+  sidecar_wam_ramp_updates: 100
   save_steps: 4000
   output_path: outputs/sidecar/aloha50_patchwam_c2r_10epochs
