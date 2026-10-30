@@ -1048,6 +1048,7 @@ class BaseWAMArchitecture(ABC, nn.Module):
         lambda_video: float = 1.0,
         lambda_action: float = 1.0,
         forward_fn=None,
+        noise_context=None,
         **inputs,
     ) -> dict:
         """Compute joint video-action flow matching loss.
@@ -1132,6 +1133,9 @@ class BaseWAMArchitecture(ABC, nn.Module):
             action_target = action_scheduler.training_target(actions, action_noise)
 
         # --- Joint forward pass ---
+        if noise_context is not None:
+            noise_context.update(video_noise=video_noise, video_sigmas=video_sigmas,
+                                 actions=actions, action_noise=action_noise, action_sigmas=action_sigmas)
         forward_inputs = dict(inputs)
         proprio = forward_inputs.pop("proprio", None)
         proprio_mask = forward_inputs.pop("proprio_mask", None)

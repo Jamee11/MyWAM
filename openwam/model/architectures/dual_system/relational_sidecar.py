@@ -99,6 +99,11 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             if not name.startswith("sidecar.") and self.training_stage != "joint":
                 if self.training_stage == "warmup" or not name.startswith("action_backbone."):
                     parameter.requires_grad_(False)
+        from openwam.model.modules.cross_appearance import configure_xa
+        configure_xa(self, ea.get('cross_appearance', {}))
+        if self.xa_enabled and (self.training_stage != 'joint' or not self.sidecar_enabled
+                               or self.backbone_warmup_updates or self.isolation_warmup_updates):
+            raise ValueError('XA requires the complete joint model without repeated warmup')
 
     def set_training_progress(self, completed_optimizer_updates):
         # Trainer supplies its restored update counter before each accumulated microstep.
@@ -141,6 +146,8 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
         super().set_dtype_device(dtype, device)
         if hasattr(self, "sidecar"):
             self.sidecar.to(device=device, dtype=dtype)
+        if hasattr(self, 'xa_projector'):
+            self.xa_projector.to(device=device,dtype=dtype)
 
     def apply_compile_optimizations(self, compile_cfg):
         # The official compiled loop contains no sidecar; never silently use it at deployment.
@@ -159,6 +166,15 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
         result["ea_targets"] = torch.stack([torch.as_tensor(s["ea_targets"]) for s in samples]).to(
             self.device, self.dtype
         )
+        if self.xa_enabled and self.training:
+            clean_samples = []
+            for sample in samples:
+                if 'xa_clean_video' not in sample:
+                    raise ValueError('XA requires retained nominal frames before augmentation')
+                clean_samples.append(dict(sample,video=sample['xa_clean_video'],
+                                          first_frame_image=[sample['xa_clean_video'][0]]))
+            clean = super().prepare_inputs(clean_samples)
+            result['xa_clean_inputs'] = {k:clean[k] for k in ('input_latents','first_frame_latents')}
         return result
 
     def forward(
@@ -168,6 +184,8 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
         *,
         proprio=None,
         return_aux=False,
+        action_hidden_layer=None,
+        action_hidden_only=False,
         use_gradient_checkpointing=False,
         use_gradient_checkpointing_offload=False,
         **pipeline_inputs,
@@ -234,6 +252,7 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             device=vs.hidden_states.device,
         )
         aux = []
+        action_hidden = None
         checkpointed = use_gradient_checkpointing and torch.is_grad_enabled() and not torch.is_inference_mode_enabled()
         for layer in range(vb.num_layers):
             vs, ast = driver.step(
@@ -261,25 +280,48 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
                 if return_aux:
                     output["read_hidden"] = current
                     aux.append(output)
+            if layer == action_hidden_layer:
+                action_hidden = ast.payload.x_action
+                if action_hidden_only:
+                    return action_hidden
         result = vb.finalize(vs), ab.extract_prediction(ast)
+        if action_hidden_layer is not None:
+            if action_hidden is None:
+                raise ValueError('Action hidden layer outside the model')
+            return (*result,tuple(aux),action_hidden) if return_aux else (*result,action_hidden)
         return (*result, tuple(aux)) if return_aux else result
 
     def forward_with_aux(self, *args, **kwargs):
         return self(*args, return_aux=True, **kwargs)
 
-    def compute_loss(self, *, ea_targets=None, **inputs):
+    def compute_loss(self, *, ea_targets=None, xa_clean_inputs=None, **inputs):
         if not self.sidecar_enabled:
             return super().compute_loss(**inputs)
         if ea_targets is None:
             raise ValueError("Training requires separate auxiliary labels")
         captured = []
+        aligned = []
+        noise_context = {} if self.xa_enabled and self.training else None
+        if noise_context is not None:
+            if xa_clean_inputs is None:
+                raise ValueError('Missing nominal XA input latents')
+            from openwam.model.modules.cross_appearance import CrossAppearanceState
+            if self._xa_state is None:
+                self._xa_state = CrossAppearanceState(self)
 
         def predict(*args, **kwargs):
-            video, action, aux = self.forward_with_aux(*args, **kwargs)
+            if noise_context is not None:
+                teacher = self._xa_state.teacher(self,kwargs,xa_clean_inputs,noise_context)
+                video,action,aux,hidden = self(*args,return_aux=True,
+                    action_hidden_layer=self.xa_config['student_layer'],**kwargs)
+                from openwam.model.modules.cross_appearance import alignment_loss
+                aligned.append(alignment_loss(self.xa_projector(hidden),teacher,inputs.get('action_is_pad')))
+            else:
+                video, action, aux = self.forward_with_aux(*args, **kwargs)
             captured.extend(aux)
             return video, action
 
-        result = super().compute_loss(forward_fn=predict, **inputs)
+        result = super().compute_loss(forward_fn=predict, noise_context=noise_context, **inputs)
         parts = self.sidecar.heads.losses(captured[-1], ea_targets)
         deep = (
             self.loss_weights["ground"] * self.sidecar.heads.losses(captured[0], ea_targets)["ground"]
@@ -292,6 +334,10 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
         result.update(
             loss_ea=extra.detach(), loss_ea_deep=deep.detach(), **{f"loss_ea_{k}": v.detach() for k, v in parts.items()}
         )
+        if aligned:
+            weighted,metrics = self._xa_state.objective(aligned[0],extra,self.completed_optimizer_updates)
+            result['loss'] = result['loss']+weighted
+            result.update(metrics)
         if self.isolation_warmup_updates:
             result["ea_isolation_warmup"] = extra.new_tensor(float(self.isolation_warmup_active))
         if self.backbone_warmup_updates:
@@ -308,6 +354,10 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             result[f"ea_read_gate_{i}"] = stage.alpha.detach()
             result[f"ea_write_gate_{i}"] = stage.write.beta.detach()
         return result
+
+    def on_optimizer_step(self):
+        if self.xa_enabled and self._xa_state is not None:
+            self._xa_state.update(self)
 
     def generate(self, *, proprio=None, active_action_mask=None, **kwargs):
         if any(k in kwargs for k in ("ea_targets", "ea_effectors", "ea_arm_present")):
@@ -326,6 +376,15 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
         from safetensors.torch import load_file
 
         state = load_file(path)
+        if self.xa_enabled and not any(k.startswith('xa_projector.') for k in state):
+            own = self.state_dict()
+            missing = set(own)-set(state)
+            if missing != {k for k in own if k.startswith('xa_projector.')} or set(state)-set(own):
+                raise RuntimeError('XA warmstart permits only new projector tensors')
+            self.load_state_dict(state,strict=False,assign=any(p.is_meta for p in self.parameters()))
+            if any(p.is_meta for p in self.parameters()):
+                raise RuntimeError('XA projector must be materialized')
+            return
         if any(k.startswith("sidecar.") for k in state):
             return super().load_checkpoint(path, strict=strict)
         if not self.foundation_warmstart:

@@ -1,0 +1,54 @@
+# Opt-in PICA-style XA from the originally transferred warmup2K, not today's C2R warmup.
+defaults:
+  - train_sidecar_patchwam_warmstart_8gpu_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      cross_appearance:
+        enabled: true
+        student_layer: 8
+        teacher_layer: 20
+        projector_width: 512
+        ema_decay: 0.9999
+        ema_device: cuda
+        noise_gap: 0.2
+        target_ea_ratio: 0.8
+        initial_weight: 0.05
+        max_weight: 0.5
+        warmup_updates: 200
+
+dataloader:
+  retain_clean_video: true
+  patchwam_augmentation:
+    p: 0.9
+    photometric:
+      brightness: 0.3
+      contrast: 0.3
+      saturation: 0.15
+      hue: 0.0  # Preserve color-referencing task labels.
+      gamma: [0.8, 1.25]
+      exposure: [-0.25, 0.25]
+      color_temperature: 0.05
+      gaussian_noise_std: 0.015
+      blur_sigma: [0.4, 1.2]
+      blur_prob: 0.25
+    style:
+      enabled: false
+    fourier:
+      enabled: false
+
+training:
+  num_epochs: 10
+  batch_size: 16
+  gradient_accumulation_steps: 2  # Preserve global batch256 with EMA memory headroom.
+  sidecar_lr_screen: null
+  save_steps: 10000  # Fallback micro-step interval; enabled run uses optimizer numbering below.
+  save_optimizer_steps: 5000
+  stop_after_optimizer_updates: null
+  save_full_states_for_resume: false
+  keep_final_resume_state: false
+  keep_last_k_ckpts: 5
+  resume_ckpt_path: null
+  output_path: outputs/sidecar/xa_original_warmup2k_10epochs

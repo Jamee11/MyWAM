@@ -710,3 +710,12 @@ E于08:43:14Z正常结束且完整3K已保存，原离线诊断继续。A在0–
 用户要求本地保留配置并同步bitdistill aigc24八卡，已有10epoch实验完成后串行执行。新增独立两阶段配置及接续器，不改core model/trainer/optimizer或旧实验。阶段1从官方RoboTwin微调10740权重初始化Sidecar，stage=joint/backbone_warmup_updates=2000/isolation=0，full backward+全局裁剪后仅Sidecar AdamW更新；acc1严格2000步退出。阶段2重新加载该final权重，新optimizer/counter，5epoch；Video/Action/base 2.5e-5、Sidecar1.25e-5，均降至此前1/4；标准5%LR warmup+cosine，原PatchWAM/EA/直接Action Write保持。不叠仅Action结构消融。阶段1按原策略全部2089张量逐位不变验收才接阶段2；原实验21480 final及八卡空闲门槛先通过，不抢占其它作业。
 
 官方与数据stats SHA不同但EEF min/max完全相同，实际min-max映射保持，其他moments不能据此称全文件相同。复用只读HDF5禁锁和项目CUDA链接；lr_screen=null规避既有zero-warmup兼容问题，不宣称全局修复。新实验weights-only保存，减少NFS完整optimizer状态IO，代价为不能精确resume；所有旧权重/输出保留。NFS锁缺失以节点socket互斥，仅限本节点控制器，不保证外部排他；新的GPU容量/真实2K冻结验收/5epoch完成/闭环收益尚待运行。证据与完整配方docs/BITDISTILL_C2R_TWO_STAGE_20261030.md。
+
+
+### 2026-10-30T13:36:30.219453+00:00：用户授权旧warmup2K→XA联合10epoch（增量实现中）
+
+修改前完整源码已推送GitHub Jamee11/MyWAM backup/pre-alignment-20261030，24328162a20dabb950c6bbf4c1ed44951673cb03；排除下载缓存/环境/权重，505代码/配置/文档文件留存。用户明确使用最初传输的Sidecar-PatchWAM-Warmup2K/checkpoint_step_4000（2000 optimizer updates），排除今天官方C2R→2K。新opt-in cross_appearance配置新增student Action block8→FP32 EMA teacher block20、512 MLP、delta[0,.2)、名义原图/增强图配对；保持旧默认路径无新增训练参数/损失。原有EA/Action/Video与gate×1保持；新增loss按平滑EA标量目标0.8、系数上限0.5、200update渐入，不把标量对齐冒充梯度对齐。读出使用显式返回，避开checkpoint重算副作用。
+
+新增保留增强前clean clip选项（默认false）；XA增强中等亮度/对比/噪声，禁Hue/AdaIN/FFT避免颜色语义变化，不改几何和EA labels。10epoch、原1e-4/Sidecar5e-5/global256；8×16acc2给FP32 EMA留显存，实际吞吐/显存尚待验收，不承诺一天完成。新配置按optimizer5000间隔保存且保留final，未改旧配置计步。独立停止条件仅用于smoke，不截短cosine。weights-only导出不含EMA/optimizer，不支持精确resume，禁止误走resume入口。当前实现测试/远端部署尚未完成。
+
+2026-10-30T14:06:35.472420+00:00增量修正：真实unified EEF padding支持[B,T,80]；teacher FP32 EMA直接引用+逐算子BF16 autocast/cache关闭，避免整模型BF16临时副本导致OOM；按optimizer计步导出附完成marker。用户最新资源约束将中途诊断迁回本地A100，H100仅新增一个8卡训练，不启动额外H100评测。

@@ -24,8 +24,9 @@ MASK_RANDOM_GOALS = frozenset(("blocks_ranking_rgb", "blocks_ranking_size"))
 
 class LiteRoboTwinSource(RoboTwinDataset):
     """Declare this raw collection's wxyz encoding at the reader boundary."""
-    def __init__(self, *args, patchwam_augmentation=None, **kwargs):
+    def __init__(self, *args, patchwam_augmentation=None, retain_clean_video=False, **kwargs):
         super().__init__(*args, **kwargs)
+        self._retain_clean_video = bool(retain_clean_video)
         self._patchwam_augmentation = None
         if patchwam_augmentation and patchwam_augmentation.get('enabled', True) and self.split == 'train':
             if self._color_jitter is not None or not self.multiview:
@@ -42,6 +43,8 @@ class LiteRoboTwinSource(RoboTwinDataset):
 
     def __getitem__(self, index):
         sample = super().__getitem__(index)
+        if self._retain_clean_video:
+            sample['xa_clean_video'] = [frame.copy() for frame in sample['video']]
         if self._patchwam_augmentation is not None:
             sample = self._patchwam_augmentation(sample, self._patchwam_camera_present)
         return sample
@@ -142,7 +145,7 @@ class EARSIGLiteDataset(BaseDataset):
     action_dim = 80
 
     def __init__(self, manifest_path, *, tasks=None, auxiliary=True, color_jitter=None, startup_mode="auto",
-                 patchwam_augmentation=None):
+                 patchwam_augmentation=None, retain_clean_video=False):
         self.manifest_path = str(Path(manifest_path).resolve())
         manifest = json.loads(Path(manifest_path).read_text())
         if manifest.get("contract") != "openwam_alpha_eef32_ea_lite_v1" or manifest.get("split") != "Clean":
@@ -186,7 +189,7 @@ class EARSIGLiteDataset(BaseDataset):
                 normalization_stats_path=self.normalization_stats_path, normalize_mode="min-max",
                 multiview=True, camera_layout=list(CAMERAS), action_mode="eef", unify_action=True,
                 unify_action_map=["0-9", "34-43"], color_jitter=color_jitter, prepared_metadata=metadata,
-                patchwam_augmentation=patchwam_augmentation)
+                patchwam_augmentation=patchwam_augmentation, retain_clean_video=retain_clean_video)
             if reader._normalizer is None:
                 raise ValueError("Official EEF normalization is mandatory")
             recorded = {ep["path"]: ep for ep in entry["episodes"]}
@@ -213,7 +216,8 @@ class EARSIGLiteDataset(BaseDataset):
             raise ValueError("Lite must preserve the official Alpha EEF/temporal contract")
         return cls(cfg["manifest_path"], tasks=cfg.get("tasks"), auxiliary=cfg.get("auxiliary", True),
                    color_jitter=cfg.get("color_jitter"), startup_mode=cfg.get("startup_mode", "prepared"),
-                   patchwam_augmentation=cfg.get("patchwam_augmentation"))
+                   patchwam_augmentation=cfg.get("patchwam_augmentation"),
+                   retain_clean_video=cfg.get('retain_clean_video',False))
 
     def __len__(self):
         return self.ends[-1]

@@ -121,7 +121,7 @@ def reduce_step_metrics(accelerator, losses: dict, grad_norm) -> dict:
     def _f(v):
         return v.item() if isinstance(v, torch.Tensor) else float(v)
 
-    extra_keys = sorted(key for key in losses if key.startswith(("loss_ea", "ea_")))
+    extra_keys = sorted(key for key in losses if key.startswith(("loss_ea", "ea_", "loss_xa", "xa_")))
     if accelerator is not None and accelerator.num_processes > 1:
         local = torch.tensor(
             [

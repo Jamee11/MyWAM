@@ -190,7 +190,7 @@ def main():
     cfg.optimization.compile.enabled = False
     cfg.optimization.dit_cache.enabled = False
     cfg.optimization.prompt_embed_cache.maxsize = 128
-    server = build_server_from_config(cfg, plan['checkpoint'], device='cpu')
+    server = build_server_from_config(cfg, plan['checkpoint'], device='cpu',ckpt_name=plan.get('checkpoint_name'))
     arch, engine = server.engine.architecture, server.engine
     vb = arch.video_backbone
     arch.eval()

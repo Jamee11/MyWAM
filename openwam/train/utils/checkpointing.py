@@ -217,6 +217,17 @@ def save_weights(accelerator, architecture, output_path: str, global_step: int, 
     tqdm.write(msg)
 
 
+def write_weights_marker(output_path, step):
+    """Publish an atomic readiness marker only after a weights export returns."""
+    import json
+    path=os.path.join(output_path,f'checkpoint_step_{step}.safetensors')
+    marker=os.path.join(output_path,f'checkpoint_step_{step}.complete.json')
+    temporary=marker+'.tmp'
+    with open(temporary,'w') as stream:
+        json.dump(dict(step=step,bytes=os.path.getsize(path)),stream)
+    os.replace(temporary,marker)
+
+
 def save_full_state(accelerator, output_path: str, global_step: int, opt_step: int, epoch: int) -> None:
     """Write full Accelerate state to ``accel_state_step_N/`` for resume.
 

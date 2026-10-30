@@ -39,6 +39,7 @@ from openwam.train.utils.checkpointing import (
     save_full_state,
     save_normalization_stats,
     save_weights,
+    write_weights_marker,
     verify_resume_normalization_stats,
 )
 from openwam.train.utils.optimizer_groups import build_trainable_parameters
@@ -230,6 +231,12 @@ class OpenWAMTrainer:
                 save_steps = int(save_steps)
         keep_last_k = int(getattr(t, "keep_last_k_ckpts", 3))
         save_full_states_for_resume = bool(getattr(t, "save_full_states_for_resume", False))
+        save_optimizer_steps = cfg_get(t,'save_optimizer_steps',None)
+        stop_after_updates = cfg_get(t,'stop_after_optimizer_updates',None)
+        if save_optimizer_steps and save_full_states_for_resume:
+            raise ValueError('Optimizer-numbered exports currently require weights-only saving')
+        if resume_path and bool(getattr(self.architecture,'xa_enabled',False)):
+            raise ValueError('XA weights-only checkpoints do not restore EMA/optimizer state; use explicit finetune')
 
         # Finetune warm-start weights were already loaded at architecture
         # construction (__init__, self-contained ckpt-dir path). Step stays 0.
@@ -297,6 +304,7 @@ class OpenWAMTrainer:
         set_training_progress = getattr(
             self.accelerator.unwrap_model(self.architecture), "set_training_progress", None
         )
+        optimizer_update_hook = getattr(self.accelerator.unwrap_model(self.architecture),'on_optimizer_step',None)
 
         # Per-step manual_seed makes timestep + noise sampling in compute_loss
         # reproducible across runs and ZeRO stages: same (rank, step) -> same RNG,
@@ -338,6 +346,9 @@ class OpenWAMTrainer:
                             scheduler.step()
                         optimizer.zero_grad()
                         opt_step += 1
+                        self._checkpoint_optimizer_step = opt_step
+                        if optimizer_update_hook is not None and not getattr(self.accelerator,'optimizer_step_was_skipped',False):
+                            optimizer_update_hook()
 
                 global_step += 1
 
@@ -364,14 +375,19 @@ class OpenWAMTrainer:
 
                 # save_steps: write the weights line (+ the resumable full state when
                 # save_full_states_for_resume=true), then prune in lockstep.
-                if save_steps and global_step > 0 and global_step % save_steps == 0:
-                    save_weights(self.accelerator, self.architecture, output_path, global_step, final=False)
+                save_now = (self.accelerator.sync_gradients and opt_step > 0 and opt_step % int(save_optimizer_steps)==0
+                            if save_optimizer_steps else save_steps and global_step > 0 and global_step % save_steps == 0)
+                if save_now:
+                    marker = opt_step if save_optimizer_steps else global_step
+                    save_weights(self.accelerator, self.architecture, output_path, marker, final=False)
+                    if save_optimizer_steps and is_main:
+                        write_weights_marker(output_path,marker)
                     if save_full_states_for_resume:
                         save_full_state(self.accelerator, output_path, global_step, opt_step, epoch)
                     if is_main:
                         manage_checkpoints(output_path, keep_last_k)
 
-                if max_steps and global_step >= max_steps:
+                if (max_steps and global_step >= max_steps) or (stop_after_updates and opt_step >= int(stop_after_updates)):
                     pbar.close()
                     self.finish_training(output_path, global_step, save_steps, keep_last_k, is_main, wandb_run)
                     return
@@ -590,7 +606,7 @@ class OpenWAMTrainer:
             "total": result["loss"],
             "video": result.get("loss_video", torch.tensor(0.0)),
             "action": result.get("loss_action", torch.tensor(0.0)),
-            **{key: value for key, value in result.items() if key.startswith(("loss_ea", "ea_"))},
+            **{key: value for key, value in result.items() if key.startswith(("loss_ea", "ea_", "loss_xa", "xa_"))},
         }
 
     # (10) Called each step in train()'s loop — progress bar, wandb log, debug loss-history CSV.
@@ -686,7 +702,11 @@ class OpenWAMTrainer:
         weight checkpoints (rank-0, post-barrier).
         """
         if save_steps:
-            save_weights(self.accelerator, self.architecture, output_path, global_step, final=True)
+            marker = (getattr(self,'_checkpoint_optimizer_step',global_step//int(self.cfg.training.gradient_accumulation_steps))
+                      if cfg_get(self.cfg.training,'save_optimizer_steps',None) else global_step)
+            save_weights(self.accelerator, self.architecture, output_path, marker, final=True)
+            if cfg_get(self.cfg.training,'save_optimizer_steps',None) and is_main:
+                write_weights_marker(output_path,marker)
         self.accelerator.wait_for_everyone()
         if is_main and not bool(cfg_get(self.cfg.training, "keep_final_resume_state", False)):
             finalize_keep_weights_only(output_path, keep_last_k)
