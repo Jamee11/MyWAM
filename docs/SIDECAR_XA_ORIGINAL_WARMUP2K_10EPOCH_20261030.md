@@ -70,3 +70,12 @@ Student与teacher前向BF16，特征归一化/loss和EMA shadow累计FP32，EMA�
 本地checkpoint observer不占H100；已启动原warmup2K的120生成基线诊断（结果保留），后续继续等待XA5000间隔权重并差分传回本地A100。尚不宣称XA正式更新已经完成或效果有收益。
 
 2026-10-30T18:02:54.460933+00:00用户最终覆盖指令：取消10步调试/验收，C2R完成并释放8卡后直接XA正式10epoch。controller显式--skip-preflight，production不传任何stop_after_optimizer_updates/max_steps截断；普通finite日志与报错检查保留。之前八H10010步未成功完成，不宣称已通过。
+
+
+## 2026-10-30T18:07:01.234413+00:00：已部署最终串行队列（无10步流程）
+
+活动节点aigc24，后台控制器PID2522243，PPID1；代码快照commit `5aaa65bbf288fc380ae66aca6b75e2578acd232d` 位于`/mnt/100T/lixiangyu/cuigm/bitdistill/OpenWAM/.experiments/xa_original_warmup2k_20261030T135522Z_sequence_fix`；活动输出`/mnt/100T/lixiangyu/cuigm/bitdistill/OpenWAM/outputs/sidecar/xa_original_warmup2k_10epoch_20261030T135522Z_after_c2r`。controller_launch.json已核对显式--wait-for-stage指向现有C2R stage2且--skip-preflight；当前状态waiting_for_c2r_final_checkpoint，不存在新XA GPU训练进程，当前八卡继续C2R（最后读取10415/10740）。完成后直接生产10epoch，不运行10步，也不需要人工再次启动。
+
+新XA launcher为standalone自动空闲端口、local-addr127.0.0.1；controller只使用节点内lo通信并禁IB，避免已遇到的主机名/固定端口故障，不改系统配置。模型/优化器/数据逻辑仍为本地已测试的增量版本；未宣称生产首步已通过。
+
+本地旧warmup2K基线120/120诊断已完成；观察器PID444798复用该结果，等待新XA5K间隔权重回传，不占额外H100。原aigc14等待控制器已撤，不会晚些时候再启动第二个8卡XA。

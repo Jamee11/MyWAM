@@ -62,3 +62,6 @@
 ## 尚未执行
 
 没有改model/trainer/data pipeline、没有生成可启动XA配置、没有启用EMA或启动新训练。实施涉及core模型读出、配对数据和训练损失/停止逻辑，遵守AGENTS.md第2条：在明确确认本方案后实施；新增重大变更必须写MODIFICATION_LOG.md并更新风险/实验记录。
+
+
+最终用户指令及实际实现已覆盖本早期提案：使用原始传输warmup2K，8→20+EMA，联合10epoch，取消10步流程，串行接C2R。以docs/SIDECAR_XA_ORIGINAL_WARMUP2K_10EPOCH_20261030.md为准。

@@ -71,9 +71,14 @@ def main():
         write(destination/'transfer.json',dict(status='complete',sha256=expected,source=source,checkpoint=str(final)))
         return final,expected
 
-    results=[]
+    previous_report=args.output/'comparison.json'
+    results=json.loads(previous_report.read_text())['checkpoints'] if previous_report.exists() else []
+    finished={r['optimizer_updates']:r for r in results}
     previous=args.initial
     for step in (0,5000,10000,15000,20000,21480):
+        if step in finished:
+            previous=Path(finished[step]['checkpoint'])
+            continue
         if step:
             while True:
                 code=('import json,glob,os; p='+repr(args.training)+'; '
