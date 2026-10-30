@@ -27,6 +27,6 @@ args=(--config-name=train_sidecar_xa_warmup2k_8gpu_10epochs
 if [[ "${CHECK_ONLY:-0}" == 1 ]]; then
   exec "$python_bin" scripts/train.py "${args[@]}" "$@" --cfg job --resolve
 fi
-exec "$python_bin" -m torch.distributed.run --nnodes=1 --nproc_per_node=8 \
-  --master_addr=127.0.0.1 --master_port="${MASTER_PORT:-29504}" \
+exec "$python_bin" -m torch.distributed.run --standalone --local-addr=127.0.0.1 \
+  --nnodes=1 --nproc_per_node=8 \
   scripts/cluster/train_sidecar_metrics.py "${args[@]}" "$@"

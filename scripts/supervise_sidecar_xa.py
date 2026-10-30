@@ -42,13 +42,28 @@ def validate_preflight(rows, updates=10):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--project',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--node',default='aigc14');args=p.parse_args()
+    p.add_argument('--node',default='aigc14')
+    p.add_argument('--wait-for-stage',type=Path)
+    args=p.parse_args()
     project=args.project.resolve();out=args.output.resolve();out.mkdir(parents=True,exist_ok=True)
     if socket.gethostname().split('.')[0]!=args.node:raise RuntimeError('Wrong training node')
     lock=socket.socket();lock.bind(('127.0.0.1',29544));lock.listen(1)
     if (out/'production_launch.json').exists():raise RuntimeError('A production run was already launched here')
     state=dict(node=args.node,project=str(project),output=str(out),started=datetime.now(timezone.utc).isoformat())
     env=os.environ.copy();env.update(CUDA_VISIBLE_DEVICES='0,1,2,3,4,5,6,7',OPENWAM_VENV=str(project/'.venv'))
+    if args.wait_for_stage:
+        import sys
+        sys.path.insert(0,str(project))
+        from scripts.supervise_sidecar_c2r_two_stage import completed
+        while True:
+            try:
+                predecessor=completed(args.wait_for_stage,10740)
+                save(out/'predecessor_completed.json',dict(checkpoint=str(predecessor),
+                    note='Launch dependency only; XA still initializes from original warmup2K'))
+                break
+            except (RuntimeError,FileNotFoundError) as error:
+                save(out/'state.json',dict(state,status='waiting_for_c2r_final_checkpoint',detail=str(error)))
+                time.sleep(30)
 
     def wait_capacity():
         while True:
@@ -74,13 +89,23 @@ def main():
             time.sleep(15)
         return proc.returncode,root
 
-    wait_capacity()
-    code,preflight=run('preflight',['training.stop_after_optimizer_updates=10','training.save_steps=null','training.save_optimizer_steps=null'])
-    acceptance=validate_preflight(last_metrics(preflight/'runs'))
-    if code:raise RuntimeError(f'Preflight process exit={code}; inspect preserved logs')
+    for batch,accum in ((16,2),(8,4)):
+        wait_capacity()
+        overrides=[f'training.batch_size={batch}',f'training.gradient_accumulation_steps={accum}']
+        code,preflight=run(f'preflight_batch{batch}',[*overrides,'training.stop_after_optimizer_updates=10',
+                            'training.save_steps=null','training.save_optimizer_steps=null'])
+        tail=(preflight/'launch.log').read_text(errors='replace')[-200000:]
+        if code and batch==16 and ('CUDA out of memory' in tail or 'OutOfMemoryError' in tail):
+            save(out/'memory_fallback.json',dict(from_batch=16,to_batch=8,global_batch=256))
+            continue
+        if code:raise RuntimeError(f'Preflight process exit={code}; inspect preserved logs')
+        acceptance=validate_preflight(last_metrics(preflight/'runs'))
+        acceptance.update(batch_size=batch,gradient_accumulation_steps=accum,global_batch=256)
+        break
+    else:raise RuntimeError('No XA batch profile passed')
     save(out/'preflight_acceptance.json',acceptance)
     wait_capacity()
-    code,production=run('production',[])
+    code,production=run('production',overrides)
     rows=last_metrics(production/'runs')
     finals=list((production/'runs').glob('*/checkpoint_step_21480.safetensors'))
     if code or len(rows)!=8 or any(r['optimizer_step']!=21480 for r in rows) or len(finals)!=1:

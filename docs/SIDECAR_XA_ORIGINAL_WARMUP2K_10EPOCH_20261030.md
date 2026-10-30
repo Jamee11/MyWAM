@@ -59,3 +59,12 @@ Student与teacher前向BF16，特征归一化/loss和EMA shadow累计FP32，EMA�
 用户新增预算约束：只允许这次新增一个8-H100训练与即将结束的C2R暂时重叠，之后尽量同时仅8H100。取消aigc32的GPU诊断安排（未启动任何GPU进程），诊断改为本地A100。新observer通过现有SSH master轮询已完成marker，使用独立旧权重副本seed做rsync可续传差分，远近SHA256一致后才正式命名并评测。SSH无密码/token写入脚本，轮询维持会话，若会话丢失则保留partial等待恢复。
 
 新增checkpoint完成marker仅对新optimizer计步配置启用，防止评测读取未写完文件。准备固定版本部署验收；CPU综合107项通过，新增AMP精度用例与marker/计步回归也通过，未以此声称八卡生产显存已验收。
+
+
+## 2026-10-30T18:02:00.409017+00:00：最终串行接续方案与启动修复
+
+用户确认不再占用另一整节点，XA接在aigc24当前C2R完成后使用同一8H100。aigc14/29/32已被其他用户占满，14上仅等待的XA控制器已退出，未触碰其作业。C2R实查8rank10269/10740，10000权重已保存；GPU仅8个train_sidecar_metrics rank，没有额外显存占用进程，因此没有杀任何C2R训练/辅助进程。
+
+已定位重启失败包含固定29504端口被上次启动短暂占用，以及节点主机名与hosts映射不一致的启动延迟。新XA launcher使用--standalone --local-addr=127.0.0.1，由TCPStore自动分配空闲端口；单节点GLOO/NCCL使用lo并禁用IB，不修改系统hosts。前置C2R完成验收+所有8卡释放后才开始XA10步，再自动从原传输warmup4000重新加载进入正式10epoch，不等待效果分析/人工操作。若16/acc2仅因OOM失败，自动尝试8/acc4；不改变global256或LR曲线。
+
+本地checkpoint observer不占H100；已启动原warmup2K的120生成基线诊断（结果保留），后续继续等待XA5000间隔权重并差分传回本地A100。尚不宣称XA正式更新已经完成或效果有收益。

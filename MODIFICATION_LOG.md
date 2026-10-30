@@ -719,3 +719,5 @@ E于08:43:14Z正常结束且完整3K已保存，原离线诊断继续。A在0–
 新增保留增强前clean clip选项（默认false）；XA增强中等亮度/对比/噪声，禁Hue/AdaIN/FFT避免颜色语义变化，不改几何和EA labels。10epoch、原1e-4/Sidecar5e-5/global256；8×16acc2给FP32 EMA留显存，实际吞吐/显存尚待验收，不承诺一天完成。新配置按optimizer5000间隔保存且保留final，未改旧配置计步。独立停止条件仅用于smoke，不截短cosine。weights-only导出不含EMA/optimizer，不支持精确resume，禁止误走resume入口。当前实现测试/远端部署尚未完成。
 
 2026-10-30T14:06:35.472420+00:00增量修正：真实unified EEF padding支持[B,T,80]；teacher FP32 EMA直接引用+逐算子BF16 autocast/cache关闭，避免整模型BF16临时副本导致OOM；按optimizer计步导出附完成marker。用户最新资源约束将中途诊断迁回本地A100，H100仅新增一个8卡训练，不启动额外H100评测。
+
+2026-10-30T18:02:00.409017+00:00用户最终要求串行接C2R：XA launcher改用torchrun standalone+loopback local-addr自动分配端口，消除10步退出后的固定端口EADDRINUSE；新增可选C2R完成依赖（8rank10740、final保存日志和safetensors完整验收，仅作为启动条件，不作XA初始化）。16×acc2若仅OOM则降8×acc4，global256保持；通过10updates后自动正式10epoch。增加CPU-only八rank通信连续两次自检，默认旧版训练launcher未改。
