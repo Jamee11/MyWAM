@@ -1,0 +1,56 @@
+# PatchWAM C2R appearance recipe with the user-selected 100-update WAM LR ramp.
+defaults:
+- train_relational_sidecar_aloha50_frozen_backbone_10epochs
+- _self_
+dataloader:
+  color_jitter:
+    enabled: false
+  patchwam_augmentation:
+    enabled: true
+    p: 0.8
+    photometric:
+      brightness: 0.4
+      contrast: 0.4
+      saturation: 0.4
+      hue: 0.1
+      gamma:
+      - 0.7
+      - 1.4
+      exposure:
+      - -0.5
+      - 0.5
+      color_temperature: 0.15
+      gaussian_noise_std: 0.03
+      blur_sigma:
+      - 0.0
+      - 1.5
+      blur_prob: 0.3
+    style:
+      enabled: true
+      p: 0.5
+      target_mean:
+      - 0.2
+      - 0.8
+      target_std:
+      - 0.05
+      - 0.4
+      strength:
+      - 0.4
+      - 1.0
+    fourier:
+      enabled: true
+      p: 0.5
+      amp_jitter:
+      - 0.5
+      - 1.5
+      envelope_strength:
+      - 0.0
+      - 0.6
+      envelope_grid: 8
+    background:
+      enabled: false
+training:
+  sidecar_lr_screen: wam_ramp
+  sidecar_wam_ramp_updates: 100
+  save_steps: 4000
+  output_path: outputs/sidecar/aloha50_patchwam_c2r_10epochs

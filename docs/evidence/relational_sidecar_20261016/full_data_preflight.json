@@ -1,0 +1,11 @@
+{
+  "status": "cpu_preflight_passed",
+  "tasks": 50,
+  "episodes": 2500,
+  "frames": 552275,
+  "foundation_head_width": 80,
+  "gpu_training": "not_run",
+  "gpu_memory_and_speed": "unverified",
+  "data_check": "full",
+  "full_dataset_integrity_audited": true
+}

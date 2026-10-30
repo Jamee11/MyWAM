@@ -1,0 +1,399 @@
+{
+  "utc": "2026-10-20T14:20:53.594629+00:00",
+  "comparisons": [
+    {
+      "task": "click_bell",
+      "mode": "demo_clean",
+      "old_environment_baseline_success_rate": 100,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 100,
+        "success_rate": 100.0,
+        "success_mean_steps": 67.46,
+        "success_median_steps": 62.0,
+        "all_mean_steps": 67.46,
+        "failure_mean_steps": null,
+        "failure_at_budget": 0
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 100,
+        "success_rate": 100.0,
+        "success_mean_steps": 62.67,
+        "success_median_steps": 63.0,
+        "all_mean_steps": 62.67,
+        "failure_mean_steps": null,
+        "failure_at_budget": 0
+      },
+      "success_difference_pp": 0.0,
+      "success_step_difference": -4.789999999999992,
+      "success_step_difference_pct": -7.100504002371766,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 100,
+        "both_success": 100,
+        "baseline_mean_steps": 67.46,
+        "sidecar_mean_steps": 62.67,
+        "mean_difference_steps": -4.79
+      }
+    },
+    {
+      "task": "click_bell",
+      "mode": "demo_randomized",
+      "old_environment_baseline_success_rate": 78,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 77,
+        "success_rate": 77.0,
+        "success_mean_steps": 89.75324675324676,
+        "success_median_steps": 75,
+        "all_mean_steps": 161.11,
+        "failure_mean_steps": 400,
+        "failure_at_budget": 23
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 71,
+        "success_rate": 71.0,
+        "success_mean_steps": 110.28169014084507,
+        "success_median_steps": 74,
+        "all_mean_steps": 194.3,
+        "failure_mean_steps": 400,
+        "failure_at_budget": 29
+      },
+      "success_difference_pp": -6.0,
+      "success_step_difference": 20.528443387598315,
+      "success_step_difference_pct": 22.87209001367487,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 100,
+        "both_success": 62,
+        "baseline_mean_steps": 84.85483870967742,
+        "sidecar_mean_steps": 102.8225806451613,
+        "mean_difference_steps": 17.967741935483872
+      }
+    },
+    {
+      "task": "handover_block",
+      "mode": "demo_clean",
+      "old_environment_baseline_success_rate": 86,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 85,
+        "success_rate": 85.0,
+        "success_mean_steps": 267.43529411764706,
+        "success_median_steps": 257,
+        "all_mean_steps": 347.32,
+        "failure_mean_steps": 800,
+        "failure_at_budget": 15
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 93,
+        "success_rate": 93.0,
+        "success_mean_steps": 266.1505376344086,
+        "success_median_steps": 256,
+        "all_mean_steps": 303.52,
+        "failure_mean_steps": 800,
+        "failure_at_budget": 7
+      },
+      "success_difference_pp": 8.0,
+      "success_step_difference": -1.284756483238482,
+      "success_step_difference_pct": -0.4803990017388293,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 96,
+        "both_success": 77,
+        "baseline_mean_steps": 266.1948051948052,
+        "sidecar_mean_steps": 264.75324675324674,
+        "mean_difference_steps": -1.4415584415584415
+      }
+    },
+    {
+      "task": "handover_block",
+      "mode": "demo_randomized",
+      "old_environment_baseline_success_rate": 17,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 46,
+        "success_rate": 46.0,
+        "success_mean_steps": 292.4130434782609,
+        "success_median_steps": 278.0,
+        "all_mean_steps": 566.51,
+        "failure_mean_steps": 800,
+        "failure_at_budget": 54
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 40,
+        "success_rate": 40.0,
+        "success_mean_steps": 288.45,
+        "success_median_steps": 283.5,
+        "all_mean_steps": 595.38,
+        "failure_mean_steps": 800,
+        "failure_at_budget": 60
+      },
+      "success_difference_pp": -6.0,
+      "success_step_difference": -3.963043478260886,
+      "success_step_difference_pct": -1.3552895695487344,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 95,
+        "both_success": 27,
+        "baseline_mean_steps": 278.18518518518516,
+        "sidecar_mean_steps": 279.6296296296296,
+        "mean_difference_steps": 1.4444444444444444
+      }
+    },
+    {
+      "task": "place_dual_shoes",
+      "mode": "demo_clean",
+      "old_environment_baseline_success_rate": 13,
+      "baseline_protocol": "traditional_native",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 92,
+        "success_rate": 92.0,
+        "success_mean_steps": 223.6304347826087,
+        "success_median_steps": 224.0,
+        "all_mean_steps": 253.74,
+        "failure_mean_steps": 600,
+        "failure_at_budget": 8
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 88,
+        "success_rate": 88.0,
+        "success_mean_steps": 221.47727272727272,
+        "success_median_steps": 221.0,
+        "all_mean_steps": 266.9,
+        "failure_mean_steps": 600,
+        "failure_at_budget": 12
+      },
+      "success_difference_pp": -4.0,
+      "success_step_difference": -2.1531620553359687,
+      "success_step_difference_pct": -0.9628215664961082,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 83,
+        "both_success": 69,
+        "baseline_mean_steps": 221.7246376811594,
+        "sidecar_mean_steps": 219.8985507246377,
+        "mean_difference_steps": -1.826086956521739
+      }
+    },
+    {
+      "task": "place_dual_shoes",
+      "mode": "demo_randomized",
+      "old_environment_baseline_success_rate": 0,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 16,
+        "success_rate": 16.0,
+        "success_mean_steps": 228.6875,
+        "success_median_steps": 225.0,
+        "all_mean_steps": 540.59,
+        "failure_mean_steps": 600,
+        "failure_at_budget": 84
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 10,
+        "success_rate": 10.0,
+        "success_mean_steps": 240.8,
+        "success_median_steps": 223.0,
+        "all_mean_steps": 564.08,
+        "failure_mean_steps": 600,
+        "failure_at_budget": 90
+      },
+      "success_difference_pp": -6.0,
+      "success_step_difference": 12.112500000000011,
+      "success_step_difference_pct": 5.296529106313197,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 79,
+        "both_success": 6,
+        "baseline_mean_steps": 222.33333333333334,
+        "sidecar_mean_steps": 253.33333333333334,
+        "mean_difference_steps": 31
+      }
+    },
+    {
+      "task": "place_shoe",
+      "mode": "demo_clean",
+      "old_environment_baseline_success_rate": 50,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 97,
+        "success_rate": 97.0,
+        "success_mean_steps": 148.44329896907217,
+        "success_median_steps": 146,
+        "all_mean_steps": 158.99,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 3
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 92,
+        "success_rate": 92.0,
+        "success_mean_steps": 148.3695652173913,
+        "success_median_steps": 147.0,
+        "all_mean_steps": 176.5,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 8
+      },
+      "success_difference_pp": -5.0,
+      "success_step_difference": -0.07373375168086227,
+      "success_step_difference_pct": -0.049671323793620825,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 96,
+        "both_success": 87,
+        "baseline_mean_steps": 148.6206896551724,
+        "sidecar_mean_steps": 148.16091954022988,
+        "mean_difference_steps": -0.45977011494252873
+      }
+    },
+    {
+      "task": "place_shoe",
+      "mode": "demo_randomized",
+      "old_environment_baseline_success_rate": 19,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 49,
+        "success_rate": 49.0,
+        "success_mean_steps": 191.3265306122449,
+        "success_median_steps": 158,
+        "all_mean_steps": 348.75,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 51
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 66,
+        "success_rate": 66.0,
+        "success_mean_steps": 191.04545454545453,
+        "success_median_steps": 160.5,
+        "all_mean_steps": 296.09,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 34
+      },
+      "success_difference_pp": 17.0,
+      "success_step_difference": -0.28107606679037644,
+      "success_step_difference_pct": -0.14690909090910864,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 94,
+        "both_success": 36,
+        "baseline_mean_steps": 189.58333333333334,
+        "sidecar_mean_steps": 165.52777777777777,
+        "mean_difference_steps": -24.055555555555557
+      }
+    },
+    {
+      "task": "scan_object",
+      "mode": "demo_clean",
+      "old_environment_baseline_success_rate": 66,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 89,
+        "success_rate": 89.0,
+        "success_mean_steps": 160.5056179775281,
+        "success_median_steps": 162,
+        "all_mean_steps": 197.85,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 11
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 87,
+        "success_rate": 87.0,
+        "success_mean_steps": 163.77011494252875,
+        "success_median_steps": 163,
+        "all_mean_steps": 207.48,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 13
+      },
+      "success_difference_pp": -2.0,
+      "success_step_difference": 3.26449696500066,
+      "success_step_difference_pct": 2.033883303360584,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 92,
+        "both_success": 75,
+        "baseline_mean_steps": 160.30666666666667,
+        "sidecar_mean_steps": 163.05333333333334,
+        "mean_difference_steps": 2.7466666666666666
+      }
+    },
+    {
+      "task": "scan_object",
+      "mode": "demo_randomized",
+      "old_environment_baseline_success_rate": 14,
+      "baseline_protocol": "official_manifest",
+      "sidecar_protocol": "traditional_native",
+      "baseline": {
+        "episodes": 100,
+        "successes": 56,
+        "success_rate": 56.0,
+        "success_mean_steps": 169.80357142857142,
+        "success_median_steps": 165.0,
+        "all_mean_steps": 315.09,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 44
+      },
+      "sidecar32k": {
+        "episodes": 100,
+        "successes": 52,
+        "success_rate": 52.0,
+        "success_mean_steps": 165.82692307692307,
+        "success_median_steps": 164.0,
+        "all_mean_steps": 326.23,
+        "failure_mean_steps": 500,
+        "failure_at_budget": 48
+      },
+      "success_difference_pp": -4.0,
+      "success_step_difference": -3.9766483516483504,
+      "success_step_difference_pct": -2.3419109022221885,
+      "shared_seed_both_success_descriptive_only": {
+        "shared_accepted_seeds": 89,
+        "both_success": 40,
+        "baseline_mean_steps": 167.05,
+        "sidecar_mean_steps": 165.075,
+        "mean_difference_steps": -1.975
+      }
+    }
+  ],
+  "summary": {
+    "demo_clean": {
+      "conditions": 5,
+      "baseline_macro_success_rate": 92.6,
+      "sidecar_macro_success_rate": 92.0,
+      "baseline_macro_success_mean_steps": 173.4949291693712,
+      "sidecar_macro_success_mean_steps": 172.48749810432028
+    },
+    "demo_randomized": {
+      "conditions": 5,
+      "baseline_macro_success_rate": 48.8,
+      "sidecar_macro_success_rate": 47.8,
+      "baseline_macro_success_mean_steps": 194.3967784544648,
+      "sidecar_macro_success_mean_steps": 199.28081355264453
+    },
+    "all": {
+      "conditions": 10,
+      "baseline_macro_success_rate": 70.7,
+      "sidecar_macro_success_rate": 69.9,
+      "baseline_macro_success_mean_steps": 183.945853811918,
+      "sidecar_macro_success_mean_steps": 185.8841558284824
+    }
+  },
+  "limitations": "Success-only populations differ. Baseline 9 conditions use sealed manifest shards; Sidecar uses native seed scanning. Shared seed is not a strict matched scene/instruction/RNG experiment. Steps are native take_action counts, not physical dt, denoising steps or wall-clock time."
+}

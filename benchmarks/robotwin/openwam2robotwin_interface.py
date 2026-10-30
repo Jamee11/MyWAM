@@ -183,6 +183,9 @@ class ModelClient:
         action_type: str = "qpos",
         debug: bool = False,
         debug_dir: str = "./debug_images",
+        ea_fk: Optional[dict] = None,
+        ea_context: Optional[str] = None,
+        source_quaternion_order: str = "xyzw",
     ) -> None:
         """
         Args:
@@ -217,6 +220,20 @@ class ModelClient:
         self._request_timeout = request_timeout
         self._action_indices = action_indices
         self._action_type = action_type
+        self._ea_fk = None
+        self._ea_context = ea_context
+        if source_quaternion_order not in ("xyzw", "wxyz"):
+            raise ValueError("Explicit source quaternion order is required")
+        self._source_quaternion_order = source_quaternion_order
+        if ea_context not in (None, "official_eef"):
+            raise ValueError("Unsupported EA context")
+        if ea_context == "official_eef" and (action_type != "ee" or state_dim != 20 or not send_state or ea_fk is not None):
+            raise ValueError("Lite needs official EEF state20/ee, without legacy qpos FK")
+        if ea_fk is not None:
+            if action_type != "qpos" or not send_state or state_dim != 14:
+                raise ValueError("Aloha EA client requires qpos, send_state=true, state_dim=14")
+            from benchmarks.robotwin.ea_fk import AlohaEEF
+            self._ea_fk = AlohaEEF(ea_fk["urdf"], ea_fk["config"], ea_fk["conversion_summary"])
         self._task_description = ""
         self._debug = debug
         self._debug_dir = debug_dir
@@ -361,6 +378,13 @@ class ModelClient:
             prompt=prompt,
             state=state_list,
         )
+        if getattr(self, "_ea_fk", None) is not None:
+            payload["ea_effectors"] = self._ea_fk(state_np).tolist()
+            payload["ea_arm_present"] = [1, 1]
+        if getattr(self, "_ea_context", None) == "official_eef":
+            from openwam.ea_lite_contract import tcp_context_from_eef20
+            payload["ea_effectors"] = tcp_context_from_eef20(state_np).tolist()
+            payload["ea_arm_present"] = [1, 1]
         response = self._client.predict(payload)
         action = np.array(response["action"], dtype=np.float32)
 
@@ -390,6 +414,9 @@ def get_model(usr_args: dict) -> ModelClient:
         action_type=usr_args.get("action_type", "qpos"),
         debug=_parse_bool(usr_args.get("debug", False), default=False),
         debug_dir=usr_args.get("debug_dir", "./debug_images"),
+        ea_fk=usr_args.get("ea_fk", None),
+        ea_context=usr_args.get("ea_context", None),
+        source_quaternion_order=usr_args.get("source_quaternion_order", "xyzw"),
     )
 
 
@@ -397,7 +424,7 @@ def reset_model(model: ModelClient) -> None:
     model.reset(task_description="")
 
 
-def _extract_eef_proprio(observation: dict) -> np.ndarray:
+def _extract_eef_proprio(observation: dict, quaternion_order="xyzw") -> np.ndarray:
     endpose = observation.get("endpose")
     if not isinstance(endpose, dict):
         available = ", ".join(sorted(observation.keys()))
@@ -407,9 +434,13 @@ def _extract_eef_proprio(observation: dict) -> np.ndarray:
             f"Available top-level observation keys: {available}"
         )
 
+    left, right = endpose["left_endpose"], endpose["right_endpose"]
+    if quaternion_order == "wxyz":
+        left = np.asarray(left)[[0, 1, 2, 4, 5, 6, 3]]
+        right = np.asarray(right)[[0, 1, 2, 4, 5, 6, 3]]
     return action_conversion.robotwin_endpose_to_eef20d(
-        endpose["left_endpose"],
-        endpose["right_endpose"],
+        left,
+        right,
         endpose["left_gripper"],
         endpose["right_gripper"],
     )
@@ -417,7 +448,7 @@ def _extract_eef_proprio(observation: dict) -> np.ndarray:
 
 def _extract_proprio(model: ModelClient, observation: dict) -> np.ndarray:
     if model._action_type == "ee":
-        return _extract_eef_proprio(observation)
+        return _extract_eef_proprio(observation, getattr(model, "_source_quaternion_order", "xyzw"))
     try:
         return np.asarray(observation["joint_action"]["vector"], dtype=np.float32)
     except KeyError as exc:
@@ -457,6 +488,9 @@ def eval(TASK_ENV, model: ModelClient, observation: dict) -> None:
     # EEF mode: convert 20D (xyz+rot6d+grip)×2 → 16D (xyz+quat+grip)×2.
     if model._action_type == "ee" and len(action) == 20:
         action = action_conversion.eef20d_to_ee16d(action)
+        if getattr(model, "_source_quaternion_order", "xyzw") == "wxyz":
+            action[3:7] = action[[6, 3, 4, 5]]
+            action[11:15] = action[[14, 11, 12, 13]]
 
     context = nullcontext() if _BENCHMARK_RNG_DOMAIN is None else _BENCHMARK_RNG_DOMAIN.activate()
     with context:

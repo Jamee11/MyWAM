@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-22T09:23:44.898153+00:00",
+  "status": "pass",
+  "cpu_tests": 51,
+  "config_resolved": true,
+  "shell_syntax": true,
+  "zero2_two_gpu": true,
+  "gpu_scope": "Tiny actual Wan/ActionDiT, BF16, fused AdamW, accumulation2, scaled boundary2, save/resume before/at/after, exact next update. No LR scheduler in GPU fixture; CPU scheduler regression retained.",
+  "full_model_four_gpu": false,
+  "formal_training_started": false,
+  "source_sha256": {
+    "openwam/model/architectures/dual_system/relational_sidecar.py": "ba1dcd0d900ced592c8d3773b3d769a58afa746479523b0078befc27f5462697",
+    "openwam/train/openwam_trainer.py": "6573e52620f08169c26f13c780e3a044ff3e2f31f269fe05f32bd75f318f82b3",
+    "openwam/train/utils/optimizer_groups.py": "a2ffec3e493eecdc6268a6b23549750915434f4fe4c5ea97caa1cbec17aa3445",
+    "openwam/train/utils/sidecar_warmup.py": "5b6443b1485627e323fd915b713b8f7a3111e75b943979628126bdf31c69b9e2",
+    "configs/train_relational_sidecar_aloha50_frozen_backbone_10epochs.yaml": "6e982979ce1a1c8051fef7edd7959eed3ecc9a4f891f41ff97b3b276a38ef11d",
+    "scripts/train_relational_sidecar_aloha50_frozen_backbone_10epochs.sh": "a8b306484b0e386940d486a28c2b1143a1bfc8a872d3b487447ada42d1916a74",
+    "scripts/cluster/train_sidecar_isolated.sh": "f4e72b931a756d88721014d47df048ec26ee13bb042241fcfe99a19e46334e0c",
+    "tests/test_sidecar_backbone_warmup.py": "8ba15f79c0f72130318adc1b5b0bd40536f761d807cc5e58d72bbb7a00d95b35",
+    "tests/test_relational_sidecar.py": "d37b8ecb4ab4abfa38a57c102368980793087d7947e23c94fe3946ff521c4be6",
+    "tests/test_sidecar_cluster_transfer.py": "a81b9bf4c439b285d62ad2d1c453040c874460d92dece4551cc8310000edd634",
+    "tests/sidecar_backbone_warmup_zero_smoke.py": "a19841c5e3ce60ce3c66624e3e3653d7f4ef1d657e32b91465bb4b9b663cd0b0"
+  }
+}

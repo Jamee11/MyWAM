@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "commit": "8af2cda4815f25dd56ee9eca64b66f6983d4d62b",
+  "run": "https://github.com/Jamee11/MyWAM/actions/runs/38880662004",
+  "passed": 2174,
+  "skipped": 15,
+  "deselected": 21,
+  "seconds": 132.91,
+  "scope": "full standard CPU suite incl Sidecar; GPU not tested"
+}

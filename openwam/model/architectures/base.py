@@ -1047,6 +1047,7 @@ class BaseWAMArchitecture(ABC, nn.Module):
         actions: Optional[torch.Tensor] = None,
         lambda_video: float = 1.0,
         lambda_action: float = 1.0,
+        forward_fn=None,
         **inputs,
     ) -> dict:
         """Compute joint video-action flow matching loss.
@@ -1066,6 +1067,9 @@ class BaseWAMArchitecture(ABC, nn.Module):
                 be passed via ``inputs["actions"]``.
             lambda_video: Weight for video loss term.
             lambda_action: Weight for action loss term.
+            forward_fn: Optional explicit 2-tuple prediction callable; defaults to
+                this module. Auxiliary variants can retain outputs locally without
+                changing the shared FM objective or caching tensors on the model.
             **inputs: Preprocessed video/text tensors plus forward-time flags.
 
         Returns:
@@ -1146,7 +1150,7 @@ class BaseWAMArchitecture(ABC, nn.Module):
 
         # Use ``self(...)`` (not ``self.forward(...)``) so ``nn.Module.__call__``
         # is invoked and any architecture-level forward-pre-hooks fire.
-        video_noise_pred, action_noise_pred = self(
+        video_noise_pred, action_noise_pred = (self if forward_fn is None else forward_fn)(
             noisy_actions if lambda_action > 0 else None,
             action_timesteps if lambda_action > 0 else None,
             proprio=proprio,

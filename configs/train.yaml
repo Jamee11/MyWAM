@@ -10,6 +10,8 @@ training:
   # --- Optimizer ---
   learning_rate: 1e-4             # Base learning rate for AdamW
   adam_betas: [0.9, 0.95]         # AdamW (beta1, beta2)
+  adam_foreach: null             # null keeps PyTorch's default; false avoids tensor-list temporaries
+  adam_fused: null               # null keeps PyTorch's default; true uses native fused AdamW
   weight_decay: 0.01              # AdamW weight decay
   max_grad_norm: 1.0              # Gradient clipping max norm
 
@@ -52,6 +54,7 @@ training:
   save_steps: 2000                # Save checkpoint every N steps (0 or null = disable saving)
   save_full_states_for_resume: false  # Also save resumable full state (optimizer/scheduler/RNG) at each save;
                                       # required for training.resume_ckpt_path, costs extra disk per checkpoint
+  keep_final_resume_state: false  # opt-in debug/resume runs retain paired full states on completion
   keep_last_k_ckpts: 1           # Rolling window: keep only the last K checkpoints
 
   # --- Finetune / Resume (mutually exclusive; both point to a training output dir, latest step auto-selected) ---

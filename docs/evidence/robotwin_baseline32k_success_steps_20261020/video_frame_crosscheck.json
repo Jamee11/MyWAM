@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "expected": "For a successful rollout official _base_task.py:1661 appends one success-terminal image; video_frames = take_action_count + 1.",
+  "checks": [
+    {
+      "condition": "click_bell/demo_clean",
+      "model": "baseline",
+      "policy_steps": 108,
+      "video_frames": 109,
+      "extra_video_frames": 1,
+      "video": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/baseline_official_manifest_deadline_20261018/shards/demo_clean/click_bell/000/runtime/eval_result/click_bell/openwam2robotwin_interface/demo_clean/openwam/2026-10-19 01:02:07/episode0.mp4"
+    },
+    {
+      "condition": "click_bell/demo_clean",
+      "model": "sidecar32k",
+      "policy_steps": 66,
+      "video_frames": 67,
+      "extra_video_frames": 1,
+      "video": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu1/queue/jobs/demo_clean/click_bell/demo_clean/click_bell/runtime/eval_result/click_bell/openwam2robotwin_interface/demo_clean/click_bell/2026-10-19 07:16:42/episode0.mp4"
+    },
+    {
+      "condition": "place_dual_shoes/demo_clean",
+      "model": "baseline",
+      "policy_steps": 222,
+      "video_frames": 223,
+      "extra_video_frames": 1,
+      "video": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/rebuild_official_20261018/official_diagnostic100/demo_clean/place_dual_shoes/runtime/eval_result/place_dual_shoes/openwam2robotwin_interface/demo_clean/fresh_official/2026-10-18 07:01:06/episode0.mp4"
+    },
+    {
+      "condition": "place_dual_shoes/demo_clean",
+      "model": "sidecar32k",
+      "policy_steps": 222,
+      "video_frames": 223,
+      "extra_video_frames": 1,
+      "video": "/remote-home/jinminghao/OpenWAM/outputs/robotwin_eval/sidecar32000_officialenv_l20_20261019/gpu1/queue/jobs/demo_clean/place_dual_shoes/demo_clean/place_dual_shoes/runtime/eval_result/place_dual_shoes/openwam2robotwin_interface/demo_clean/place_dual_shoes/2026-10-19 03:21:00/episode0.mp4"
+    }
+  ]
+}

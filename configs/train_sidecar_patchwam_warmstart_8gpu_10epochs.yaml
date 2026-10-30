@@ -1,0 +1,25 @@
+# New finetune run from the trained 2K weights; optimizer and counters start at zero.
+defaults:
+  - train_relational_sidecar_aloha50_patchwam_c2r_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      backbone_warmup_updates: 0
+      isolation_warmup_updates: 0
+      aux_heads_only_after_warmup: false
+      aux_shared_gradient_scale: 1.0
+      aux_gradient_anneal_updates: 0
+      main_task_gradient_gain: 1.0
+training:
+  num_epochs: 10
+  batch_size: 32
+  gradient_accumulation_steps: 1
+  sidecar_lr_screen: control
+  resume_ckpt_path: null
+  save_steps: 10000  # With acc=1, microsteps and optimizer updates are identical.
+  save_full_states_for_resume: true
+  keep_final_resume_state: true
+  keep_last_k_ckpts: 2
+  output_path: outputs/sidecar/patchwam_warmstart_8gpu_10epochs

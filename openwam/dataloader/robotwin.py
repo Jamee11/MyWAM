@@ -297,6 +297,7 @@ class RoboTwinDataset(BaseDataset):
         # (default). Truthy → enabled; a dict overrides
         # the per-channel strengths {brightness, contrast, saturation, hue}.
         color_jitter: Optional[Any] = None,
+        prepared_metadata: Optional[dict] = None,
     ):
         super().__init__()
         self.embodiment = embodiment
@@ -379,7 +380,12 @@ class RoboTwinDataset(BaseDataset):
 
         # ---- Discover and sort target episode files ----
         pattern = os.path.join(data_root, "episode*.hdf5")
-        all_files = sorted(glob.glob(pattern))
+        # Optional offline metadata avoids reopening every HDF5 on every rank.
+        # The default reader/discovery and all sample construction stay unchanged.
+        all_files = (sorted(glob.glob(pattern)) if prepared_metadata is None
+                     else list(prepared_metadata["episode_files"]))
+        if prepared_metadata is not None and all_files != sorted(all_files):
+            raise ValueError("Prepared episode order must match official lexicographic order")
         if not all_files:
             raise FileNotFoundError(f"No episode*.hdf5 files found in {data_root}")
 
@@ -387,10 +393,15 @@ class RoboTwinDataset(BaseDataset):
         print(f"RoboTwinDataset: {len(self._episode_files)} episodes ({split}, action_mode={action_mode})")
 
         # Probe episodes for length and action dim
-        self._episode_lengths = []
-        self._action_dim_detected = None
+        self._episode_lengths = ([] if prepared_metadata is None
+                                 else list(prepared_metadata["episode_lengths"]))
+        self._action_dim_detected = None if prepared_metadata is None else EEF_ACTION_DIM
+        if prepared_metadata is not None and (action_mode != "eef" or
+                len(self._episode_lengths) != len(all_files) or
+                any(not isinstance(n, int) or n < 1 for n in self._episode_lengths)):
+            raise ValueError("Prepared metadata requires valid EEF episodes/lengths")
 
-        for path in self._episode_files:
+        for path in (self._episode_files if prepared_metadata is None else []):
             with h5py.File(path, "r") as f:
                 T = f[f"observation/{target_camera}/rgb"].shape[0]
                 self._episode_lengths.append(T)
@@ -414,20 +425,23 @@ class RoboTwinDataset(BaseDataset):
 
         # ---- Probe original observation image size (first camera, first episode) ----
         self._obs_image_size = None  # (H, W) of the raw JPEG frames in HDF5
-        with h5py.File(self._episode_files[0], "r") as f:
-            probe_cam = self.cameras[0]
-            obs_path = f"observation/{probe_cam}/rgb"
-            if obs_path in f and f[obs_path].shape[0] > 0:
-                probe_jpeg = f[obs_path][0]
-                probe_img = self._decode_jpeg(probe_jpeg)
-                self._obs_image_size = (probe_img.height, probe_img.width)
-                print(
-                    f"  Raw observation image size: {self._obs_image_size[0]}x{self._obs_image_size[1]} "
-                    f"(probed from camera '{probe_cam}')"
-                )
+        if prepared_metadata is not None:
+            self._obs_image_size = tuple(prepared_metadata["obs_image_size"])
+        else:
+            with h5py.File(self._episode_files[0], "r") as f:
+                probe_cam = self.cameras[0]
+                obs_path = f"observation/{probe_cam}/rgb"
+                if obs_path in f and f[obs_path].shape[0] > 0:
+                    probe_jpeg = f[obs_path][0]
+                    probe_img = self._decode_jpeg(probe_jpeg)
+                    self._obs_image_size = (probe_img.height, probe_img.width)
+                    print(
+                        f"  Raw observation image size: {self._obs_image_size[0]}x{self._obs_image_size[1]} "
+                        f"(probed from camera '{probe_cam}')"
+                    )
 
         # ---- Validate multiview cameras ----
-        if self.multiview:
+        if self.multiview and prepared_metadata is None:
             with h5py.File(self._episode_files[0], "r") as f:
                 obs_keys = list(f["observation"].keys()) if "observation" in f else []
                 for cam in self.cameras:
@@ -472,15 +486,15 @@ class RoboTwinDataset(BaseDataset):
         )
 
         # ---- Load scene_info for active arm detection ----
-        self._scene_info = {}
+        self._scene_info = {} if prepared_metadata is None else prepared_metadata["scene_info"]
         scene_info_path = os.path.join(data_root, "..", "scene_info.json")
-        if not os.path.exists(scene_info_path):
+        if prepared_metadata is None and not os.path.exists(scene_info_path):
             scene_info_path = os.path.join(data_root, "scene_info.json")
-        if os.path.exists(scene_info_path):
+        if prepared_metadata is None and os.path.exists(scene_info_path):
             with open(scene_info_path) as _f:
                 self._scene_info = json.load(_f)
             print(f"  Scene info loaded from {scene_info_path} ({len(self._scene_info)} entries)")
-        else:
+        elif prepared_metadata is None:
             print("  No scene_info.json found, active_arm will default to 'both'")
 
         # ---- Action normalization (unified for joint & eef via Normalizer) ----
@@ -578,9 +592,9 @@ class RoboTwinDataset(BaseDataset):
             print("  [normalizer] Action normalization DISABLED (normalize_mode=None)")
 
         # ---- Try loading instruction prompts ----
-        self._instructions = {}
+        self._instructions = {} if prepared_metadata is None else prepared_metadata["instructions"]
         instr_dir = os.path.join(os.path.dirname(data_root), "instructions")
-        if os.path.isdir(instr_dir):
+        if prepared_metadata is None and os.path.isdir(instr_dir):
             for fname in os.listdir(instr_dir):
                 if fname.endswith(".json"):
                     try:

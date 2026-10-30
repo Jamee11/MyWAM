@@ -1,0 +1,24 @@
+# Fresh Sidecar on the official RoboTwin-finetuned policy, full backward / Sidecar-only updates.
+defaults:
+  - train_sidecar_patchwam_warmstart_8gpu_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      stage: joint
+      foundation_warmstart: true
+      backbone_warmup_updates: 2000
+training:
+  num_epochs: null
+  max_steps: 2000  # acc=1: exactly 2000 optimizer updates, never enter joint updates.
+  learning_rate: 1e-4
+  action_lr: 1e-4
+  video_lr: 1e-4
+  sidecar_lr: 5e-5
+  sidecar_lr_screen: null
+  save_steps: 2000
+  save_full_states_for_resume: false
+  keep_final_resume_state: false
+  keep_last_k_ckpts: 2
+  output_path: outputs/sidecar/c2r_sidecar_warmup2k_8gpu

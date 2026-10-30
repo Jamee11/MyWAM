@@ -1,0 +1,393 @@
+{
+  "source": "/remote-home/jinminghao/DiT4DiT/examples/RoboTwin2/ea_rsig_v3_oracle.py",
+  "sha256": "cf3a5e417fa3e922a06ec3ec40cbfb9201395b3901fc725afdb789a299ede554",
+  "roles": {
+    "adjust_bottle": [
+      [
+        "bottle",
+        "pose_by:qpose_tag:left_target_pose:right_target_pose"
+      ]
+    ],
+    "beat_block_hammer": [
+      [
+        "hammer",
+        "functional:block:1"
+      ]
+    ],
+    "blocks_ranking_rgb": [
+      [
+        "block1",
+        "pose:block1_target_pose"
+      ],
+      [
+        "block2",
+        "pose:block2_target_pose"
+      ],
+      [
+        "block3",
+        "pose:block3_target_pose"
+      ]
+    ],
+    "blocks_ranking_size": [
+      [
+        "block1",
+        "pose:block1_target_pose"
+      ],
+      [
+        "block2",
+        "pose:block2_target_pose"
+      ],
+      [
+        "block3",
+        "pose:block3_target_pose"
+      ]
+    ],
+    "click_alarmclock": [
+      [
+        "alarm",
+        "self",
+        "contact:0"
+      ]
+    ],
+    "click_bell": [
+      [
+        "bell",
+        "self",
+        "contact:0"
+      ]
+    ],
+    "dump_bin_bigbin": [
+      [
+        "deskbin",
+        "actor:dustbin"
+      ]
+    ],
+    "grab_roller": [
+      [
+        "roller",
+        "height:0.85"
+      ]
+    ],
+    "handover_block": [
+      [
+        "box",
+        "functional:target_box:1"
+      ]
+    ],
+    "handover_mic": [
+      [
+        "microphone",
+        "pose:handover_middle_pose"
+      ]
+    ],
+    "hanging_mug": [
+      [
+        "mug",
+        "actor:rack"
+      ]
+    ],
+    "lift_pot": [
+      [
+        "pot",
+        "height:0.88"
+      ]
+    ],
+    "move_can_pot": [
+      [
+        "can",
+        "actor:pot"
+      ]
+    ],
+    "move_pillbottle_pad": [
+      [
+        "pillbottle",
+        "actor:pad"
+      ]
+    ],
+    "move_playingcard_away": [
+      [
+        "playingcards",
+        "self"
+      ]
+    ],
+    "move_stapler_pad": [
+      [
+        "stapler",
+        "actor:pad"
+      ]
+    ],
+    "open_laptop": [
+      [
+        "laptop",
+        "self",
+        "contact:1"
+      ]
+    ],
+    "open_microwave": [
+      [
+        "microwave",
+        "self",
+        "contact:2"
+      ]
+    ],
+    "pick_diverse_bottles": [
+      [
+        "bottle1",
+        "pose:left_target_pose"
+      ],
+      [
+        "bottle2",
+        "pose:right_target_pose"
+      ]
+    ],
+    "pick_dual_bottles": [
+      [
+        "bottle1",
+        "pose:left_target_pose"
+      ],
+      [
+        "bottle2",
+        "pose:right_target_pose"
+      ]
+    ],
+    "place_a2b_left": [
+      [
+        "object",
+        "actor:target_object"
+      ]
+    ],
+    "place_a2b_right": [
+      [
+        "object",
+        "actor:target_object"
+      ]
+    ],
+    "place_bread_basket": [
+      [
+        "bread",
+        "actor:breadbasket"
+      ]
+    ],
+    "place_bread_skillet": [
+      [
+        "skillet",
+        "self"
+      ],
+      [
+        "bread",
+        "actor:skillet"
+      ]
+    ],
+    "place_burger_fries": [
+      [
+        "hamburg",
+        "actor:tray"
+      ],
+      [
+        "frenchfries",
+        "actor:tray"
+      ]
+    ],
+    "place_can_basket": [
+      [
+        "can",
+        "actor:basket"
+      ],
+      [
+        "basket",
+        "actor:can"
+      ]
+    ],
+    "place_cans_plasticbox": [
+      [
+        "object1",
+        "functional:plasticbox:1"
+      ],
+      [
+        "object2",
+        "functional:plasticbox:0"
+      ]
+    ],
+    "place_container_plate": [
+      [
+        "container",
+        "functional:plate:0"
+      ]
+    ],
+    "place_dual_shoes": [
+      [
+        "left_shoe",
+        "actor:shoe_box"
+      ],
+      [
+        "right_shoe",
+        "actor:shoe_box"
+      ]
+    ],
+    "place_empty_cup": [
+      [
+        "cup",
+        "actor:coaster"
+      ]
+    ],
+    "place_fan": [
+      [
+        "fan",
+        "actor:pad"
+      ]
+    ],
+    "place_mouse_pad": [
+      [
+        "mouse",
+        "actor:target"
+      ]
+    ],
+    "place_object_basket": [
+      [
+        "object",
+        "actor:basket"
+      ],
+      [
+        "basket",
+        "actor:object"
+      ]
+    ],
+    "place_object_scale": [
+      [
+        "object",
+        "functional:scale:0"
+      ]
+    ],
+    "place_object_stand": [
+      [
+        "object",
+        "functional:displaystand:0"
+      ]
+    ],
+    "place_phone_stand": [
+      [
+        "phone",
+        "actor:stand"
+      ]
+    ],
+    "place_shoe": [
+      [
+        "shoe",
+        "actor:target_block"
+      ]
+    ],
+    "press_stapler": [
+      [
+        "stapler",
+        "self",
+        "contact:2"
+      ]
+    ],
+    "put_bottles_dustbin": [
+      [
+        "bottles",
+        "actor:dustbin"
+      ]
+    ],
+    "put_object_cabinet": [
+      [
+        "object",
+        "actor:cabinet"
+      ],
+      [
+        "cabinet",
+        "actor:object",
+        "functional:0"
+      ]
+    ],
+    "rotate_qrcode": [
+      [
+        "qrcode",
+        "pose:target_pose"
+      ]
+    ],
+    "scan_object": [
+      [
+        "object",
+        "actor:scanner"
+      ],
+      [
+        "scanner",
+        "actor:object"
+      ]
+    ],
+    "shake_bottle": [
+      [
+        "bottle",
+        "self"
+      ]
+    ],
+    "shake_bottle_horizontally": [
+      [
+        "bottle",
+        "self"
+      ]
+    ],
+    "stack_blocks_three": [
+      [
+        "block1",
+        "pose:block1_target_pose"
+      ],
+      [
+        "block2",
+        "actor:block1"
+      ],
+      [
+        "block3",
+        "actor:block2"
+      ]
+    ],
+    "stack_blocks_two": [
+      [
+        "block1",
+        "pose:block1_target_pose"
+      ],
+      [
+        "block2",
+        "actor:block1"
+      ]
+    ],
+    "stack_bowls_three": [
+      [
+        "bowl1",
+        "pose:bowl1_target_pose"
+      ],
+      [
+        "bowl2",
+        "actor:bowl1"
+      ],
+      [
+        "bowl3",
+        "actor:bowl2"
+      ]
+    ],
+    "stack_bowls_two": [
+      [
+        "bowl1",
+        "pose:bowl1_target_pose"
+      ],
+      [
+        "bowl2",
+        "actor:bowl1"
+      ]
+    ],
+    "stamp_seal": [
+      [
+        "seal",
+        "actor:target"
+      ]
+    ],
+    "turn_switch": [
+      [
+        "switch",
+        "self",
+        "contact:0"
+      ]
+    ]
+  }
+}

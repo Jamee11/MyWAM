@@ -1,0 +1,20 @@
+defaults:
+  - dual_system
+  - _self_
+
+architecture:
+  variant: joint_self_attn_ea_rsig_lite
+  action_dim: 80
+  state_dim: 80
+  ea_lite:
+    foundation_warmstart: true
+    stage: warmup  # warmup | joint | action_only; warmup is not full SFT
+    adapter_layer: 0  # After the FIRST mixed block; RoPE/mask/sequence stay official.
+    action_conditioning: true
+    slot_dim: 512
+    num_heads: 8
+    grid_height: 14
+    view_grid_width: 14
+    ground_weight: 0.025
+    relation_weight: 0.01
+    plan_weight: 0.05

@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "scope": "11 old Lite implementation/config/launcher files; Python imports/formatting may differ",
+  "immutable_backup_commit": "364a95f44660420cb30e0ed0a4bba8482a248281",
+  "files": [
+    {
+      "path": "configs/dataloader/ea_rsig_lite.yaml",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "configs/deploy_ea_rsig_lite.yaml",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "configs/model/dual_system_ea_rsig_lite.yaml",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "configs/train_ea_lite_4gpu.yaml",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "configs/train_ea_lite_wrist020_clean50.yaml",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "openwam/dataloader/ea_rsig_lite.py",
+      "byte_equal": false,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/ea_rsig_lite.py",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "openwam/model/modules/ea_rsig_lite.py",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "scripts/train_ea_lite_4gpu.sh",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "scripts/train_ea_lite_multigpu.sh",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    },
+    {
+      "path": "scripts/train_ea_lite_wrist020_clean50.sh",
+      "byte_equal": true,
+      "ast_equal_excluding_imports": true
+    }
+  ]
+}

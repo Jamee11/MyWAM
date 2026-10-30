@@ -1,0 +1,29 @@
+{
+  "reference": {
+    "episodes": 2500,
+    "windows_per_epoch": 549775,
+    "epochs": 10,
+    "hours_user_reported": 80,
+    "effective_batch": 256
+  },
+  "mixed": {
+    "prepared_episodes": 52204,
+    "train_episodes": 39816,
+    "windows_per_epoch": 7282176,
+    "effective_batch": 512,
+    "world_size": 4,
+    "per_gpu_batch": 32,
+    "accumulation": 4,
+    "updates_per_epoch": 14223,
+    "microsteps_per_epoch": 56892
+  },
+  "linear_estimate": {
+    "windows_per_second": 19.08940972222222,
+    "one_epoch_hours": 105.96590969032786,
+    "two_epoch_hours": 211.93181938065572,
+    "one_epoch_days": 4.415246237096994,
+    "two_epoch_days": 8.830492474193989,
+    "seconds_per_optimizer_update_at_512": 26.821154108498934
+  },
+  "scope": "Assumes same per-window throughput and hardware; not a measured four-A100 timing. Batch doubled by accumulation, not doubled compute throughput."
+}

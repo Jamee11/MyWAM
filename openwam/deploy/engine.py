@@ -15,6 +15,7 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict
 from typing import Any, Optional
 
+import numpy as np
 import torch
 
 from openwam.deploy.denoise_schedule import make_schedule, normalize_denoise_config
@@ -337,6 +338,27 @@ class JointInferenceEngine(BaseInferenceEngine):
             )
         )
 
+        ea_kwargs = {}
+        if getattr(self.architecture, "sidecar", None) is not None:
+            observation = conditions.get("observation") or {}
+            if "ea_targets" in observation or "ea_targets" in conditions:
+                raise ValueError("EA oracle targets are forbidden in Sidecar deployment")
+        if getattr(self.architecture, "ea_bridge", None) is not None:
+            observation = conditions.get("observation") or {}
+            if "ea_targets" in observation or "ea_targets" in conditions:
+                raise ValueError("EA oracle targets are forbidden in deployment")
+            for key, shape in (("ea_effectors", (1, 2, 10)), ("ea_arm_present", (1, 2))):
+                value = conditions.get(key, observation.get(key))
+                if value is None:
+                    raise ValueError(f"EA deployment needs {key} from current robot observations")
+                tensor = torch.as_tensor(value, device=self.architecture.device, dtype=self.architecture.dtype)
+                if tensor.numel() != int(np.prod(shape)) or not torch.isfinite(tensor).all():
+                    raise ValueError(f"Invalid {key}: expected {shape}")
+                ea_kwargs[key] = tensor.reshape(shape)
+            arms = ea_kwargs["ea_arm_present"]
+            if not torch.all((arms == 0) | (arms == 1)) or not torch.any(arms):
+                raise ValueError("Invalid EA arm-presence mask")
+
         generate_kwargs = self._filter_architecture_generate_kwargs(
             {
                 "schedule": schedule,
@@ -360,6 +382,7 @@ class JointInferenceEngine(BaseInferenceEngine):
                 "proprio": proprio,
                 "cfg_scale": self._cfg_scale,
                 "cfg_merge": self._cfg_merge,
+                **ea_kwargs,
             }
         )
         result = self.architecture.generate(**generate_kwargs)

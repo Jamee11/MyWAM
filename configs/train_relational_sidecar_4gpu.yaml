@@ -1,0 +1,8 @@
+defaults:
+  - train_ea_lite_4gpu
+  - override model: dual_system_relational_sidecar
+  - override dataloader: relational_sidecar
+  - _self_
+
+training:
+  output_path: outputs/sidecar/smoke

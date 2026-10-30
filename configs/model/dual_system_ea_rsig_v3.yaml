@@ -1,0 +1,29 @@
+defaults:
+  - dual_system
+  - _self_
+
+architecture:
+  variant: joint_self_attn_ea_rsig_v3
+  action_dim: 14
+  state_dim: 14
+  ea_rsig_v3:
+    foundation_warmstart: true
+    layer_index: 17  # 18th Wan block, observation-only extraction
+    action_horizon: 40
+    video_anchors: [0, 10, 20, 30, 40]
+    action_space: qpos
+    layout: robotwin
+    num_views: 3
+    num_arms: 2
+    num_tracks: 2
+    grid_height: 14
+    view_grid_width: 14
+    slot_dim: 512
+    num_heads: 8
+    action_conditioning: true
+    video_residual: true
+    loss_scale: 0.1
+    ground_weight: 0.25
+    relation_weight: 0.1
+    plan_weight: 1.0
+    logical_loss_batch_size: null

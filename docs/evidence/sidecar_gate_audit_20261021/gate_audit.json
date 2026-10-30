@@ -1,0 +1,235 @@
+{
+  "status": "passed",
+  "synthetic_probes": [
+    {
+      "scheme": "zero_gate_normal_projection",
+      "scope": "Synthetic CPU write adapters, not trained WAM activations",
+      "initial": [
+        {
+          "beta": 0.0,
+          "projection_norm": 18.483369827270508
+        },
+        {
+          "beta": 0.0,
+          "projection_norm": 18.452180862426758
+        },
+        {
+          "beta": 0.0,
+          "projection_norm": 18.47783660888672
+        }
+      ],
+      "steps": [
+        {
+          "update_index": 1,
+          "taps": [
+            {
+              "tap": 7,
+              "beta_grad": -0.00015494716353714466,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 15,
+              "beta_grad": 0.00014085967268329114,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 23,
+              "beta_grad": 0.0009776543593034148,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            }
+          ]
+        },
+        {
+          "update_index": 2,
+          "taps": [
+            {
+              "tap": 7,
+              "beta_grad": -0.00015455769607797265,
+              "projection_grad_norm": 1.3451972336042672e-06,
+              "residual_ratio": 3.1122312975639943e-06
+            },
+            {
+              "tap": 15,
+              "beta_grad": 0.0001404622453264892,
+              "projection_grad_norm": 1.366237938782433e-06,
+              "residual_ratio": 3.1471579404751537e-06
+            },
+            {
+              "tap": 23,
+              "beta_grad": 0.0009772439952939749,
+              "projection_grad_norm": 1.3417826494332985e-06,
+              "residual_ratio": 3.18357569994987e-06
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scheme": "unit_gate_zero_projection",
+      "scope": "Synthetic CPU write adapters, not trained WAM activations",
+      "initial": [
+        {
+          "beta": 1.0,
+          "projection_norm": 0.0
+        },
+        {
+          "beta": 1.0,
+          "projection_norm": 0.0
+        },
+        {
+          "beta": 1.0,
+          "projection_norm": 0.0
+        }
+      ],
+      "steps": [
+        {
+          "update_index": 1,
+          "taps": [
+            {
+              "tap": 7,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.0269057247787714,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 15,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.02732672356069088,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 23,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.026835957542061806,
+              "residual_ratio": 0.0
+            }
+          ]
+        },
+        {
+          "update_index": 2,
+          "taps": [
+            {
+              "tap": 7,
+              "beta_grad": -0.0007015980081632733,
+              "projection_grad_norm": 0.026773149147629738,
+              "residual_ratio": 0.0013957713963463902
+            },
+            {
+              "tap": 15,
+              "beta_grad": -0.0007111973827704787,
+              "projection_grad_norm": 0.02719458006322384,
+              "residual_ratio": 0.0013942591613158584
+            },
+            {
+              "tap": 23,
+              "beta_grad": -0.0006981784827075899,
+              "projection_grad_norm": 0.026709778234362602,
+              "residual_ratio": 0.0013566964771598577
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scheme": "double_zero_negative_control",
+      "scope": "Synthetic CPU write adapters, not trained WAM activations",
+      "initial": [
+        {
+          "beta": 0.0,
+          "projection_norm": 0.0
+        },
+        {
+          "beta": 0.0,
+          "projection_norm": 0.0
+        },
+        {
+          "beta": 0.0,
+          "projection_norm": 0.0
+        }
+      ],
+      "steps": [
+        {
+          "update_index": 1,
+          "taps": [
+            {
+              "tap": 7,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 15,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 23,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            }
+          ]
+        },
+        {
+          "update_index": 2,
+          "taps": [
+            {
+              "tap": 7,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 15,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            },
+            {
+              "tap": 23,
+              "beta_grad": 0.0,
+              "projection_grad_norm": 0.0,
+              "residual_ratio": 0.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "trained_checkpoint": "outputs/sidecar/aloha50_C_joint_10epochs_20261016T131709Z/runs/2026-10-16_13-50-52/checkpoint_step_42960.safetensors",
+  "trained_write_tensors": [
+    {
+      "tap": 7,
+      "beta": -0.00020313262939453125,
+      "projection_norm": 18.26417350769043,
+      "projection_nonzero": 524288,
+      "projection_elements": 524288
+    },
+    {
+      "tap": 15,
+      "beta": 0.0003795623779296875,
+      "projection_norm": 18.273122787475586,
+      "projection_nonzero": 524288,
+      "projection_elements": 524288
+    },
+    {
+      "tap": 23,
+      "beta": -0.0004787445068359375,
+      "projection_norm": 18.26749038696289,
+      "projection_nonzero": 524288,
+      "projection_elements": 524288
+    }
+  ],
+  "packaged_write_module_matches_current": true,
+  "residual_ratio_runtime_logging_implemented": false,
+  "production_code_changed": false,
+  "targeted_existing_tests": {
+    "passed": 6,
+    "deselected": 21,
+    "command": "pytest tests/test_relational_sidecar.py -k 'full_loss_optimizer_and_resume or isolated or isolation_boundary'"
+  }
+}

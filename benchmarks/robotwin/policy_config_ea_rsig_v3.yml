@@ -1,0 +1,17 @@
+policy_name: openwam2robotwin_interface
+task_name: null
+task_config: null
+ckpt_setting: null
+seed: null
+instruction_type: unseen
+host: "127.0.0.1"
+port: 8848
+send_state: true
+state_dim: 14
+request_timeout: 300
+action_type: qpos
+debug: false
+ea_fk:
+  urdf: assets/ea_robotwin/aloha.urdf
+  config: assets/ea_robotwin/aloha_config.yml
+  conversion_summary: assets/ea_robotwin/training_contract.json

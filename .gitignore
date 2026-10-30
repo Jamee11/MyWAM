@@ -1,4 +1,5 @@
 /data/*
+/datasets/
 !/data/robotwin/
 /models
 /diffusers
@@ -8,6 +9,9 @@
 
 # Hydra outputs
 outputs/
+assets/openwam_ckpt/
+docs/OpenWAM_paper_extracted.txt
+*.partial
 *.pkl
 *.safetensors
 *.pth
@@ -217,5 +221,15 @@ assets/*
 !assets/robodojo_verification/
 !assets/robodojo_verification/**
 
+# EA extension rules and small FK assets travel with the code.
+!AGENTS.md
+!assets/ea_robotwin/
+!assets/ea_robotwin/**
+
 # Local Labtasker state and attempt journals
 .labtasker/
+
+# Independent local RoboTwin checkout/assets and simulator environment.
+.external/
+.venv-robotwin/
+.conda/

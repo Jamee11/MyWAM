@@ -121,6 +121,7 @@ def reduce_step_metrics(accelerator, losses: dict, grad_norm) -> dict:
     def _f(v):
         return v.item() if isinstance(v, torch.Tensor) else float(v)
 
+    extra_keys = sorted(key for key in losses if key.startswith(("loss_ea", "ea_")))
     if accelerator is not None and accelerator.num_processes > 1:
         local = torch.tensor(
             [
@@ -128,6 +129,7 @@ def reduce_step_metrics(accelerator, losses: dict, grad_norm) -> dict:
                 _f(losses["video"]),
                 _f(losses["action"]),
                 grad_norm.item(),
+                *[_f(losses[key]) for key in extra_keys],
             ],
             device=loss.device,
             dtype=torch.float32,
@@ -138,12 +140,14 @@ def reduce_step_metrics(accelerator, losses: dict, grad_norm) -> dict:
             "loss_video": g[1].item(),
             "loss_action": g[2].item(),
             "grad_norm": g[3].item(),
+            **{key: g[4 + index].item() for index, key in enumerate(extra_keys)},
         }
     return {
         "loss_total": loss.detach().item(),
         "loss_video": _f(losses["video"]),
         "loss_action": _f(losses["action"]),
         "grad_norm": grad_norm.item(),
+        **{key: _f(losses[key]) for key in extra_keys},
     }
 
 

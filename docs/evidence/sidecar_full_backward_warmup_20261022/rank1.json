@@ -1,0 +1,29 @@
+{
+  "status": "pass",
+  "zero_stage": 2,
+  "bf16": true,
+  "accumulation": 2,
+  "rows": [
+    {
+      "completed_updates": 1,
+      "wam_changed": false,
+      "sidecar_changed": true,
+      "wam_backward_nonzero": true,
+      "resume_next_update_exact": true
+    },
+    {
+      "completed_updates": 2,
+      "wam_changed": false,
+      "sidecar_changed": true,
+      "wam_backward_nonzero": true,
+      "resume_next_update_exact": true
+    },
+    {
+      "completed_updates": 3,
+      "wam_changed": true,
+      "sidecar_changed": true,
+      "wam_backward_nonzero": true,
+      "resume_next_update_exact": true
+    }
+  ]
+}

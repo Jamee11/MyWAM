@@ -1,0 +1,35 @@
+# Clean2Random baseline: official Alpha policy, shared audited Clean reader, no EA.
+defaults:
+  - train
+  - override model: dual_system
+  - override dataloader: ea_rsig_lite
+  - _self_
+
+model:
+  architecture:
+    variant: joint_self_attn
+dataloader:
+  auxiliary: false
+  startup_mode: prepared
+  color_jitter:
+    enabled: true
+training:
+  batch_size: 64
+  gradient_accumulation_steps: 1
+  num_epochs: 5
+  max_steps: null
+  learning_rate: 1e-4
+  # Equal rates retain the validated three-group ZeRO memory layout.
+  action_lr: 1e-4
+  video_lr: 1e-4
+  adam_foreach: false
+  adam_fused: true
+  initialize_model_on_cpu: true
+  dataset_num_workers: 4
+  save_steps: 2000
+  save_full_states_for_resume: true
+  keep_final_resume_state: true
+  keep_last_k_ckpts: 2
+project:
+  wandb:
+    project: null

@@ -1,0 +1,94 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "group": "robotwin_aloha",
+      "collection": "robotwin_base",
+      "index": 0,
+      "position_error_m": 2.9802322387695312e-08,
+      "rotation_error_rad": 9.426016194712095e-08
+    },
+    {
+      "group": "robotwin_aloha",
+      "collection": "robotwin_base",
+      "index": 72,
+      "position_error_m": 3.003425057343598e-08,
+      "rotation_error_rad": 8.648263710585917e-08
+    },
+    {
+      "group": "robotwin_aloha",
+      "collection": "robotwin_base",
+      "index": 144,
+      "position_error_m": 2.9802322387695312e-08,
+      "rotation_error_rad": 8.648263710585917e-08
+    },
+    {
+      "group": "robotwin_aloha",
+      "collection": "robotwin_clutter",
+      "index": 0,
+      "position_error_m": 2.9802322387695312e-08,
+      "rotation_error_rad": 5.746652595446296e-08
+    },
+    {
+      "group": "robotwin_aloha",
+      "collection": "robotwin_clutter",
+      "index": 74,
+      "position_error_m": 2.9802322387695312e-08,
+      "rotation_error_rad": 8.648263710585917e-08
+    },
+    {
+      "group": "robotwin_aloha",
+      "collection": "robotwin_clutter",
+      "index": 148,
+      "position_error_m": 2.9802322387695312e-08,
+      "rotation_error_rad": 9.174796717593239e-08
+    },
+    {
+      "group": "robotwin_piper",
+      "collection": "robotwin_base",
+      "index": 0,
+      "position_error_m": 5.960464477539063e-08,
+      "rotation_error_rad": 1.5229493663416476e-07
+    },
+    {
+      "group": "robotwin_piper",
+      "collection": "robotwin_base",
+      "index": 39,
+      "position_error_m": 7.508562643358995e-09,
+      "rotation_error_rad": 2.903985466122804e-08
+    },
+    {
+      "group": "robotwin_piper",
+      "collection": "robotwin_base",
+      "index": 78,
+      "position_error_m": 4.566330713082575e-08,
+      "rotation_error_rad": 1.301969063841065e-07
+    },
+    {
+      "group": "robotwin_piper",
+      "collection": "robotwin_clutter",
+      "index": 0,
+      "position_error_m": 5.960464477539063e-08,
+      "rotation_error_rad": 1.5229493663416476e-07
+    },
+    {
+      "group": "robotwin_piper",
+      "collection": "robotwin_clutter",
+      "index": 37,
+      "position_error_m": 8.429369702178807e-08,
+      "rotation_error_rad": 8.871136562210478e-08
+    },
+    {
+      "group": "robotwin_piper",
+      "collection": "robotwin_clutter",
+      "index": 73,
+      "position_error_m": 6.828569911354542e-08,
+      "rotation_error_rad": 1.227511718875176e-07
+    }
+  ],
+  "scope": "native absolute achieved EEF -> prepared labels -> train normalization/unify -> deployment unnormalize -> actual evaluator quaternion/gripper format; not a simulator rollout",
+  "delta_ee_used": false,
+  "raw_quaternion_order": "wxyz",
+  "training_rotation": "first_two_matrix_columns",
+  "environment_action_type": "ee"
+}

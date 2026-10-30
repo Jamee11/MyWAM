@@ -4,13 +4,17 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import importlib.util
+import inspect
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
+import textwrap
 import traceback
 import types
 from pathlib import Path
@@ -124,14 +128,53 @@ def _load_robotwin_eval_module(robotwin_path: str):
 
 
 def _prepare_runtime_root(robotwin_path: str) -> str:
+    policy_path = os.environ.get("POLICY_CONFIG_PATH")
+    policy = yaml.safe_load(Path(policy_path).read_text()) if policy_path else {}
+    video_override = (policy or {}).get("eval_video_log")
+    if video_override is not None and type(video_override) is not bool:
+        raise ValueError("policy eval_video_log must be a YAML boolean")
     runtime_root = os.environ.get("ROBOTWIN_RUNTIME_ROOT", "")
     if runtime_root:
         runtime_root = os.path.abspath(runtime_root)
         os.makedirs(runtime_root, exist_ok=True)
-    elif os.access(robotwin_path, os.W_OK):
+    elif video_override is None and os.access(robotwin_path, os.W_OK):
         return robotwin_path
     else:
         runtime_root = tempfile.mkdtemp(prefix="robotwin_runtime.", dir=os.environ.get("TMPDIR", "/tmp"))
+
+    if video_override is not None:
+        if Path(runtime_root).resolve() == Path(robotwin_path).resolve():
+            raise ValueError("Video override requires a private runtime")
+        source = Path(robotwin_path) / "task_config"
+        target = Path(runtime_root) / "task_config"
+        if target.is_symlink():
+            raise ValueError("Video override requires a fresh private task_config directory")
+        target.mkdir(exist_ok=True)
+        evidence = {}
+        for item in source.iterdir():
+            destination = target / item.name
+            if item.name in ("demo_clean.yml", "demo_randomized.yml"):
+                original = item.read_text()
+                modified, count = re.subn(
+                    r"(?m)^(eval_video_log:\s*)(true|false)([ \t]*(?:#.*)?)$",
+                    lambda match: match[1] + str(video_override).lower() + match[3],
+                    original,
+                )
+                if count != 1:
+                    raise ValueError(f"Expected one eval_video_log setting in {item}")
+                if destination.is_symlink():
+                    raise ValueError(f"Refusing to modify linked task config: {destination}")
+                destination.write_text(modified)
+                evidence[item.name] = {
+                    "source_sha256": hashlib.sha256(original.encode()).hexdigest(),
+                    "runtime_sha256": hashlib.sha256(modified.encode()).hexdigest(),
+                }
+            elif not os.path.lexists(destination):
+                destination.symlink_to(item.resolve())
+        (Path(runtime_root) / "video_logging_override.json").write_text(
+            json.dumps({"eval_video_log": video_override, "configs": evidence}, indent=2) + "\n"
+        )
+        print(f"[eval_policy_wrapper] private eval_video_log={video_override}", flush=True)
 
     for name in os.listdir(robotwin_path):
         if name == "eval_result":
@@ -244,6 +287,33 @@ def _install_test_num_override(module) -> None:
         raise ValueError(f"ROBOTWIN_TEST_NUM must be an integer, got {value!r}") from exc
     if test_num <= 0:
         raise ValueError(f"ROBOTWIN_TEST_NUM must be > 0, got {test_num}")
+
+    # Upstream main also uses its local test_num when writing _result.txt.
+    # Capping only eval_policy silently reports 1 success / 100 for a 1/1 smoke.
+    # Adapt that one assignment in memory; never rewrite the RoboTwin checkout.
+    source_lines, first_line = inspect.getsourcelines(module.main)
+    tree = ast.parse(textwrap.dedent("".join(source_lines)))
+    function = tree.body[0]
+    assignments = [
+        node for node in ast.walk(function)
+        if isinstance(node, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "test_num" for target in node.targets)
+    ]
+    if (
+        not isinstance(function, ast.FunctionDef)
+        or function.decorator_list
+        or module.main.__closure__
+        or len(assignments) != 1
+        or not isinstance(assignments[0].value, ast.Constant)
+        or assignments[0].value.value != 100
+    ):
+        raise RuntimeError("Unrecognized RoboTwin main test_num assignment; refusing inconsistent result denominator")
+    assignments[0].value = ast.copy_location(ast.Constant(value=test_num), assignments[0].value)
+    ast.fix_missing_locations(tree)
+    ast.increment_lineno(tree, first_line - 1)
+    namespace = {}
+    exec(compile(tree, inspect.getsourcefile(module.main), "exec"), module.__dict__, namespace)
+    module.main = namespace[function.name]
 
     orig_eval_policy = module.eval_policy
 

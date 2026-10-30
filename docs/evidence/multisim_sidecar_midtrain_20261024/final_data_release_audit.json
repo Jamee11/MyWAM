@@ -1,0 +1,76 @@
+{
+  "status": "passed",
+  "episodes": 52204,
+  "train_episodes": 39816,
+  "manifest_sha256": "6531627ba8c1ba5479f70c31652ab4780201c15253e14d1c0d5a2d0396219a19",
+  "normalization_sha256": "204c49cbf3c3d494581a419c2411218097ce62b0d72ac857dd44d9dab02291f2",
+  "source_counts": {
+    "rlbench": 8204,
+    "maniskill_base": 10000,
+    "maniskill_hard": 10000,
+    "robotwin_base": 20000,
+    "robotwin_clutter": 4000
+  },
+  "splits": {
+    "test": 6227,
+    "train": 39816,
+    "val": 6161
+  },
+  "group_counts": {
+    "rlbench_franka": 8204,
+    "maniskill_franka": 20000,
+    "robotwin_aloha": 12000,
+    "robotwin_piper": 12000
+  },
+  "independent_physical_families": 29101,
+  "train_native_windows": 7281973,
+  "mixture_windows": 7282176,
+  "mixture_epoch0_group_counts": [
+    1820558,
+    1820539,
+    1820538,
+    1820541
+  ],
+  "dataset_construction_seconds": 3.939241010695696,
+  "reshuffle_seconds": 0.6235105581581593,
+  "train_samples": [
+    {
+      "source": "rlbench_franka",
+      "episodes": 4666,
+      "windows": 1080908,
+      "action_shape": [
+        32,
+        80
+      ]
+    },
+    {
+      "source": "maniskill_franka",
+      "episodes": 16000,
+      "windows": 2671589,
+      "action_shape": [
+        32,
+        80
+      ]
+    },
+    {
+      "source": "robotwin_aloha",
+      "episodes": 9584,
+      "windows": 2124695,
+      "action_shape": [
+        32,
+        80
+      ]
+    },
+    {
+      "source": "robotwin_piper",
+      "episodes": 9566,
+      "windows": 1404781,
+      "action_shape": [
+        32,
+        80
+      ]
+    }
+  ],
+  "scope": "full manifest membership/quotas/families/statistics; actual full train mixture construction/epoch shuffle and per-source sample",
+  "foundation_joint_gpu_update_verified": false
+}

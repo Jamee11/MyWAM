@@ -1,0 +1,26 @@
+defaults:
+  - train
+  - override dataloader: maniskill_absolute
+  - _self_
+
+# Original dual_system / joint_self_attn; no EA modules or auxiliary losses.
+training:
+  batch_size: 64
+  gradient_accumulation_steps: 1
+  num_epochs: 10
+  max_steps: null
+  # Numerically equal-LR groups and fused AdamW retain the validated A100 memory path.
+  action_lr: 1e-4
+  video_lr: 1e-4
+  adam_foreach: false
+  adam_fused: true
+  initialize_model_on_cpu: true
+  save_steps: 2000
+  save_full_states_for_resume: true
+  keep_final_resume_state: true
+  keep_last_k_ckpts: 2
+  finetune_ckpt_path: assets/openwam_ckpt/openwam_alpha/OpenWAM-Alpha-Pretrain-Foundation-Model
+  output_path: outputs/maniskill_baseline/six_task_bs64_10epochs
+project:
+  wandb:
+    project: null

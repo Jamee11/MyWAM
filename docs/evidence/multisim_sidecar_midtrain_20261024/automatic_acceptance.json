@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "time": 1792866761.7012606,
+  "builder_pid": 3802485,
+  "episodes": 52204,
+  "source_counts": {
+    "rlbench": 8204,
+    "maniskill_base": 10000,
+    "maniskill_hard": 10000,
+    "robotwin_base": 20000,
+    "robotwin_clutter": 4000
+  },
+  "splits": {
+    "test": 6227,
+    "train": 39816,
+    "val": 6161
+  },
+  "preparation_sha256": "3096f6cf32a50e8347a3f48ed6c09fe53de48fbf823b7275d53995a62f4b6ce9",
+  "scope": "all selected numeric hashes/media stats; sample model inputs; physical-family split consistency",
+  "full_foundation_training_tested": false
+}

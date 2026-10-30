@@ -1,0 +1,11 @@
+defaults:
+  - train_relational_sidecar_aloha50_frozen_backbone_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      aux_shared_gradient_scale: 0.01
+      aux_gradient_anneal_updates: 500
+training:
+  output_path: outputs/sidecar/aloha50_ea_grad_anneal_10epochs

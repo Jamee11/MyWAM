@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/TianhengW/PatchWAM",
+  "commit": "dea19d21182a26a8ee16efc2c4125ee7aecf44fb",
+  "source_path": "src/patchwam/data/appearance.py",
+  "license": "MIT",
+  "license_file": "licenses/PatchWAM-data-MIT.txt",
+  "source_sha256": "1d9719cd379bca55085938183f4d6dbb068b07f1015225ad38cb5d1f653acf27",
+  "adaptation": "appearance.py copied without algorithm changes; PIL L-canvas adapter applies per-camera after existing resize and preserves missing-view slots. PIL conversion adds uint8 quantization. No PatchWAM model, data filtering, action convention, training budget, crop or rotation is imported."
+}

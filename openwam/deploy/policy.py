@@ -99,4 +99,7 @@ class WAMPolicy:
             conditions["prompt"] = obs["prompt"]
         if "state" in obs and obs["state"] is not None:
             conditions["proprio"] = obs["state"]
+        for key in ("ea_effectors", "ea_arm_present"):
+            if key in obs:
+                conditions[key] = obs[key]
         return conditions

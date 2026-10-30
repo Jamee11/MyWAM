@@ -1,0 +1,20 @@
+type: maniskill_absolute
+manifest_path: ${oc.env:MANISKILL_MANIFEST,outputs/maniskill_baseline/data_absolute_eef_20261017/manifest.ready.json}
+action_mode: eef
+unify_action: true
+unify_action_map: ["0-9"]
+unify_state_map: null
+normalize_mode: min-max
+num_frames: 33
+video_stride: 4
+window_stride: 1
+height: 384
+width: 320
+multiview: true
+camera_layout: [front_camera, hand_camera, null]
+color_jitter:
+  enabled: false  # User requested repository defaults; not the RoboTwin C2R override.
+  brightness: 0.2
+  contrast: 0.2
+  saturation: 0.2
+  hue: 0.0
