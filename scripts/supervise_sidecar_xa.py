@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate ten real eight-GPU updates, then start the authorized 10epoch XA run."""
+"""Queue the authorized XA run after C2R; optional legacy preflight stays opt-in."""
 import argparse
 from datetime import datetime, timezone
 import json
@@ -44,6 +44,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--project',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--node',default='aigc14')
     p.add_argument('--wait-for-stage',type=Path)
+    p.add_argument('--skip-preflight',action='store_true')
     args=p.parse_args()
     project=args.project.resolve();out=args.output.resolve();out.mkdir(parents=True,exist_ok=True)
     if socket.gethostname().split('.')[0]!=args.node:raise RuntimeError('Wrong training node')
@@ -89,21 +90,23 @@ def main():
             time.sleep(15)
         return proc.returncode,root
 
-    for batch,accum in ((16,2),(8,4)):
-        wait_capacity()
-        overrides=[f'training.batch_size={batch}',f'training.gradient_accumulation_steps={accum}']
-        code,preflight=run(f'preflight_batch{batch}',[*overrides,'training.stop_after_optimizer_updates=10',
-                            'training.save_steps=null','training.save_optimizer_steps=null'])
-        tail=(preflight/'launch.log').read_text(errors='replace')[-200000:]
-        if code and batch==16 and ('CUDA out of memory' in tail or 'OutOfMemoryError' in tail):
-            save(out/'memory_fallback.json',dict(from_batch=16,to_batch=8,global_batch=256))
-            continue
-        if code:raise RuntimeError(f'Preflight process exit={code}; inspect preserved logs')
-        acceptance=validate_preflight(last_metrics(preflight/'runs'))
-        acceptance.update(batch_size=batch,gradient_accumulation_steps=accum,global_batch=256)
-        break
-    else:raise RuntimeError('No XA batch profile passed')
-    save(out/'preflight_acceptance.json',acceptance)
+    overrides=[]
+    if not args.skip_preflight:
+        for batch,accum in ((16,2),(8,4)):
+            wait_capacity()
+            overrides=[f'training.batch_size={batch}',f'training.gradient_accumulation_steps={accum}']
+            code,preflight=run(f'preflight_batch{batch}',[*overrides,'training.stop_after_optimizer_updates=10',
+                                'training.save_steps=null','training.save_optimizer_steps=null'])
+            tail=(preflight/'launch.log').read_text(errors='replace')[-200000:]
+            if code and batch==16 and ('CUDA out of memory' in tail or 'OutOfMemoryError' in tail):
+                save(out/'memory_fallback.json',dict(from_batch=16,to_batch=8,global_batch=256))
+                continue
+            if code:raise RuntimeError(f'Preflight process exit={code}; inspect preserved logs')
+            acceptance=validate_preflight(last_metrics(preflight/'runs'))
+            acceptance.update(batch_size=batch,gradient_accumulation_steps=accum,global_batch=256)
+            break
+        else:raise RuntimeError('No XA batch profile passed')
+        save(out/'preflight_acceptance.json',acceptance)
     wait_capacity()
     code,production=run('production',overrides)
     rows=last_metrics(production/'runs')

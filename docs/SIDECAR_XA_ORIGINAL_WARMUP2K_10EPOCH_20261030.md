@@ -68,3 +68,5 @@ Student与teacher前向BF16，特征归一化/loss和EMA shadow累计FP32，EMA�
 已定位重启失败包含固定29504端口被上次启动短暂占用，以及节点主机名与hosts映射不一致的启动延迟。新XA launcher使用--standalone --local-addr=127.0.0.1，由TCPStore自动分配空闲端口；单节点GLOO/NCCL使用lo并禁用IB，不修改系统hosts。前置C2R完成验收+所有8卡释放后才开始XA10步，再自动从原传输warmup4000重新加载进入正式10epoch，不等待效果分析/人工操作。若16/acc2仅因OOM失败，自动尝试8/acc4；不改变global256或LR曲线。
 
 本地checkpoint observer不占H100；已启动原warmup2K的120生成基线诊断（结果保留），后续继续等待XA5000间隔权重并差分传回本地A100。尚不宣称XA正式更新已经完成或效果有收益。
+
+2026-10-30T18:02:54.460933+00:00用户最终覆盖指令：取消10步调试/验收，C2R完成并释放8卡后直接XA正式10epoch。controller显式--skip-preflight，production不传任何stop_after_optimizer_updates/max_steps截断；普通finite日志与报错检查保留。之前八H10010步未成功完成，不宣称已通过。
