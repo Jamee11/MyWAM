@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "intervention": "sidecar_off",
+  "checkpoint_sha256": "b141060b4ab33b0a2542effad452203b2ee5a5d287e5fd38ef092abe7326de7e",
+  "cache": true,
+  "compile": false,
+  "checks": [
+    {
+      "fixture": 0,
+      "full_canonical_exact": true,
+      "sidecar_calls_when_off": 0,
+      "repeat_exact": true,
+      "full_restored_exact": true,
+      "off_vs_write_off_exact": true,
+      "off_vs_write_off_max_abs": 0.0,
+      "off_vs_full_max_abs": 0.0078125
+    },
+    {
+      "fixture": 1,
+      "full_canonical_exact": true,
+      "sidecar_calls_when_off": 0,
+      "repeat_exact": true,
+      "full_restored_exact": true,
+      "off_vs_write_off_exact": true,
+      "off_vs_write_off_max_abs": 0.0,
+      "off_vs_full_max_abs": 0.0078125
+    }
+  ],
+  "parameter_versions_unchanged": true
+}

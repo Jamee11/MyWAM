@@ -1,0 +1,1791 @@
+{
+  "base_commit": "5038443a7978f83d58d304efcad2bcb96e7660d4",
+  "scope": "current model/runtime sources plus actual 19-arm evaluation scripts, selected docs and checks; no weights/env/tokens/results logs",
+  "files": [
+    {
+      "path": "benchmarks/robotwin/LABTASKER.md",
+      "sha256": "cc250be1ef375d57eda6b67309d1ebb75b401dcf8ae1ce023e38a6c2b43462ff",
+      "bytes": 13190
+    },
+    {
+      "path": "benchmarks/robotwin/README.md",
+      "sha256": "308249464670c897f7d77f09b8d646f82e4f39a08f34cbf17177c0b648930c91",
+      "bytes": 8006
+    },
+    {
+      "path": "benchmarks/robotwin/check_sidecar_fast_runtime.py",
+      "sha256": "82d781626ea9abde67b5932378fee3ad1e4ba2eb98b3d639e53efdc95bc75a39",
+      "bytes": 7064
+    },
+    {
+      "path": "benchmarks/robotwin/collect_sidecar_diagnostic_inputs.py",
+      "sha256": "7a1b819ab186806b972146543b8fff80a85d413f2965e054f3b47ec5e094654b",
+      "bytes": 3297
+    },
+    {
+      "path": "benchmarks/robotwin/collect_sidecar_expert_gt.py",
+      "sha256": "4e78284226f95c0c24f3b456fb1082bf48874a6ab07175a76b888f8cc1cbb9f9",
+      "bytes": 5711
+    },
+    {
+      "path": "benchmarks/robotwin/compare_endpoints.py",
+      "sha256": "76276f993d0f3be2e3eb885054c47eaa58abc5cda52e54c66fd43782f7e8fa35",
+      "bytes": 4999
+    },
+    {
+      "path": "benchmarks/robotwin/ea_fk.py",
+      "sha256": "56f6ffd8c019b695e74111b41da9fce4000779e50cc72e66706bbbc9aec25bb0",
+      "bytes": 5131
+    },
+    {
+      "path": "benchmarks/robotwin/eval_manifest.py",
+      "sha256": "d1fdf8cabe9c431cde6eca0376963b4f8e12f7700bef6c36fe475b3d4211343c",
+      "bytes": 1250
+    },
+    {
+      "path": "benchmarks/robotwin/eval_policy_wrapper.py",
+      "sha256": "777ee18032f71c6610a94a99e1aef107181bb9584863be98ab796e26a2d0e480",
+      "bytes": 35168
+    },
+    {
+      "path": "benchmarks/robotwin/eval_remaining24.py",
+      "sha256": "614c390b438024b1dd7c25c765eeb3efbc124a3e960d225621e3fa6664ecefb0",
+      "bytes": 12137
+    },
+    {
+      "path": "benchmarks/robotwin/labtasker_runtime.py",
+      "sha256": "92f13a410bb912388a5e5f5c83874818d1cf495962633b90ac65c7505c9a38a0",
+      "bytes": 23215
+    },
+    {
+      "path": "benchmarks/robotwin/labtasker_submit.py",
+      "sha256": "72060badd4943e7e17064677fe8deff3c72f7eacabd1c88ca75962409018c81a",
+      "bytes": 950
+    },
+    {
+      "path": "benchmarks/robotwin/labtasker_summarize.py",
+      "sha256": "c4b2891cdd28ad8d48948f2aad7a958c838c577fefa6446d0ba23fe4f3fa286f",
+      "bytes": 997
+    },
+    {
+      "path": "benchmarks/robotwin/labtasker_worker.py",
+      "sha256": "f4ecddc7240a8fc5524dfc030b90ddddbbc610984678dbcef77e9a3dcfd743c5",
+      "bytes": 10553
+    },
+    {
+      "path": "benchmarks/robotwin/launch_remaining24_from_a100.py",
+      "sha256": "abbe9b121128ac7de4dcf8d4bb5e2d09568bb83b8d8edb5ec54914820b8db7a9",
+      "bytes": 2650
+    },
+    {
+      "path": "benchmarks/robotwin/launch_sidecar_official.py",
+      "sha256": "c24a2d7f8072ca727d78fd1877079d9546321f2493ce0a54dd4aa14c3c66c82b",
+      "bytes": 8179
+    },
+    {
+      "path": "benchmarks/robotwin/multi_eval.sh",
+      "sha256": "d6c5602d169f34058b245c19e333b57bfbcd75769b57a4887040bf1ffba53f82",
+      "bytes": 9406
+    },
+    {
+      "path": "benchmarks/robotwin/openwam2robotwin_interface.py",
+      "sha256": "b6389b835880cc39721f168b777466f971241a9e4a9f122ef6c9ea4427b178d9",
+      "bytes": 21731
+    },
+    {
+      "path": "benchmarks/robotwin/parallel_eval.py",
+      "sha256": "db39a0181781f3b544dff907631e32f5697ac7a0464eb272c14acea27bab0435",
+      "bytes": 9566
+    },
+    {
+      "path": "benchmarks/robotwin/plans/sidecar42960_remaining24_20261022.json",
+      "sha256": "aead2e62b14c60765e3add69be3e77274bdcfce109ec13cf79cc0a980fc4ed2b",
+      "bytes": 2814
+    },
+    {
+      "path": "benchmarks/robotwin/policy_config.yml",
+      "sha256": "583aaf8084e20b752d5861a9e6a06005e7acb374efda52d8150b2d9b228cb4fc",
+      "bytes": 1689
+    },
+    {
+      "path": "benchmarks/robotwin/policy_config_ea_rsig_lite.yml",
+      "sha256": "99cd31cb5b598b1c12c2636e06e9e183e1550002e4b42a63d7f606e44c3bac35",
+      "bytes": 318
+    },
+    {
+      "path": "benchmarks/robotwin/policy_config_ea_rsig_v3.yml",
+      "sha256": "b7aa2aed9f1c5592f68b3867001268a123eb18d6dde798a18083c12ab5293d58",
+      "bytes": 396
+    },
+    {
+      "path": "benchmarks/robotwin/policy_config_relational_sidecar.yml",
+      "sha256": "18e10ef8bd50ade81a5c6037cb3e5fdd6099d21f8b178e33d195fba034993b9c",
+      "bytes": 310
+    },
+    {
+      "path": "benchmarks/robotwin/prompt_template.py",
+      "sha256": "b39bced8b9841f6f608b5fc8aeb6d5bedff8e451956939ad54e292b91b499e7f",
+      "bytes": 1489
+    },
+    {
+      "path": "benchmarks/robotwin/remote_eval.py",
+      "sha256": "0dfc0fcbaa10e594865be1888ca6fcb5d173612c49f5acc94b15da4c5a43febf",
+      "bytes": 11068
+    },
+    {
+      "path": "benchmarks/robotwin/remote_reverse_tunnel.sh",
+      "sha256": "53810204e43464e11afaa39fc813b895197aed3db78d17fe82e697f3b560100e",
+      "bytes": 1001
+    },
+    {
+      "path": "benchmarks/robotwin/remote_tunnel.sh",
+      "sha256": "0566e0b81a3df330f101ea9c82f4060de2d6c1eacf7cc18a892c164d4b273c38",
+      "bytes": 1020
+    },
+    {
+      "path": "benchmarks/robotwin/requirements-labtasker.txt",
+      "sha256": "a6c859a1db44468c32900429ae14063f85362ba0bfb1f08ac2ac7c8772020ffc",
+      "bytes": 29
+    },
+    {
+      "path": "benchmarks/robotwin/run_fresh_official_diagnostics.py",
+      "sha256": "08f294e2dd5e02b3b91de48cd22c43c1de91a17904129b1534ae223dded9975a",
+      "bytes": 6993
+    },
+    {
+      "path": "benchmarks/robotwin/run_official_baseline_shards.py",
+      "sha256": "f2ece43c14d2aa6530893f969ffee7c5bd210508a3bfb17189b33ff876be1253",
+      "bytes": 8706
+    },
+    {
+      "path": "benchmarks/robotwin/serve_parallel.py",
+      "sha256": "de20866a2e7558497546db90413b8cdc84467810df0418ba1e1542515dc67a97",
+      "bytes": 3974
+    },
+    {
+      "path": "benchmarks/robotwin/serve_remote_sidecar.py",
+      "sha256": "b6a9f8155af20c5d39e3531929c13553f60ca8afcb662079b77dd8733fafe815",
+      "bytes": 1091
+    },
+    {
+      "path": "benchmarks/robotwin/serve_sidecar_ablation.py",
+      "sha256": "eaa83e6d0a61ca8736464f3f0a3d6f4244a5df048cd3b964eb7e8d052354ff3c",
+      "bytes": 2399
+    },
+    {
+      "path": "benchmarks/robotwin/serve_sidecar_checked.py",
+      "sha256": "474fa5d14230e8714506c9e1e16644de3b35d634b63a28a9f6aea884de67706c",
+      "bytes": 1678
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_ablation.py",
+      "sha256": "9c37f54bec5946a44119d2f0a89f6ae860aeb065ec887e4bc82c24a67049caa3",
+      "bytes": 1574
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_appearance_diagnostics.py",
+      "sha256": "9ff9763d24502c1da31d9a2554aafd0fc49c2246f6bf7fe42db37702f2bc66f1",
+      "bytes": 15757
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_fast_runtime.py",
+      "sha256": "f02fa3ddc82fa52e97b0c59a180a20c515f99c00cffde0389aab7f4b815be118",
+      "bytes": 4850
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_gate_sweep.py",
+      "sha256": "42b3fa590235910e35c68e05a358d7c110160a1eb2daab56786cbd3718636a94",
+      "bytes": 6232
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_gradient32.py",
+      "sha256": "517b9a124fa998cd2ea3ffb32c8b1127d62b82b2bcfae9628da2d23c88458a68",
+      "bytes": 15264
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_gradient_probe.py",
+      "sha256": "2bee228ff1d1c00439fbad34b66148a36dfbbb2ca344f6c779f6c6de581b7463",
+      "bytes": 9440
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_gt_diagnostics.py",
+      "sha256": "c65e94a52e767cb81880729e7e79d1432109dbedf1841a83040ab65577d5b4ed",
+      "bytes": 22417
+    },
+    {
+      "path": "benchmarks/robotwin/sidecar_write_diagnostics.py",
+      "sha256": "9cac0c69205e47a6c1aef084d8b9f05658be219279657d220af0ab3e7e739bb9",
+      "bytes": 20361
+    },
+    {
+      "path": "benchmarks/robotwin/single_eval.sh",
+      "sha256": "b6f4b9d95018fcddcd8c977af218b0918392444a8f870254c5df859c5119c5a2",
+      "bytes": 4717
+    },
+    {
+      "path": "benchmarks/robotwin/standard_eval.py",
+      "sha256": "fddc90520ac77396a2f441ec94b0d7cf4ac7cc319f2fa593dc82d9f568fc53b0",
+      "bytes": 22634
+    },
+    {
+      "path": "benchmarks/robotwin/step_limits.yml",
+      "sha256": "b5abd4880a303554fb724ea5a83a949ae91e6840b8a1994b9c6b9d0ee1bf43dc",
+      "bytes": 3852
+    },
+    {
+      "path": "benchmarks/robotwin/watch_official_results.py",
+      "sha256": "cefe09aafe4c6d8ea1039de01a88ad9ab48e528e2d9b866c6593873c9dfbb4f7",
+      "bytes": 9402
+    },
+    {
+      "path": "configs/deploy.yaml",
+      "sha256": "a26d2087f02950f3d21f7af629cbf5a421d759359bab9b70962c8650e1235246",
+      "bytes": 2420
+    },
+    {
+      "path": "docs/OPENWAM_SIDECAR_IMPLEMENTATION_EXPERIMENTS_AND_DIAGNOSTICS_20261102.md",
+      "sha256": "170fcb0126cd4a6dfd7e8ad3634ed93939b92e6786c7401198ff45231fe55eb0",
+      "bytes": 42534
+    },
+    {
+      "path": "docs/ROBOTWIN_19ARM_IMPLEMENTATION_AUDIT_20261102.md",
+      "sha256": "ae31657f407afe08908e4a77d187b792c2576d15946ffeee99ebf0b88c9048fe",
+      "bytes": 10069
+    },
+    {
+      "path": "docs/ROBOTWIN_21480_19ARMS_COMPLETE10_20261102.md",
+      "sha256": "41b7b0e76401fc4c8f56772a721e10b7ed0ca07b466f0172aac2af676f9fa51f",
+      "bytes": 14148
+    },
+    {
+      "path": "docs/ROBOTWIN_21480_EXPANDED_ABLATIONS_20261102.md",
+      "sha256": "473f3d15fef9069884f7c54bc48a2eaba20c24908e8e8d8330075fac8be13d37",
+      "bytes": 13020
+    },
+    {
+      "path": "docs/ROBOTWIN_21480_SIDECAR_ALL_OFF_20261102.md",
+      "sha256": "d8752ea5ddfbcf9b41c517bd03f2e2732ef2ea3d1228e8ca32cdfcc31ad4e10c",
+      "bytes": 3731
+    },
+    {
+      "path": "docs/evidence/sidecar_intervention_audit_20261102/measure_reset_write.py",
+      "sha256": "617438f8567e1aaa4b5cb2aa9ce76ce3a9d20723446ab2fe336de8d04cacffef",
+      "bytes": 2209
+    },
+    {
+      "path": "docs/evidence/sidecar_intervention_audit_20261102/modes_cpu_validation.json",
+      "sha256": "c345c70a862e159e404525cd2fed0bf8f8af5c939113591c8840d292ea84175c",
+      "bytes": 383
+    },
+    {
+      "path": "docs/evidence/sidecar_intervention_audit_20261102/modes_gpu_validation.json",
+      "sha256": "1fdd6137882e918e54af78068da4a0f8601065426c7d5f03e40ff9584f017dc0",
+      "bytes": 5274
+    },
+    {
+      "path": "docs/evidence/sidecar_intervention_audit_20261102/reset_write_measurements.json",
+      "sha256": "2d2f2064d9d04004dc601c672411bfd9082be19cec672f0cfaeaf61c62c65956",
+      "bytes": 1748
+    },
+    {
+      "path": "docs/evidence/sidecar_intervention_audit_20261102/sidecar_off_gpu_validation.json",
+      "sha256": "65e4249d658e0d345839af0ef4fa6324c257231c1f74d9d297f7641c989e2f44",
+      "bytes": 806
+    },
+    {
+      "path": "openwam/__init__.py",
+      "sha256": "d3fa616d27e418da41c0f6433cf2b32282bf4af5fac4087284288b2a813b0c30",
+      "bytes": 269
+    },
+    {
+      "path": "openwam/dataloader/__init__.py",
+      "sha256": "c40a12c38e5fc345531433ad63f539d097e81d82bdfc9a28c117a751200b1fed",
+      "bytes": 940
+    },
+    {
+      "path": "openwam/dataloader/agibotworld.py",
+      "sha256": "31bee03513f4c0aa3d533bef647c0c138549d22843f6c369b77bececae70c2c5",
+      "bytes": 32775
+    },
+    {
+      "path": "openwam/dataloader/bases/__init__.py",
+      "sha256": "8b89c4147ce750bb27d9c2fc9be9353ff621a96d33c86f4e46f97023b1deb079",
+      "bytes": 1106
+    },
+    {
+      "path": "openwam/dataloader/bases/dataset.py",
+      "sha256": "4ced498a32ea367852ea7ae6eeed7e738b07775f6020689066deb919d9d236d3",
+      "bytes": 1943
+    },
+    {
+      "path": "openwam/dataloader/bases/lerobot_v3_reader.py",
+      "sha256": "7ce90e0e6ef335bfe9cfed559afa8b93971490a254e87057c0fbb05b598fefe6",
+      "bytes": 60827
+    },
+    {
+      "path": "openwam/dataloader/bases/multi_lerobot_v3_reader.py",
+      "sha256": "bf672bf28abbda9e8c93dcb519ff3fa8dd93c98980a6a9d6637749a403480351",
+      "bytes": 3821
+    },
+    {
+      "path": "openwam/dataloader/ea_rsig_lite.py",
+      "sha256": "714eb843b46912b305e78cfe7b0b837be7a1c131fc02f3044a06f2cb64e1d89f",
+      "bytes": 14448
+    },
+    {
+      "path": "openwam/dataloader/ea_rsig_v3.py",
+      "sha256": "56adafca2e7796a04e0f4814835025920d621c0fb9bda62961763e1040bae3eb",
+      "bytes": 11506
+    },
+    {
+      "path": "openwam/dataloader/ebench.py",
+      "sha256": "4d6b32bf0f14967954997b32d580747a6387a3cc86c14f2dfcb6fa50be0bdddd",
+      "bytes": 58050
+    },
+    {
+      "path": "openwam/dataloader/interndata_a1.py",
+      "sha256": "decfcdfed164c5f31c10e4143fc23fdf3667e361af4c89d5184db5e0d0d1440b",
+      "bytes": 71706
+    },
+    {
+      "path": "openwam/dataloader/libero.py",
+      "sha256": "19a5f0a0c394645e2fd5337cf6524413392f03f73b0e4c353e790780b0cf29f8",
+      "bytes": 14559
+    },
+    {
+      "path": "openwam/dataloader/maniskill_absolute.py",
+      "sha256": "61f564ef31c4d25aab33fa6430bfa917b9c9cfa6fe8294ef9ab1eb4ca2e6b27f",
+      "bytes": 6490
+    },
+    {
+      "path": "openwam/dataloader/maniskill_sidecar.py",
+      "sha256": "bed8036dac5d1ef137f76657a72ee45209bb363a18e82db02c6e5554dda8e388",
+      "bytes": 1970
+    },
+    {
+      "path": "openwam/dataloader/mixture.py",
+      "sha256": "28c8f20f4c0d167960170b6a4c1b6c6a96202208145be33c3832ef03fc123f45",
+      "bytes": 18121
+    },
+    {
+      "path": "openwam/dataloader/muka_franka.py",
+      "sha256": "42fbe46feb7af703e1e88767b5f390f5d5f6a05e4f7da07d4f882420c296872d",
+      "bytes": 13962
+    },
+    {
+      "path": "openwam/dataloader/multisim_sidecar.py",
+      "sha256": "728efb739410229a54375b03a253a75b83376312528b41fe8c95085bcb0ce964",
+      "bytes": 9962
+    },
+    {
+      "path": "openwam/dataloader/oxe_droid.py",
+      "sha256": "7e7d8c54574f9db717e31b0c22cb0e6622b88071fb1b23d00d883e0819881e66",
+      "bytes": 27167
+    },
+    {
+      "path": "openwam/dataloader/registry.py",
+      "sha256": "535520624a068dccd5d4d95b4eaec53ae5ff74472c9aff00c52ecb43fe542b39",
+      "bytes": 4255
+    },
+    {
+      "path": "openwam/dataloader/robocasa365.py",
+      "sha256": "04c30b1943962130e48b100f2beea253566677df0525c20775c54e8defcbe34c",
+      "bytes": 28638
+    },
+    {
+      "path": "openwam/dataloader/robocasa_gr1.py",
+      "sha256": "4e7e50c5ec68eb47fc361c9aad9ea5263be7eed1a72f5ce4655d4c6772abc1cd",
+      "bytes": 22099
+    },
+    {
+      "path": "openwam/dataloader/robocoin.py",
+      "sha256": "908355c6a8a2890528e6f37255d91ad79174a7c717f94d8810f09d1dd7e832fc",
+      "bytes": 59855
+    },
+    {
+      "path": "openwam/dataloader/robodojo.py",
+      "sha256": "be0ff12066ca62a76820bd6ed9e45c5419b7f6724af70416053971343e94c292",
+      "bytes": 50143
+    },
+    {
+      "path": "openwam/dataloader/robodojo_contract.py",
+      "sha256": "193a221ed4f6a2ee13263d601e53ad6339d3f44e1d9df924175b1498fc0add63",
+      "bytes": 13780
+    },
+    {
+      "path": "openwam/dataloader/robotwin.py",
+      "sha256": "79ef004c9d0b90fa98d2a5367d93b6ad599fbbdb0cbb4bed31db5200e0bb71ce",
+      "bytes": 53254
+    },
+    {
+      "path": "openwam/dataloader/transforms/__init__.py",
+      "sha256": "7777309c152ba7def4ad4e6ca5b0dc1c69aa1279d90d10a926b9e9e753020e5d",
+      "bytes": 1075
+    },
+    {
+      "path": "openwam/dataloader/transforms/base.py",
+      "sha256": "79ceae34f73c7fe219c56dc686c547ae736d9fbdeb832941d964a25c36d7b071",
+      "bytes": 2710
+    },
+    {
+      "path": "openwam/dataloader/transforms/builder.py",
+      "sha256": "8e2260c6b2712c7f2ffb5b3adac98001559a73fdc7a1a349efd9601ef190440a",
+      "bytes": 4211
+    },
+    {
+      "path": "openwam/dataloader/transforms/multiview.py",
+      "sha256": "197bb6962a169f2c8c4f50574d262a9d2cbed95f3df8fff543f0b3195e18a4d5",
+      "bytes": 5730
+    },
+    {
+      "path": "openwam/dataloader/transforms/normalize.py",
+      "sha256": "ea3b1443b8431e6c9a201bf2d49cfb7569ee3214853a971000e324207646c4d1",
+      "bytes": 9612
+    },
+    {
+      "path": "openwam/dataloader/transforms/patchwam_appearance.py",
+      "sha256": "1d9719cd379bca55085938183f4d6dbb068b07f1015225ad38cb5d1f653acf27",
+      "bytes": 7932
+    },
+    {
+      "path": "openwam/dataloader/transforms/patchwam_video.py",
+      "sha256": "160b42c638c2f40b8eecb3014e1fc27a2df0e7b44731d4c2c8a204146312c9f8",
+      "bytes": 1717
+    },
+    {
+      "path": "openwam/dataloader/transforms/pipeline.py",
+      "sha256": "1ec3cf47dadeb57d04ef63858ef9ccc96e8397c773301ad4e6f3e26a663fac9a",
+      "bytes": 1656
+    },
+    {
+      "path": "openwam/dataloader/transforms/rotation.py",
+      "sha256": "283cf759e50f2a5b10df5e7e1c76629f76d8717d84fc915a219e8b986b71ca4d",
+      "bytes": 9082
+    },
+    {
+      "path": "openwam/dataloader/transforms/video.py",
+      "sha256": "8a2ced3f683675ee2a4cf4189bd79655b2d2bfc0ad42624419bb745c9d109d2d",
+      "bytes": 7486
+    },
+    {
+      "path": "openwam/dataloader/utils/__init__.py",
+      "sha256": "aba6e7d1eedee2228c4c0c9669836665b56cf642b05ff527dca35d9c8af8fb67",
+      "bytes": 1222
+    },
+    {
+      "path": "openwam/dataloader/utils/eef.py",
+      "sha256": "ad39fb97f0f4920d79c4f06bab609f2f6c702527af9952daab82556cf00ef010",
+      "bytes": 11723
+    },
+    {
+      "path": "openwam/dataloader/utils/exclusion_io.py",
+      "sha256": "d8d11494c93864aeedd01e8ff4a168b303ec3f1731df97af7ec067d78e999b47",
+      "bytes": 1635
+    },
+    {
+      "path": "openwam/dataloader/utils/gr1_kinematics.py",
+      "sha256": "862a013ae88f095d94fb5fb5c641a6b375999c111786cd64ec7a250dbd90e2d2",
+      "bytes": 14392
+    },
+    {
+      "path": "openwam/dataloader/utils/lerobotv3.py",
+      "sha256": "ecb2aa439d2e6b6cbb2fe410ac39f441d991de43fe8286d2ad0baf40116ca2dc",
+      "bytes": 35118
+    },
+    {
+      "path": "openwam/dataloader/utils/normalization.py",
+      "sha256": "7b6c6cfaf4d551ca8c0c5e35ddf6bf240b7337de8b3e428c59b405cf489a5762",
+      "bytes": 12831
+    },
+    {
+      "path": "openwam/dataloader/utils/oxe_schema.py",
+      "sha256": "bea6cc803dd2945ffddc317f5ac4cf2e966c75f97b64c3555ad727f90cc27789",
+      "bytes": 6160
+    },
+    {
+      "path": "openwam/dataloader/utils/poses.py",
+      "sha256": "1939133e6049394a2d0f243f81df9431763417f594832a54e4e5592c086a9d1c",
+      "bytes": 13614
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/__init__.py",
+      "sha256": "4205180de4258cc62d873fdb07e6e81e583689642ff2d9aa34e9ddc0f50fd902",
+      "bytes": 315
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/agibotworld_stats_computation.py",
+      "sha256": "f8ac5c28068330a91731931999455b6d88c1026f7b583dc15a1931f13ce9db7b",
+      "bytes": 14419
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/ebench_stats_computation.py",
+      "sha256": "3b7cc6b4ae91462c4232882f8f54c1bc39cc2766892998797c40d7dbb842cf88",
+      "bytes": 8870
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/interndata_a1_stats_computation.py",
+      "sha256": "ed7bf063ec57ca73e6bf1691f10b0b8260f7f7fdbd291cc74bce2c2343cc3ba6",
+      "bytes": 26248
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/libero_stats_computation.py",
+      "sha256": "265c504c7f79dc4d4cf35b970989bb0d589b1bc029a6ac953128b7a2340c5dab",
+      "bytes": 5512
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/muka_franka_stats_computation.py",
+      "sha256": "b0a5c4d07bf41e58b0dfb9e9e647c0b95843d5a9cafe2a05aef74ab94f6eb599",
+      "bytes": 5767
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/oxe_stats_computation.py",
+      "sha256": "09c1d5bab92e07d1246d4cacd2e17a6891bf2199a39652381a665483f740c405",
+      "bytes": 12697
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/robocasa365_stats_computation.py",
+      "sha256": "620fcf0a8012b631d48d5671d71775ac6902377ad029d924d73dc6ff5ad5249b",
+      "bytes": 10945
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/robocasa_gr1_stats_computation.py",
+      "sha256": "bd3c8b7d14ae80534a972f8578e4073463df09e28221883e9e3c45eed982c88f",
+      "bytes": 8548
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/robocoin_stats_computation.py",
+      "sha256": "c6ec85640f4885107fc7b0e1ff02f10248a173c4c2f2ab90d91c28710f7d3f6b",
+      "bytes": 22481
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/robodojo_stats_computation.py",
+      "sha256": "3d8c7802e9a821259953af98dbc8da67173c31c77f87269b33ec3d8504c78bfc",
+      "bytes": 11208
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/robotwin_stats_computation.py",
+      "sha256": "9bd378493de4da1741d8536606b40d624deb8eb0ea736a799737ce5fdd1b1d72",
+      "bytes": 22111
+    },
+    {
+      "path": "openwam/dataloader/utils/stats_computation/vlabench_stats_computation.py",
+      "sha256": "a11d66c35cc57f64f9c3dcdc201c984ae14ad175a6d8e184c38fbf968eedbe66",
+      "bytes": 7136
+    },
+    {
+      "path": "openwam/dataloader/utils/unify_action.py",
+      "sha256": "353ca60b6a7a69ef6b50f86e582ac4ec5a40b0ec22a35fe4272468f15581b441",
+      "bytes": 9932
+    },
+    {
+      "path": "openwam/dataloader/utils/video_io.py",
+      "sha256": "68381684589832d56eaaca70dd772062e83ce50f5723df75936c9c17da99d182",
+      "bytes": 5119
+    },
+    {
+      "path": "openwam/dataloader/vlabench.py",
+      "sha256": "8517d970e8667652189206998d6bd3063a25119fe1892590b868f9f343a6626a",
+      "bytes": 12286
+    },
+    {
+      "path": "openwam/deploy/__init__.py",
+      "sha256": "10970afb2d5b25d59e676398b810a6db0ba2ffa84c4239bdc3707f871b60dee4",
+      "bytes": 555
+    },
+    {
+      "path": "openwam/deploy/denoise_schedule.py",
+      "sha256": "8ecd3c73bb78de767a3c669bea7a51fccfca6ffdaa726b49aab3663e96da5c30",
+      "bytes": 12915
+    },
+    {
+      "path": "openwam/deploy/engine.py",
+      "sha256": "bf26aace932e7a7196ab4c07829c662f62aae30355e5825bd516eca973d4fc8c",
+      "bytes": 18289
+    },
+    {
+      "path": "openwam/deploy/executors/__init__.py",
+      "sha256": "7de60d68f521df6ed1633df8c4f4ad59a9d6eaebf4ac9a2332e5194177fbd9c0",
+      "bytes": 910
+    },
+    {
+      "path": "openwam/deploy/executors/async_executor.py",
+      "sha256": "18eda62ba79e01043c9fddb60517dda548f300cd5cb9c03e38efd59712d0bd85",
+      "bytes": 15228
+    },
+    {
+      "path": "openwam/deploy/executors/sync_executor.py",
+      "sha256": "0a170b7d1bd978fcab4a993893cb1fa1153b81343600f10ddd36a72afff1aed2",
+      "bytes": 2709
+    },
+    {
+      "path": "openwam/deploy/model_loader.py",
+      "sha256": "c5009815d43fb67b45185bb96e3d0f2ef881341ee204d281983e97359b8b4e70",
+      "bytes": 27191
+    },
+    {
+      "path": "openwam/deploy/obs_preprocess.py",
+      "sha256": "cc7189637029de6011084dcea0e4c3d77fbe18806664a5d8e242adc58a021ecf",
+      "bytes": 9559
+    },
+    {
+      "path": "openwam/deploy/optimizations/__init__.py",
+      "sha256": "f93581e7e836c5c4fa9e605eafaa4debfd172bccec2d784583803708ffdd95e6",
+      "bytes": 324
+    },
+    {
+      "path": "openwam/deploy/optimizations/dit_cache.py",
+      "sha256": "e96cd3016f7d0e321800caccd92d2bd31f1833072988d7f7c48b6c74ea45e9bb",
+      "bytes": 6563
+    },
+    {
+      "path": "openwam/deploy/policy.py",
+      "sha256": "793c8c18df9dac11a4925ce2525644da0ff8c953d733518babbe28d14d2e4063",
+      "bytes": 4379
+    },
+    {
+      "path": "openwam/deploy/server.py",
+      "sha256": "42b0d00530a464735cef545fd6439cf81d368ece893598de4bc087f2c9fb3a2a",
+      "bytes": 28266
+    },
+    {
+      "path": "openwam/ea_lite_contract.py",
+      "sha256": "3013214af805ae369f6708eb09f99190bf4e6b669496e96c5af40d0552e65765",
+      "bytes": 741
+    },
+    {
+      "path": "openwam/maniskill_eef_contract.py",
+      "sha256": "bd390c897cda5bd6927fc85f9ae1a6c0d07264adf1e2d13f1faf31fc22f16f7d",
+      "bytes": 2315
+    },
+    {
+      "path": "openwam/maniskill_sidecar_contract.py",
+      "sha256": "5e0db5fe22026be55c392bd3f94391cc02b2ba3a13f50b013837493dda21eb87",
+      "bytes": 3380
+    },
+    {
+      "path": "openwam/model/__init__.py",
+      "sha256": "06103e0c49bea0e3f6f027ac1fbd957cf97dc1938a6ca1122a89f913d78bb2da",
+      "bytes": 1072
+    },
+    {
+      "path": "openwam/model/action_backbone/__init__.py",
+      "sha256": "add346e5cd14a657ea4c055075ed0e9ca8cb03253dd72a381fee0dfe1900401d",
+      "bytes": 1000
+    },
+    {
+      "path": "openwam/model/action_backbone/base.py",
+      "sha256": "fab5829d25a64a4b743e41f7f194533af2069e1a0377ce3c68dd80bf76fc4d92",
+      "bytes": 9811
+    },
+    {
+      "path": "openwam/model/action_backbone/components.py",
+      "sha256": "419a45c88d12dfa4e7a63a975a582dd7d67f67bc91a31a5658a0698e850e92c1",
+      "bytes": 13586
+    },
+    {
+      "path": "openwam/model/action_backbone/scheduler.py",
+      "sha256": "a8c0b88d687a07e2b9aa22b29573831ae5b6b2a901aee42f334f08f435add75e",
+      "bytes": 5658
+    },
+    {
+      "path": "openwam/model/action_backbone/separate_action_dit.py",
+      "sha256": "a62b6b6985cfedd5e45f0e7301a03880381698c51aecb2f88c28e48d0926a24f",
+      "bytes": 38141
+    },
+    {
+      "path": "openwam/model/action_backbone/shared_action_backbone.py",
+      "sha256": "ccc49f3b1f7d2f239107b92cf9eeff45839808e575c3083c5467d5ca978374f8",
+      "bytes": 9828
+    },
+    {
+      "path": "openwam/model/architectures/__init__.py",
+      "sha256": "ec2107e32820e1148ba1858b797dbc35816d665197cdf10080a93d9aa9ed0f07",
+      "bytes": 1923
+    },
+    {
+      "path": "openwam/model/architectures/base.py",
+      "sha256": "c6d1f6670f20887fb228cb446d302c7c27a8932d66bc29e8d2b951c32802bfa6",
+      "bytes": 85157
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/__init__.py",
+      "sha256": "3c867ce56e69cd0e9e931fe63edd9d5eb30bbcc88d92efcfad30ff8c08684535",
+      "bytes": 863
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/ea_rsig_lite.py",
+      "sha256": "ecf0f6f216d776456b9ddd266ccc100e53ae7c65190177f99470b9ff85cc7bea",
+      "bytes": 11230
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/ea_rsig_v3.py",
+      "sha256": "44313a3b195ce42522b61b74df899ee32eeaea37a256be8eeecb5b8142180be7",
+      "bytes": 11647
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/idm.py",
+      "sha256": "4da8addc3797e5ef8977864c04cd1e3040edd72615db32e3fadd5e53a0a56823",
+      "bytes": 56454
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/joint_cross_attn.py",
+      "sha256": "be93a22617f9798eef0ef61273c7391519adf15da7719ac49df301987f6198a1",
+      "bytes": 11751
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/joint_self_attn.py",
+      "sha256": "9149b99df6f55cc8c09a787cb11a1b51e99e75ebc012fe44240ba385c59157c3",
+      "bytes": 11507
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/mot_driver.py",
+      "sha256": "74e5ffe9b3295e339e3063376114aa454483bc1096efa341859d7d9334902f8e",
+      "bytes": 16251
+    },
+    {
+      "path": "openwam/model/architectures/dual_system/relational_sidecar.py",
+      "sha256": "11f0eb4d2ce98e1101cf8eb58066703dfcdb0cd9a47ebe27ad4df9addeb447d8",
+      "bytes": 23886
+    },
+    {
+      "path": "openwam/model/architectures/registry.py",
+      "sha256": "71ced7ee651fc87dbe37959396903cd9cf353aa14840d03881d09f7b1acb3b1c",
+      "bytes": 9558
+    },
+    {
+      "path": "openwam/model/architectures/single_system/__init__.py",
+      "sha256": "fc896763c2fc86d78645245560d0ed3d462066bc83c4214563b474bb38f86431",
+      "bytes": 463
+    },
+    {
+      "path": "openwam/model/architectures/single_system/moe.py",
+      "sha256": "300fff96050d5162505e248632930fe2fd70ea350d770b52d76703ac7846a78e",
+      "bytes": 8028
+    },
+    {
+      "path": "openwam/model/architectures/single_system/state.py",
+      "sha256": "e032a932f6567f57502d30ed5e546978d0bcc5b52f25203f982d884e10bfd987",
+      "bytes": 3022
+    },
+    {
+      "path": "openwam/model/architectures/single_system/vanilla.py",
+      "sha256": "fe1e1140b99371046ba256c9868c7656eab1cf37c709896e728e9372fe83ec57",
+      "bytes": 6537
+    },
+    {
+      "path": "openwam/model/architectures/tri_system/__init__.py",
+      "sha256": "0da85a7da0251b67f1e68a464cb8945c2cdea39282ca7b8659b62b1ea95af5f2",
+      "bytes": 334
+    },
+    {
+      "path": "openwam/model/architectures/tri_system/joint_self_attn.py",
+      "sha256": "908c9fdb8fc3438730f8e1278fa16647a01a0aad42e47f6a065ef307c976dbd7",
+      "bytes": 22396
+    },
+    {
+      "path": "openwam/model/architectures/tri_system/mot_driver.py",
+      "sha256": "5c47e4bfd94ce9c43729f5016d3752dd38075c7e30ee7c1443c1325a43ad83ed",
+      "bytes": 19052
+    },
+    {
+      "path": "openwam/model/architectures/tri_system/und_expert.py",
+      "sha256": "8d61e6d3fb33c412d999783c49dfd6b5ec26e51a15643e6f61073bc2654aec56",
+      "bytes": 7875
+    },
+    {
+      "path": "openwam/model/architectures/utils/__init__.py",
+      "sha256": "d8e66543894289a70acf5c00a303f6f45c802c000e593a1e12596d66feaec419",
+      "bytes": 401
+    },
+    {
+      "path": "openwam/model/architectures/utils/common.py",
+      "sha256": "a6019ba9ebe49c6ceca60553e548715f4d3a0946e2af7445d14c5c614b7fc4a3",
+      "bytes": 5694
+    },
+    {
+      "path": "openwam/model/architectures/utils/mask_modes.py",
+      "sha256": "3a23815ee94719132ca9b173bc2cbe6fda62575b1b95eb6f8e350c2a6236a787",
+      "bytes": 7070
+    },
+    {
+      "path": "openwam/model/compile_options.py",
+      "sha256": "9b8f1bb4318f7d08725fd3a28d98017620c6fbe68a22bc5060b8ac871b705142",
+      "bytes": 7573
+    },
+    {
+      "path": "openwam/model/modules/__init__.py",
+      "sha256": "4d3d37b47a3f417cde19a4a0fdc82f73327a0c46a375ac304c4a0087d4227d15",
+      "bytes": 50
+    },
+    {
+      "path": "openwam/model/modules/cross_appearance.py",
+      "sha256": "a339c26e5c2acb87c4c51882d7dac0266d7748195e37741a67cc3421488ca23f",
+      "bytes": 7237
+    },
+    {
+      "path": "openwam/model/modules/ea_bridge.py",
+      "sha256": "be5d7d5497eab46f312de25edbe279df3322cfefd89572dad804e8f400ca60e5",
+      "bytes": 8592
+    },
+    {
+      "path": "openwam/model/modules/ea_rsig_lite.py",
+      "sha256": "a1f075571528ea5521bec61a6442a72d885f0cb1cf410446ff59b136ef479411",
+      "bytes": 4387
+    },
+    {
+      "path": "openwam/model/modules/ea_rsig_v3.py",
+      "sha256": "452a3f90a99a7f4ebdbd569de94c5fa3c3fbdb750bf9a6ce4870fe7b5008b578",
+      "bytes": 38559
+    },
+    {
+      "path": "openwam/model/modules/relational_sidecar.py",
+      "sha256": "0c6b063ca5d44483406cc6a87645dffc0c31caa878964fccf440a2d3304d0a69",
+      "bytes": 10241
+    },
+    {
+      "path": "openwam/model/modules/training_memory.py",
+      "sha256": "6c6efa5f39c9930b1aeda1ce9dfcbe565a79fda0a9218c107c2359f218b18404",
+      "bytes": 375
+    },
+    {
+      "path": "openwam/model/video_backbone/__init__.py",
+      "sha256": "7852da94c4100ee9e6ea4471eac22292e4a5479eb83db4f407d6d3626941dd24",
+      "bytes": 2305
+    },
+    {
+      "path": "openwam/model/video_backbone/base.py",
+      "sha256": "a0f59edeeca3f2168a8e28228bdeb6a207b4209bfb39dab93932c4db2e7062ec",
+      "bytes": 14973
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/__init__.py",
+      "sha256": "2cc6aaeeabd06919da9892cf04083edc7d398d3fbfb5e22cce205d317b3cae10",
+      "bytes": 381
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/_vendor/README.md",
+      "sha256": "96bd297b4c0d648ff70e28a0d538d32f8cac739e9a6fc4651b62c4542065a717",
+      "bytes": 1734
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/_vendor/__init__.py",
+      "sha256": "cde0e316da8c5342293d57de248cd9cb70a17cdcffaac51a6e63e315a63d9843",
+      "bytes": 353
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/_vendor/transformer_cosmos3.py",
+      "sha256": "404024f0a6b64a3e04db8a750496b37befd44d8a18e916aa2611998fb951ead3",
+      "bytes": 43151
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/block_split.py",
+      "sha256": "773667b6e8f315fea2b6ba6d95f185d1daf03c1738d5ff26e9ee765c0bc212b4",
+      "bytes": 3901
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/component_specs.py",
+      "sha256": "9baac02ceb80fa6b0fe7e793c7715ec8c0e0ac606e6a2415f89f3a1f2b677511",
+      "bytes": 2459
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/dit_forward.py",
+      "sha256": "e4287af5e4d96cbd681e41d46fbb13ab1e6f7f8fb881dfc93633fa7836d3d053",
+      "bytes": 16545
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/idm_merge.py",
+      "sha256": "76290fec1ae472d3080550229d6ba912d12a45efc66fa6fb0f7ee94d5727dc61",
+      "bytes": 4376
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/pipeline_builder.py",
+      "sha256": "08e7bf92f67dcbf12efe22904ee662b15f8909595edaa2055d98ed9208de1f91",
+      "bytes": 20152
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/scheduler.py",
+      "sha256": "287ecef7b792ffeb5bdcba889b501c4dfb104c9e154fcee07c14a4504cefce9b",
+      "bytes": 1524
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/shared_block.py",
+      "sha256": "cb94c07f4ad86810d51dba4a5610aa78fc4823ff0c038e916fc8a04ddc94e09a",
+      "bytes": 4074
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3/text_pack.py",
+      "sha256": "d668130fedeb47d8971b553bdbd7802340e93341505844aaa691bd0329f68617",
+      "bytes": 11181
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos3_backbone.py",
+      "sha256": "cf202492e5aa91b7fdfc90a7c2eace5556f7eced1d7059b54f0a21d031893147",
+      "bytes": 35392
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/__init__.py",
+      "sha256": "618199642da0e1ee5a90389a74df5fb2e379cb77b99151af53e5b345369aa661",
+      "bytes": 830
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/_vae_utils.py",
+      "sha256": "d23c0069379c63a59b02bac5d6eb673743c2ad37722c6e909c0a8057ac92a358",
+      "bytes": 6683
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/block_split.py",
+      "sha256": "d28233565b27ec735ca977d4878fd510416a7a225cf81b5beaa734166b3d344e",
+      "bytes": 8370
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/component_specs.py",
+      "sha256": "d3983e190c7ef52bcf9f38a19a68748f9e93815bd2d503caf3efeb223a1e9b3d",
+      "bytes": 8136
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/dit_forward.py",
+      "sha256": "ad1969361e22badbf1a054e52068e8b8556dbf6421d19092f4cfff0b4519821b",
+      "bytes": 9044
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/idm_merge.py",
+      "sha256": "20fea5e366080b6c2722df0d35c79aa65bf1f2128b56f08a1e31033bd6377ebd",
+      "bytes": 6275
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/pipeline_builder.py",
+      "sha256": "4add4a66a1328648d081b7a0341fb65ef8dc08982424c74b5cf901d2428a8025",
+      "bytes": 22597
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/scheduler.py",
+      "sha256": "943949f3b111c2587678d43c5fb7c4a27f2d93db6162ebe12e227d82a2bdf8d6",
+      "bytes": 5666
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/shared_block.py",
+      "sha256": "5cf886cbf8cce0c39f9a2c80ad32908745a4d7b9e8de640697bfe531981fae38",
+      "bytes": 8291
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25/text_encoder.py",
+      "sha256": "7382a346cfb0245f60cc4d93c72de5f8fd5b1e609c0eb8055434382849187ade",
+      "bytes": 14272
+    },
+    {
+      "path": "openwam/model/video_backbone/cosmos_predict25_backbone.py",
+      "sha256": "1708da2538fa2358d456e14ef736cc0e6fab59ae42f2a54ea498ecfa8e7c1c04",
+      "bytes": 40351
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/__init__.py",
+      "sha256": "31e262c70a8342a49750eede1092f1008f7aaea12552681af58292f8d5abaa19",
+      "bytes": 2522
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/base.py",
+      "sha256": "1880d59a83ddaa00eeec509e8a3890df12aa73bf8256412f0d29b8c502745c87",
+      "bytes": 14666
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/dinov3.py",
+      "sha256": "c5ac7cf081afc023fe85c32940a807f201213f383d4141b4e68096cde2124eb9",
+      "bytes": 21929
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/flux2_vae.py",
+      "sha256": "5c1aafeac26bcd04fcbd0d1f281f50ce7d70feaf3052d3d4a9223dacf7f25c27",
+      "bytes": 13888
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/flux2_vae_src/__init__.py",
+      "sha256": "1a1aa31b302baaaf3e9c81a29e491c4fd7c07b36ec43370eec3b463d49926d43",
+      "bytes": 722
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/flux2_vae_src/autoencoder.py",
+      "sha256": "f668a04dedfb59e89ca1bab7911e5277a7e360dfe34de6c5a226fefa3c76fb63",
+      "bytes": 15860
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/registry.py",
+      "sha256": "cef1261bdce39ce7da6af3f6f01ebafaa6b6bc80ef76c728708fcaac7fc7a8b9",
+      "bytes": 2645
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/svae/__init__.py",
+      "sha256": "c3e56d7da6ea0da3dd52ab4b48478809147e8f403e061c1cedda0bfc2b458e8b",
+      "bytes": 700
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/svae/model.py",
+      "sha256": "3f042c5d19bed2d0c8e7f385af0266aea73b8bd49f37736c3356e5044997dfd1",
+      "bytes": 16339
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/svae/reducer.py",
+      "sha256": "1307a715c6e1038a1618de856d00c17de1390fbc803bb780d375ad3c36d0f39b",
+      "bytes": 5280
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21.py",
+      "sha256": "ef7fa5217954f335121f8742c95f7aaac2d2975a670ddc7c21506b8f274f9c61",
+      "bytes": 19922
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21_src/__init__.py",
+      "sha256": "5987e67b2c2b660faa5dc8cf45da0463ba59bd4cec219c1dafde36390f39a92f",
+      "bytes": 470
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21_src/loader.py",
+      "sha256": "78c5f9732a690871f6e2ca98c551348447ffc30aeb886f1d580ed3caa4ac14d6",
+      "bytes": 11653
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21_src/masks_utils.py",
+      "sha256": "a73deab0cf15169af3de7135e4e29528102de7254a3189b08184ee037a6d3cee",
+      "bytes": 599
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21_src/modules.py",
+      "sha256": "2af7db5773f1ec27e42523198d9d54c16f2f698fdad0b9676741fed007523809",
+      "bytes": 15070
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21_src/patch_embed.py",
+      "sha256": "44c7e0938311d41572b7ae954637e0d8b339c0bf24fc7a84956d5084c3865398",
+      "bytes": 1276
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21_src/tensors.py",
+      "sha256": "4e4877b7ec9f971d66cc2464d71f135f979ca565da2c3e342005d4a092662f64",
+      "bytes": 1555
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/vjepa21_src/vision_transformer.py",
+      "sha256": "2a6c82dbae7aea258b36288e47ccdcc68082b3a6de326359025acef501edaa99",
+      "bytes": 17559
+    },
+    {
+      "path": "openwam/model/video_backbone/encoder/wan22_vae.py",
+      "sha256": "d64b5a1bf61358205e99bf955c9fcd03b9002dcdef1b0265c2555060f4198f6e",
+      "bytes": 8121
+    },
+    {
+      "path": "openwam/model/video_backbone/registry.py",
+      "sha256": "55391cb0ce609eb2cd9af453da05d9fb4d3620fac2211465d399593d0d1d5f25",
+      "bytes": 4478
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/__init__.py",
+      "sha256": "4d4584d530ecf6e7040717cb37d3fc566199e4445f4f69997cdf5918c948f6cc",
+      "bytes": 697
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/_reference.py",
+      "sha256": "ed04a70fff711172102708993532b3f32068180be291ae27979717fcd1f5602f",
+      "bytes": 11865
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/action_tokens.py",
+      "sha256": "48353fdbf85b67721d81146779858d78fa87629851b876beda3236cb2b74cb79",
+      "bytes": 5067
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/camera_controller.py",
+      "sha256": "b345185636d9b6d5078c5b0017bb3f3140324a3a9a99d19306630ebe85082b63",
+      "bytes": 7129
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/component_specs.py",
+      "sha256": "37f76fd29e7d13dd7f8012fd918bc0b710485254222261d84659eb096045d509",
+      "bytes": 7102
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/conditioning.py",
+      "sha256": "63a81ca08947f719f405cbdc0e09e2a8062d71d0ee97bed2e140d54e24f6f0a4",
+      "bytes": 15709
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/dit_forward.py",
+      "sha256": "f1512a2544de9d217b2a8b5214989667a88bbe24405a0e008e42626c037792ea",
+      "bytes": 5459
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/encode.py",
+      "sha256": "c3239d921fbf3e78c4c4253b0db8141e3c45d593b6e9195ad540e82e9f3e89c3",
+      "bytes": 3983
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/license/LICENSE",
+      "sha256": "d43b96112d60d83595395649e61c6bc215f568052a979320489556c6c1262eb1",
+      "bytes": 11347
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/license/NOTICE",
+      "sha256": "767efa46cd22375fe831ad5faf73e124748ca804b762ed2bc0f86f1c24bd5386",
+      "bytes": 726
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/loader.py",
+      "sha256": "199a8c08849eb4fe8f54e8c63ed9437fe1d4ab1be4d98f2ad7901cba946cf1cc",
+      "bytes": 12347
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/models/__init__.py",
+      "sha256": "cdd745d2c7b2c0f980870a8453c72be61b6979842d2a2f9aa30b3b12a4c1a247",
+      "bytes": 195
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/models/dit.py",
+      "sha256": "18872203de04b80ec16c2905050ac14f9da95065be7d457197ccd3e88773bc47",
+      "bytes": 17449
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/models/image_encoder.py",
+      "sha256": "b3d4ab510a1c509ed942f1ebe44c2ec3c989c324b5adcc3e74e46cabb331be5c",
+      "bytes": 12808
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/models/text_encoder.py",
+      "sha256": "89a59348e57b7bc29ce5fe62c944b48e5d88a7e1a8948d871cd6b8377a6798c6",
+      "bytes": 10243
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/models/vace.py",
+      "sha256": "fba13d8d30e452bc1486ff6dc1d29c5ed5728565cc21f46b668e6eac9ffad790",
+      "bytes": 2470
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/models/vae.py",
+      "sha256": "2821a28dc146f57b1cf73a555da516f5a5e37436b8f044a52fcba947d89a8bd5",
+      "bytes": 47985
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/pipeline_builder.py",
+      "sha256": "8722a0ee97d322c7c7248534b69de046caac764ab5ab362b1006d69c2f5f8ca5",
+      "bytes": 8295
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/preprocess.py",
+      "sha256": "4c94efdee0d25515a3020d0424947de37d2f2bd3760b18feb29020fb938f2377",
+      "bytes": 3960
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/reinit.py",
+      "sha256": "f6066c79d4c779a32a79ab6e114b07816ae8a9f724fc1089dbd49fad0d5a9788",
+      "bytes": 8183
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/__init__.py",
+      "sha256": "c01e6a2435bf65b2d03003cf5004a9ffe3d3d217c647088a37091e0cc9cdaeba",
+      "bytes": 98
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/configs/__init__.py",
+      "sha256": "d7e797448041db3087c03dd2de32e04ad5a30c215fa1035a3c5508af114927c8",
+      "bytes": 158
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/configs/model_configs.py",
+      "sha256": "1ace74fdfb9b4f4da95d830e965a3532ae47b8c38bb302fa6eca0935b8e30094",
+      "bytes": 18671
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/configs/vram_management_module_maps.py",
+      "sha256": "bba9ae3c883d1a26405dcb2a936dbe687f93485c08a6d4e8973e77436e8da175",
+      "bytes": 3066
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/__init__.py",
+      "sha256": "637e048bee33fd930bae12f112a32c4cf57ff1c7f0915cbb33bd1427088f9340",
+      "bytes": 1151
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/attention/__init__.py",
+      "sha256": "a35181d7465175acd8c3034305782802ba309b5b1719930551711f8ad529fa2e",
+      "bytes": 62
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/attention/attention.py",
+      "sha256": "b209e7771cbf10dbe84af52e2a48f612391af0ee9b0600ab1de4d32684edcefe",
+      "bytes": 7986
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/device/__init__.py",
+      "sha256": "d956d5ec4e2bf19e4874ab1544688da3c79b10e28664ae7cb9d43afd0b930bde",
+      "bytes": 314
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/device/torch_device.py",
+      "sha256": "5d19384e35862965eed1c4889f20aa509f83dcdc679d8345276e369548754d63",
+      "bytes": 1335
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/gradient/__init__.py",
+      "sha256": "365e8b1a9f051b09758e974fc9b04f3410ffadcfdff3b47c6ce1f1860ab92cbc",
+      "bytes": 92
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/gradient/gradient_checkpoint.py",
+      "sha256": "0bc3d9d50c3fd9479f1c4556dcdbfa169115b97be32eba2ece855dc3a9f57930",
+      "bytes": 908
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/loader/__init__.py",
+      "sha256": "fb112dbe0007138c7f70f7b27deabd847e27198c5eb7a97fa22db81cd1a65a87",
+      "bytes": 340
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/loader/config.py",
+      "sha256": "8f36d3a609cf1af9521a4c85976ece2b0390423c33e807962a2eff287efcaa01",
+      "bytes": 4993
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/loader/file.py",
+      "sha256": "9d0a9eb3621694396700ab5580a9a2a123816963c8d70d0fe50776bfd71a4308",
+      "bytes": 4811
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/loader/model.py",
+      "sha256": "88a00660d3b5f5e7e06abf4ae0a6a2aace1cbf5e18281eb3f5e8d9f2da885afd",
+      "bytes": 4440
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/vram/__init__.py",
+      "sha256": "170f0e565eca39afbe2da7bd0b207bdbdcc46e6783ee69bf87d20eae2d3149c8",
+      "bytes": 376
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/vram/disk_map.py",
+      "sha256": "ec76daccedd9140876229fd493ee440d6d480d000512db9ee4c1ac74bd178a4a",
+      "bytes": 3411
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/vram/initialization.py",
+      "sha256": "734906bba106f92af004cb1fea04b47f492ef2e735b1deb0b00ce4c374e701a8",
+      "bytes": 766
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/core/vram/layers.py",
+      "sha256": "d87cf1b61116274a755600922bff7033a04d6e747d47da7229da4f018d1f52a6",
+      "bytes": 19631
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/diffusion/__init__.py",
+      "sha256": "abae027bad3df0767a2bb7072afe9008533a2fd0dcff01af38957be977f706d7",
+      "bytes": 65
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/diffusion/flow_match.py",
+      "sha256": "aacfac9bb614fed6cc142a8a90eab0fce54c4dbf8efec8b3c37a73d8b4756201",
+      "bytes": 10030
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/models/__init__.py",
+      "sha256": "1b680eb5d810c7a1d812c3b4144788ef5879dd86ead2882bd7f7d0af96d36173",
+      "bytes": 176
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/models/model_loader.py",
+      "sha256": "e33dc7a985650a68ab5baf0bfdce9171efe4629fe3c9a315d399bc46b663eb7a",
+      "bytes": 5859
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/utils/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/utils/state_dict_converters/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/utils/state_dict_converters/wan_video_dit.py",
+      "sha256": "fe0db0081e71079eb6a73870aea695f266bb0ba90a879c3add6238a5eb28cc33",
+      "bytes": 4994
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/utils/state_dict_converters/wan_video_image_encoder.py",
+      "sha256": "2aeab496510090de733d22152b05041bcce038d81bb83ae6562a522352440958",
+      "bytes": 262
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/utils/state_dict_converters/wan_video_vace.py",
+      "sha256": "cc6c39d6e2b16819c341ea76dff680bea11d16817e353229344f6fb98e2e30ca",
+      "bytes": 159
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/shared/utils/state_dict_converters/wan_video_vae.py",
+      "sha256": "e6318d4967f94cbc1dde1005f9fdc662050d967704c20ad1ee66d0cd3dcce538",
+      "bytes": 258
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/variants/__init__.py",
+      "sha256": "5e35c6a4b666be5e97cf2fad68522f13e03dc7b1a79f06c1d9522dd26cca1e19",
+      "bytes": 1771
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/variants/base.py",
+      "sha256": "7dadeb50e66f5ce2babbeea926994de39dff900c173b6fc277d1126b04c7a74d",
+      "bytes": 1312
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/variants/i2v.py",
+      "sha256": "9deb44f9bc25092b07b385e08cf63e28f76639594e8b0d83e4bf0aa1d979aff6",
+      "bytes": 2991
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/variants/ti2v.py",
+      "sha256": "569ef4dfc025f5320767304301ef92e94bc2606eaddcc3f306c05d84122779b6",
+      "bytes": 1157
+    },
+    {
+      "path": "openwam/model/video_backbone/wan/variants/vace.py",
+      "sha256": "3ba040515b5c0816e7568605d84a851c97abc8c66487c4b4cbeb3de3ad0f2685",
+      "bytes": 1662
+    },
+    {
+      "path": "openwam/model/video_backbone/wan_backbone.py",
+      "sha256": "b1f10e03fcae3ba95a1e49ab17979806828026fba68a65754ffbb2cbf9d72c3d",
+      "bytes": 52212
+    },
+    {
+      "path": "openwam/model/vlm_backbone/__init__.py",
+      "sha256": "c4f0b4df22d160f7aaca18d1f327f32c7165537914e0c73d4e47062e19191a81",
+      "bytes": 1038
+    },
+    {
+      "path": "openwam/model/vlm_backbone/base.py",
+      "sha256": "93886bd6e87a8be7a7be89a98d305728cb8d765f22a7ec662edc90a4cba86bc4",
+      "bytes": 2641
+    },
+    {
+      "path": "openwam/model/vlm_backbone/qwen3_vl_backbone.py",
+      "sha256": "7bca136c3940cfcde441c957454d6daee7fd9b7886404f8ec9c7163898eb54f5",
+      "bytes": 9714
+    },
+    {
+      "path": "openwam/model/vlm_backbone/registry.py",
+      "sha256": "917b43d6597b754179223719c41de4747ca83f9c528f8a7591507a9cd1a18f6a",
+      "bytes": 1472
+    },
+    {
+      "path": "openwam/multisim_sidecar_contract.py",
+      "sha256": "352718977934b0c872a205fab282b4ddb97a06271b5facbd32096e2dc153009a",
+      "bytes": 5668
+    },
+    {
+      "path": "openwam/train/__init__.py",
+      "sha256": "726b67ac9d85e98734f5ea8759a1e62de693008b06eae2a3b1dfe70376cb405a",
+      "bytes": 204
+    },
+    {
+      "path": "openwam/train/openwam_trainer.py",
+      "sha256": "5a1f23f9a0739d927f489076423b1431d2b2b78937174984b08c866289d9d9eb",
+      "bytes": 34857
+    },
+    {
+      "path": "openwam/train/utils/__init__.py",
+      "sha256": "921f21e666a7697ec19f7e43d9f804e85e605280e68ce25c36a1d3f63e7b544e",
+      "bytes": 288
+    },
+    {
+      "path": "openwam/train/utils/checkpointing.py",
+      "sha256": "16767d7e9804a1b918298a7ba3113a74db69ab1b8902a92095505fa2fcaf20cd",
+      "bytes": 16833
+    },
+    {
+      "path": "openwam/train/utils/ckpt_model_loader.py",
+      "sha256": "7332c896bd9591b6de00ee534109062bb4e287d0206b675047674794b9b105a5",
+      "bytes": 17281
+    },
+    {
+      "path": "openwam/train/utils/optimizer_groups.py",
+      "sha256": "9eabd8406df65afb3ca52fcdb1e3f1c5ad86b9d9fa5d994e230660e4c3da24ac",
+      "bytes": 2791
+    },
+    {
+      "path": "openwam/train/utils/seeding.py",
+      "sha256": "251ecbcef57c01ad28ca3a32f616c75871e09b9d72575827a3b72aee8afd76cc",
+      "bytes": 11148
+    },
+    {
+      "path": "openwam/train/utils/sidecar_lr_screen.py",
+      "sha256": "3464971733647b8ebfdc379321a3c9398c0376c708ac80880b12d6156f182f4d",
+      "bytes": 5207
+    },
+    {
+      "path": "openwam/train/utils/sidecar_warmup.py",
+      "sha256": "a4919100e7178b3dfa081f4e7083fd53aeca3ca80303be4372c63b93063fecfa",
+      "bytes": 1113
+    },
+    {
+      "path": "openwam/train/utils/training_utils.py",
+      "sha256": "2517ba8520b7be44dd66b831a96f5d1f7207e9483d118970401496f7ceb6a9e7",
+      "bytes": 6539
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/activate_transport.py",
+      "sha256": "2f1a3cca5adc149301ad64f47f37a32631ebac71cae00b343c2a72527c975881",
+      "bytes": 2579
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/activate_transport_before_camera_gate_20261028.py",
+      "sha256": "3f2bc7078087215a0f1b1beb186c176d3578066855395b05dc153a71d9568973",
+      "bytes": 2290
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/batch_bridge.py",
+      "sha256": "c5c42267de89c85f1a1a7e6007c9ed56d6c4ba0f7a06ea115dfdf22f6de72d63",
+      "bytes": 10756
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/benchmark_wire.py",
+      "sha256": "2f35894674470e8ce41d6cab23b5bd0e2f3733d55f3b0951c902f4eb60b34203",
+      "bytes": 3261
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/check_activation.py",
+      "sha256": "432b10f346ec7b9ab0fd3b35481af5eec9a746f91dd38ae272e640c488361684",
+      "bytes": 1237
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/check_chunk.py",
+      "sha256": "b70eb7c99d660b8569dc8eb5b57a2033a8c696cbad2a7d26116c282e97026d6e",
+      "bytes": 5497
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/check_deferred_rgb.py",
+      "sha256": "f942be6858085e54b36eddff056a62a407787b6ff334483d69a5ab6eadd18cae",
+      "bytes": 1277
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/check_recovery_overlay.py",
+      "sha256": "3d1f55ea4da3327d9c376ecc9362ef64d686ad4c776ba015819d2482ee3ac12c",
+      "bytes": 2079
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/chunk_transport.py",
+      "sha256": "7699c476fce34b24d5def32c4473205d8af97f671a78c5cde3b1f066c95024f9",
+      "bytes": 5063
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/cleanup_diagnostics.py",
+      "sha256": "584afa7d24c156bc337a37f96a4f583a214a5befe418b0030e41368ee4998917",
+      "bytes": 2948
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/enable_formal_bridge.py",
+      "sha256": "d8ba92c15c1c486e95a9506b95db9edb5926e4b24d85366b7c866c61d076c10a",
+      "bytes": 2637
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/launch_sim_hotpath.py",
+      "sha256": "6855880963cc9a99eb14044f8cdd44cd8c511285a1043fb46e77eb36515442cb",
+      "bytes": 3348
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/launch_skip_capture.py",
+      "sha256": "d2ed2f8aa535e1af6f11b5e9b086d670100a8e0a5c4291de76c620ba7690bda1",
+      "bytes": 3330
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/observe.py",
+      "sha256": "5284dd500a588f02fd76fba2b71eb257b3cc0be1891086b97e95689e88175a0c",
+      "bytes": 2149
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/pilot_native.py",
+      "sha256": "0903005b7f81fcae1132593409d3ab64349ad0783d5a64bbb58cc6aa8dfb0ac4",
+      "bytes": 4425
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/prepare_formal_bridge.py",
+      "sha256": "d4a3e719e1b9b0c3242d143d098891233c8fda974d5a0414f3ef494548b7b22d",
+      "bytes": 2338
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/prepare_formal_gateways.py",
+      "sha256": "7b429431f5237ca9f69a4053f5f62bf76ce9a4dc965599405fd10280a7916819",
+      "bytes": 1225
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/probe_sim_hotpath.py",
+      "sha256": "5a2949f727e204e9aef4fc7303895359506ea4ec32baa7112e24873e621c5e2c",
+      "bytes": 7881
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/probe_skip_capture.py",
+      "sha256": "8444dabcc17607e74dcdf4be6dc3b422fb47a3e095eaaa337ffd8f0ffd2fff84",
+      "bytes": 8197
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/recover_failed_condition.py",
+      "sha256": "dbf296ceab1446b0969d4c032748ea945471cd0fcdf46f5c3c926584fe7818b3",
+      "bytes": 6608
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/run_chunk_native.py",
+      "sha256": "8c2f85d73909e2bd348aeb7daa7344e83ebbdd5460e16c5974f022233f408b7b",
+      "bytes": 449
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/run_native.before.py",
+      "sha256": "91b630dff748eecbb91261e8842329dc9951197744a26ccb2e805b3b351bd118",
+      "bytes": 2817
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/run_pilots.py",
+      "sha256": "5d6acb732067711786183e243dd822dc0cc34b4c7cf421795acedb1492590bce",
+      "bytes": 3793
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/serve_chunk.py",
+      "sha256": "316340ee60a25bd23af77f44ce87fff5c4331cc5e2a6957333b9bebb2930da19",
+      "bytes": 418
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/serve_chunk_split.py",
+      "sha256": "4eb7693bfe23732ed64482e2e10b1e8eb86fea4676e8fd0a3ebcfe0a6fb48e78",
+      "bytes": 1856
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/sim_hotpath.py",
+      "sha256": "1301fbd966af415dc5baf191ec1826c3c0da70f3534af6654ff25fb9a775bae8",
+      "bytes": 6837
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/skip_chunk_capture.py",
+      "sha256": "422fa069cef4a518ed17c43efa833b6995c899368dba882eea2bf9df4f0d9310",
+      "bytes": 4327
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/summarize_acceptance.py",
+      "sha256": "b6f83a23da9553b15e6cc565b97161837e75b9ab24dfd208ef32b84bfea7725a",
+      "bytes": 3235
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/supervise_formal_bridge.py",
+      "sha256": "6365b688b536b14e66733439274423f5b80677099106d17aa9165ea38ef8c521",
+      "bytes": 4639
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/test_skip_chunk_capture.py",
+      "sha256": "f699463aa2cf69c203c3e524951e7906ed3826da3081585ff4db26818277ad56",
+      "bytes": 5271
+    },
+    {
+      "path": "outputs/robotwin_eval/performance_recheck_20261028T0900Z/transport_probe.py",
+      "sha256": "fea27fbc719351505b851f292eb066caf209fc539ca5b29c6f536eb44d262b2d",
+      "bytes": 3185
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/merge_report.py",
+      "sha256": "6bd7e1d0a7cfd45632423bcfd33ff8c722773fe29986686cb6223c283d9e5754",
+      "bytes": 4371
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/observe_queue.py",
+      "sha256": "41dbeaebe36370891a8734dd89c4800bde35a0b82df94b5bf8c113d6f652efb4",
+      "bytes": 2163
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/render_guard.py",
+      "sha256": "c8cfe9e8020f7abd761282c93788c38fab766d177889883344ebcf0f9c937020",
+      "bytes": 2208
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/render_integrity.py",
+      "sha256": "cc76ce075d5f62aba9670c4f081b02325841c9950754ee7ed941c434a73ae88a",
+      "bytes": 2109
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/report.py",
+      "sha256": "c847bf0d7a989d83e06cafe70c8b9d451792b1a3cccbd7372cf2476affae8c70",
+      "bytes": 943
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/restart_reporting_and_guard.py",
+      "sha256": "94d2ccf6500952e7cdcd4a1382b881159358b70fbf97c6b5756b013ea39c809d",
+      "bytes": 1410
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/resume_after_first5.py",
+      "sha256": "d55728ac3169c14673ecc9814c0d9f3c6bf2fec6f5c54b68db8b9dfafc041fe7",
+      "bytes": 5055
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/run_manifest.py",
+      "sha256": "be9d3b27305729f6310ab6df0e39c3d2566931549f350c392f935242e016e626",
+      "bytes": 4862
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/schedule.py",
+      "sha256": "267ee6bb8b4860bb72fe7cd42998374d06e3561ba030116cddbdf75f905e0416",
+      "bytes": 8297
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_19arms_complete10_20261102/start_remote.py",
+      "sha256": "d97d955d672a3eb2523dad79a25321f451633dda9c8e75d7634eaaa1ee9fe8ed",
+      "bytes": 563
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/deploy.yaml",
+      "sha256": "50b64b3a074952301a8e091d07da71d6f31d70dbbdd3cc02ecdd783b36d304b2",
+      "bytes": 503
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/launch.py",
+      "sha256": "21d104f6373664ee367f4fa037edb65f632917646ae87747283b17d1ed716627",
+      "bytes": 3127
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/observe_queue.py",
+      "sha256": "41dbeaebe36370891a8734dd89c4800bde35a0b82df94b5bf8c113d6f652efb4",
+      "bytes": 2163
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/report.py",
+      "sha256": "589c79a9ef5a8a30a4a774dbaa9549cefa9c6815f4984ca820d15ef20de9b839",
+      "bytes": 2255
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/retry_infrastructure_failures.py",
+      "sha256": "d252c5ffed32ca65c7855b4d4bc2350b699a478f9d82cafb23f142171d42874b",
+      "bytes": 2673
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/run_manifest.py",
+      "sha256": "f59a2504f82fcf91a65d806bb42beee227163749b2f49063e04bc3fa7b71fecd",
+      "bytes": 4467
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/schedule.py",
+      "sha256": "22b8dd6a91627653b595c38ce60e75030ee0cca71c18fbb5f0b9bfd3d0539586",
+      "bytes": 7905
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/serve_checked.py",
+      "sha256": "293fafb655721263f0dc9db966e50bf9476acec5a414795ed66885e9d5cc9881",
+      "bytes": 3566
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/serve_split.py",
+      "sha256": "070ecdbd51336242a1afd3ab71c55cc11669c65edcbeafc9a516808816318238",
+      "bytes": 1919
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_all_off_20261102/start_remote.py",
+      "sha256": "d97d955d672a3eb2523dad79a25321f451633dda9c8e75d7634eaaa1ee9fe8ed",
+      "bytes": 563
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/deploy.yaml",
+      "sha256": "50b64b3a074952301a8e091d07da71d6f31d70dbbdd3cc02ecdd783b36d304b2",
+      "bytes": 503
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/intervention.py",
+      "sha256": "3d027e073a4783c389b294c47f5a1633441d92b5513ce502dfd549a430df2781",
+      "bytes": 2343
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/launch.py",
+      "sha256": "5b8623faf5c04f10a04c59850bf6e9da7badf0a66a5a7505dce4f01a9d0e5f17",
+      "bytes": 3771
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/observe_queue.py",
+      "sha256": "41dbeaebe36370891a8734dd89c4800bde35a0b82df94b5bf8c113d6f652efb4",
+      "bytes": 2163
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/report.py",
+      "sha256": "3081201e008666ad7e845f9b420ae6f03c788cc97b9378f05a86bb680786dcbb",
+      "bytes": 2224
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/restart_capacity.py",
+      "sha256": "5ccb5818a5781f01e1f8e83dd3d56b1342e020e6319b6625a825ecb362201eb6",
+      "bytes": 1859
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/run_manifest.py",
+      "sha256": "75246632a1d84f162de8cfc2887cbdba38661eb802e372dc31a336adbbed877d",
+      "bytes": 4724
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/schedule.py",
+      "sha256": "a57bacaf9ec7520eae80b035700f94c024f69bc51e1aed2902a2484d97adbde7",
+      "bytes": 7709
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/serve_checked.py",
+      "sha256": "209b39a87c564c70353434936240ba64d9c33211fc57db4f8ba70810ddc340ed",
+      "bytes": 3073
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/serve_modes.py",
+      "sha256": "634fb19494d3ba6a266e84ff39aafc18167a1515c784fa60196f3bae026a39a7",
+      "bytes": 4190
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/serve_split.py",
+      "sha256": "070ecdbd51336242a1afd3ab71c55cc11669c65edcbeafc9a516808816318238",
+      "bytes": 1919
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_expanded_ablations_20261102/start_remote.py",
+      "sha256": "d97d955d672a3eb2523dad79a25321f451633dda9c8e75d7634eaaa1ee9fe8ed",
+      "bytes": 563
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/check_intervention_scope.py",
+      "sha256": "e2de68257e9ff20068f109a36e6b08890e987798e86283d42b94f3890aa810c3",
+      "bytes": 969
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/connect_and_start.py",
+      "sha256": "2e9e2d70c7a9c4452cc21a7b5c3f151372bdb2ec0266db29a4c895171a5caccd",
+      "bytes": 1421
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/deploy_models.py",
+      "sha256": "1ce1663ef79a1031cec8dd7d34c5c0f43fcd435fe19355c9a93c9b10f3e8cb74",
+      "bytes": 1094
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/observe_queue.py",
+      "sha256": "41dbeaebe36370891a8734dd89c4800bde35a0b82df94b5bf8c113d6f652efb4",
+      "bytes": 2163
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/recover_last_stalled.py",
+      "sha256": "cf0d22334af62795eb7dc405e966f9fd2e367b25348f5f99cf12e7ccd253cc58",
+      "bytes": 949
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/report.py",
+      "sha256": "040ddff8b160046983533391671f39116725a91f2b4c15b820f06ec96ae47d89",
+      "bytes": 3445
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/run_manifest.py",
+      "sha256": "f59a2504f82fcf91a65d806bb42beee227163749b2f49063e04bc3fa7b71fecd",
+      "bytes": 4467
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/schedule.py",
+      "sha256": "51876d95f38c6fdc9c875fe9d88ac930eb3b405573c53afdc23bd099ac9b75e4",
+      "bytes": 6589
+    },
+    {
+      "path": "outputs/robotwin_eval/sidecar21480_interventions_20261102/start_remote.py",
+      "sha256": "9554e7fbd745b8b95571886803868d8a10e8c9c2c8488e7253f7816cf8c24854",
+      "bytes": 562
+    }
+  ]
+}

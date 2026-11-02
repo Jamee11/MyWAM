@@ -1,0 +1,28 @@
+checkpoint_path: null
+device: cuda:0
+inference:
+  cfg_scale: 1.0
+  denoise_mode: sync
+  denoise_steps: 10
+  height: 384
+  inference_horizon: 32
+  inference_mode: sync
+  lead_modality: video
+  num_frames: 33
+  video_num_frames: 9
+  width: 320
+optimization:
+  compile:
+    enabled: false
+    sidecar_strategy: ffn
+  decode_video: false
+  dit_cache:
+    cosine_threshold: 0.99
+    enabled: true
+    max_skips: 3
+  prompt_embed_cache:
+    enabled: true
+    maxsize: 32
+server:
+  host: 0.0.0.0
+  port: 39500

@@ -23,7 +23,8 @@ from openwam.multisim_sidecar_contract import ACTION_SLOTS, CONTRACT, SOURCE_GRO
 class PreparedSimDataset(BaseDataset):
     action_dim = 80
 
-    def __init__(self, manifest_path, group, split='train', color_jitter=None, allow_smoke=False):
+    def __init__(self, manifest_path, group, split='train', color_jitter=None, allow_smoke=False,
+                 patchwam_augmentation=None):
         self.manifest_path = str(Path(manifest_path).resolve())
         self.root = Path(self.manifest_path).parent
         manifest = json.loads(Path(self.manifest_path).read_text())
@@ -48,6 +49,12 @@ class PreparedSimDataset(BaseDataset):
         self.ends = np.cumsum([x['steps'] for x in self.records]).tolist()
         self._handles, self._pid = OrderedDict(), os.getpid()
         self._color_jitter = None
+        self._patchwam = None
+        if patchwam_augmentation and patchwam_augmentation.get('enabled', False):
+            if color_jitter_enabled(color_jitter):
+                raise ValueError('Use PatchWAM or ColorJitter, not both')
+            from openwam.dataloader.transforms.patchwam_video import PatchWAMVideoAugment
+            self._patchwam = PatchWAMVideoAugment(patchwam_augmentation)
         if color_jitter_enabled(color_jitter):
             self._color_jitter = VideoColorJitter(**{k: float(color_jitter.get(k, v)) for k, v in
                 [('brightness', .2), ('contrast', .2), ('saturation', .2), ('hue', 0)]})
@@ -107,6 +114,8 @@ class PreparedSimDataset(BaseDataset):
         video = [assemble_multiview_layout({key: value[t] for key, value in views.items()}, layout, 384, 320) for t in range(9)]
         if self._color_jitter is not None:
             video = self._color_jitter.apply({'video': video})['video']
+        if self._patchwam is not None:
+            video = self._patchwam({'video': video}, [True, True, len(views) == 3])['video']
         present = np.repeat(np.asarray(record['arm_present'], bool), 10)
         actions, proprio = np.zeros((32, 80), np.float32), np.zeros((1, 80), np.float32)
         amask, pmask = np.zeros((32, 80), bool), np.zeros((1, 80), bool)

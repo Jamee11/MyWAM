@@ -41,6 +41,13 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             raise ValueError("Need three increasing, valid zero-based tap blocks")
         self.foundation_warmstart = bool(ea.get("foundation_warmstart", False))
         self.deep_supervision = float(ea.get("deep_supervision", 0.1))
+        self.stage_supervision_weights = ea.get("stage_supervision_weights")
+        if self.stage_supervision_weights is not None:
+            self.stage_supervision_weights = tuple(float(v) for v in self.stage_supervision_weights)
+            if (len(self.stage_supervision_weights) != 3
+                    or not all(math.isfinite(v) and v > 0 for v in self.stage_supervision_weights)
+                    or not math.isclose(sum(self.stage_supervision_weights), 1.0, abs_tol=1e-6)):
+                raise ValueError("Stage supervision requires three positive finite weights summing to one")
         self.aux_loss_scale = float(ea.get("aux_loss_scale", 1.0))
         self.isolation_warmup_updates = int(ea.get("isolation_warmup_updates", 0))
         self.backbone_warmup_updates = int(ea.get("backbone_warmup_updates", 0))
@@ -322,14 +329,29 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             return video, action
 
         result = super().compute_loss(forward_fn=predict, noise_context=noise_context, **inputs)
-        parts = self.sidecar.heads.losses(captured[-1], ea_targets)
+        stage_parts = [self.sidecar.heads.losses(output, ea_targets) for output in captured]
+        parts = stage_parts[-1]
         deep = (
-            self.loss_weights["ground"] * self.sidecar.heads.losses(captured[0], ea_targets)["ground"]
-            + self.loss_weights["relation"] * self.sidecar.heads.losses(captured[1], ea_targets)["relation"]
+            self.loss_weights["ground"] * stage_parts[0]["ground"]
+            + self.loss_weights["relation"] * stage_parts[1]["relation"]
         )
-        extra = self.aux_loss_scale * (
-            sum(self.loss_weights[k] * v for k, v in parts.items()) + self.deep_supervision * deep
-        )
+        if self.stage_supervision_weights is None:
+            extra = self.aux_loss_scale * (
+                sum(self.loss_weights[k] * v for k, v in parts.items()) + self.deep_supervision * deep
+            )
+        else:
+            # Redistribute the old per-task coefficient budgets; do not add deep supervision twice.
+            contributions = [
+                self.aux_loss_scale * weight * sum(
+                    self.loss_weights[k] * (1 + self.deep_supervision if k in ("ground", "relation") else 1) * v
+                    for k, v in values.items()
+                )
+                for weight, values in zip(self.stage_supervision_weights, stage_parts)
+            ]
+            extra = sum(contributions)
+            for i, values in enumerate(stage_parts):
+                result[f"loss_ea_stage_{i}"] = contributions[i].detach()
+                result.update({f"loss_ea_stage_{i}_{k}": v.detach() for k, v in values.items()})
         result["loss"] = result["loss"] + extra
         result.update(
             loss_ea=extra.detach(), loss_ea_deep=deep.detach(), **{f"loss_ea_{k}": v.detach() for k, v in parts.items()}
