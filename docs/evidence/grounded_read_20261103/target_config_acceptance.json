@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "Foundation_reconstruction_merged": true,
+  "warmup_to_joint_merge": true,
+  "target_manifest_paths_correct": true,
+  "tasks": 50,
+  "episodes": 2500,
+  "global_batch": 256,
+  "warmup_scheduler_horizon_updates": 21480,
+  "warmup_stop_updates": 2000,
+  "joint_epochs": 10
+}

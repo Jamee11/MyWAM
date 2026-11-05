@@ -1,0 +1,23 @@
+# Match the joint Sidecar recipe while constructing the original WAM without EA.
+defaults:
+  - train_sidecar_patchwam_warmstart_8gpu_10epochs
+  - override model: dual_system
+  - _self_
+
+model:
+  architecture:
+    variant: joint_self_attn
+    relational_sidecar: null
+dataloader:
+  auxiliary: false
+training:
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  sidecar_lr: null
+  sidecar_lr_screen: null
+  stop_after_optimizer_updates: null
+  save_optimizer_steps: 5000
+  save_full_states_for_resume: false
+  keep_final_resume_state: false
+  keep_last_k_ckpts: 5
+  output_path: outputs/baseline_patchwam_10epoch

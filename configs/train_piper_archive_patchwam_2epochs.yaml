@@ -1,0 +1,10 @@
+defaults:
+  - train_maniskill_archive_patchwam_1epoch
+  - _self_
+
+dataloader:
+  type: piper_archive
+  manifest_path: ${oc.env:PIPER_ARCHIVE_MANIFEST,datasets/multisim_sidecar_archive_v2_20261025/manifest.ready.json}
+training:
+  num_epochs: 2
+  output_path: ${oc.env:PIPER_ARCHIVE_OUTPUT,outputs/piper_sidecar/archive_patchwam_2epochs}

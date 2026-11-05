@@ -1,0 +1,29 @@
+checkpoint_path: null
+device: cuda:0
+dataloader:
+  multiview: true
+  camera_layout: ['0', '1', '2']
+inference:
+  inference_mode: sync
+  denoise_mode: sync
+  denoise_steps: 10
+  cfg_scale: 1.0
+  height: 384
+  width: 320
+  num_frames: 33
+  video_num_frames: 9
+  inference_horizon: 32
+optimization:
+  compile:
+    enabled: false
+  dit_cache:
+    enabled: true
+    cosine_threshold: 0.99
+    max_skips: 3
+  prompt_embed_cache:
+    enabled: true
+    maxsize: 32
+  decode_video: false
+server:
+  host: 127.0.0.1
+  port: 43400

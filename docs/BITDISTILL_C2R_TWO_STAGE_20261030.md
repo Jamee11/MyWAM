@@ -98,3 +98,12 @@ export EA_SIDECAR_MANIFEST="$PWD/datasets/robotwin2_official_clean_ea_rsig_v3_43
 接续器`stage1_frozen_policy_verification.json`证明官方2089张量逐张量完全不变，新增140个Sidecar张量；warmup末步ea_backbone_frozen_warmup=1，符合full-backward但原策略不更新的用户合同。
 随后显式重新加载本次2000权重并进入stage2；当前新torchrun PID2284976，八rank均1064/10740更新、epoch0，最近100步全部指标有限，均速3.998s/update，八卡利用率100%。当前total0.188114/action0.00152773，日志LR约2.48e-5；约余10.75小时计算时间，另加保存。
 阶段1退出仍出现已知NFS Triton autotune锁异常，但退出0且权重保存和冻结验收通过，未按缓存清理告警重启训练。阶段2未完成、不宣称闭环收益；继续既定低LR/5epoch配置并验收最终10740步，不根据单批loss临时调参。
+
+
+## 2026-10-30T18:16:13.039843+00:00：最终评测归档自动回传已排队
+
+用户指定本地目录`/remote-home/jinminghao/OpenWAM/outputs/1031-warmup2k-fromc2r-5epoch`。后台归档进程PID446366/PPID1已启动，脚本保存在该目录transfer/fetch_after_c2r.py，self-test通过。当前8rank10563/10740，等待10740、final保存日志和训练子进程退出后回传，不影响XA的串行接续。
+
+只取stage2最终checkpoint_step_10740、完整tokenizer、实际config/stats/contract；包含stage1与stage2两套launch/启动配置/八rank训练JSONL和必要冻结验证/配置/启动脚本来源。远端原件保留，不取中间权重或optimizer/RNG/完整恢复状态。复用本地官方C2R权重的独立副本作rsync差分参考；partial续传且不冒充已下载完，双端size/SHA256、2229tensor header与tokenizer离线加载通过后才原子改名正式checkpoint并写verification。
+
+状态：归档目录transfer/status.json；传输日志transfer/rsync.log；最终完整性证据transfer/verification.json及SHA256SUMS。当前仅等待，不能宣称已回传完成。eval.yaml与README已保留在指定目录。

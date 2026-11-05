@@ -32,4 +32,4 @@ Instead of directly mapping camera-view observations to robot actions, this proj
 
 11. Use the configured Hugging Face mirror (`hf-mirror.com` by default) for downloads; do not fall back to official hosts without the user's approval. Preserve resumable files, verify revision/size/hash, and never expose credentials.
 
-12. For reversible, low-risk evaluation or infrastructure work, prefer a monitored attempt over excessive locks; preserve logs and retry recoverable failures. Keep pre-training checks, code functionality tests, and safeguards for destructive changes or evaluation validity.
+12. Solve simple or low-risk tasks promptly with proportionate checks; avoid unnecessary defensive code and safeguards. For substantial training or evaluation changes, carefully review correctness, experimental validity, and actual results, while keeping the implementation focused and avoiding excessive defensive modifications.

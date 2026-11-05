@@ -1,0 +1,23 @@
+defaults:
+  - train_sidecar_patchwam_warmstart_8gpu_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      grounding_guided_read:
+        enabled: true
+        strength: 0.5
+        uniform_mix: 0.5
+        ramp_updates: 1000
+
+training:
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  sidecar_lr_screen: null
+  stop_after_optimizer_updates: null
+  save_optimizer_steps: 5000
+  save_full_states_for_resume: false
+  keep_final_resume_state: false
+  keep_last_k_ckpts: 5
+  output_path: outputs/sidecar/grounded_read_joint10epoch

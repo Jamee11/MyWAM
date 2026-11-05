@@ -1,0 +1,20 @@
+defaults:
+  - train_sidecar_patchwam_warmstart_8gpu_10epochs
+  - override dataloader: multisim_sidecar
+  - _self_
+
+dataloader:
+  type: maniskill_archive
+  manifest_path: ${oc.env:MANISKILL_ARCHIVE_MANIFEST,datasets/multisim_sidecar_archive_v2_20261025/manifest.ready.json}
+  epoch_alignment: 256
+  color_jitter:
+    enabled: false
+training:
+  finetune_ckpt_path: outputs/midtrain/multisim_1ep_b512_warmup500_20261025T154412Z/2026-10-25_16-06-34/checkpoint_step_56892.safetensors
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  num_epochs: 1
+  max_steps: null
+  sidecar_lr_screen: null
+  save_steps: 4000
+  output_path: ${oc.env:MANISKILL_ARCHIVE_OUTPUT,outputs/maniskill_sidecar/archive_patchwam_1epoch}

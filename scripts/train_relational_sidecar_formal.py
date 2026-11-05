@@ -87,9 +87,9 @@ def main():
                 wam_ramp_updates=getattr(getattr(self, "sidecar_lr_screen", None), "ramp_updates", None),
                 finetune_ckpt_path=str(self.cfg.training.finetune_ckpt_path),
                 resume_ckpt_path=getattr(self.cfg.training, "resume_ckpt_path", None),
-                patchwam_augmentation_active=bool(getattr(self.dataset, "readers", None)) and all(
+                patchwam_augmentation_active=getattr(self.dataset, '_patchwam', None) is not None or (bool(getattr(self.dataset, "readers", None)) and all(
                     getattr(reader, "_patchwam_augmentation", None) is not None for reader in self.dataset.readers
-                ),
+                )),
             ))
             wait_for_gpu_release(handover)
         else:

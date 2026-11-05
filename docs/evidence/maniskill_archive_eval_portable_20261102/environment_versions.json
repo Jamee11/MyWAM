@@ -1,0 +1,33 @@
+{
+  "utc": "2026-11-02T12:49:26.101059+00:00",
+  "model": {
+    "python": "3.10",
+    "torch": "2.7.1+cu128",
+    "torchvision": "0.22.1+cu128",
+    "transformers": "5.19.0",
+    "diffusers": "0.41.0",
+    "triton": "3.3.1",
+    "numpy": "2.2.6",
+    "omegaconf": "2.3.1",
+    "hydra-core": "1.3.7",
+    "safetensors": "0.8.0",
+    "websockets": "16.1.1"
+  },
+  "simulator": {
+    "python": "3.10",
+    "torch": "2.7.1+cu128",
+    "sapien": "3.0.3",
+    "mani-skill": "3.0.1 (archive custom source)",
+    "gymnasium": "1.2.3",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "h5py": "3.16.0",
+    "Pillow": "12.2.0",
+    "transforms3d": "0.4.2",
+    "websockets": "16.0",
+    "opencv-python": "4.11.0.86",
+    "tyro": "1.0.15",
+    "matplotlib": "3.10.9"
+  },
+  "scope": "Installed source-host package metadata; not a target-machine installation or GPU validation"
+}

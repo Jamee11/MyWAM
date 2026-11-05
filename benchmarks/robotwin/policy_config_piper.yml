@@ -1,0 +1,12 @@
+policy_name: openwam2robotwin_interface
+instruction_type: unseen
+host: 127.0.0.1
+port: 43400
+send_state: true
+state_dim: 20
+request_timeout: 300
+action_type: ee
+ea_context: null
+source_quaternion_order: wxyz
+debug: false
+eval_video_log: false

@@ -1,0 +1,28 @@
+defaults:
+  - train_maniskill_baseline_10epochs
+  - override dataloader: multisim_sidecar
+  - _self_
+
+dataloader:
+  type: maniskill_archive
+  manifest_path: ${oc.env:MANISKILL_ARCHIVE_MANIFEST,datasets/multisim_sidecar_archive_v2_20261025/manifest.ready.json}
+  epoch_alignment: 256
+  auxiliary: false
+  color_jitter:
+    enabled: true
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.2
+    hue: 0.0
+  patchwam_augmentation:
+    enabled: false
+training:
+  finetune_ckpt_path: assets/openwam_ckpt/openwam_alpha/OpenWAM-Alpha-Pretrain-Foundation-Model/checkpoint_step_154000.safetensors
+  resume_ckpt_path: null
+  batch_size: 64
+  gradient_accumulation_steps: 1
+  num_epochs: 2
+  max_steps: null
+  dataset_num_workers: 4
+  save_steps: 2000
+  output_path: ${oc.env:MANISKILL_BASELINE_ARCHIVE_OUTPUT,outputs/maniskill_baseline/archive_colorjitter_2epochs}

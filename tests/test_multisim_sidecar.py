@@ -80,6 +80,70 @@ def test_masked_actions_keep_true_command_alignment_and_terminal_masks(tmp_path)
     assert dual['action_mask'].sum().item() == 32 * 20
 
 
+def test_maniskill_subset_padding_and_patchwam_preserve_actions(tmp_path):
+    import torch
+    from openwam.dataloader.maniskill_archive import ManiSkillArchiveDataset
+    path = make_release(tmp_path)
+    plain = ManiSkillArchiveDataset(path, 'maniskill_franka', allow_smoke=True)
+    augmented = ManiSkillArchiveDataset(path, 'maniskill_franka', allow_smoke=True,
+                                        patchwam_augmentation={'enabled': True, 'p': 1.0})
+    augmented.epoch_alignment = 256
+    assert len(augmented.records) == 1
+    assert len(augmented) == 256
+    sample = augmented[255]
+    original = plain[255 % 40]
+    for key in ['action', 'action_mask', 'proprio', 'proprio_mask', 'ea_targets']:
+        assert torch.equal(sample[key], original[key])
+    assert np.asarray(sample['video'][0])[256:, 160:].max() == 0
+    assert sample['first_frame_image'][0] is sample['video'][0]
+    assert sample['embodiment'] == 'maniskill_franka'
+    with pytest.raises(IndexError):
+        augmented[256]
+    with pytest.raises(ValueError, match='not both'):
+        ManiSkillArchiveDataset(path, 'maniskill_franka', allow_smoke=True,
+                                color_jitter={'enabled': True},
+                                patchwam_augmentation={'enabled': True})
+
+
+def test_piper_subset_reuses_padding_and_augments_three_views(tmp_path):
+    from omegaconf import OmegaConf
+    from openwam.dataloader.piper_archive import PiperArchiveDataset
+    from openwam.dataloader.maniskill_archive import ManiSkillArchiveDataset
+    path = make_release(tmp_path)
+    manifest = json.loads(path.read_text())
+    manifest['release_kind'] = 'production'
+    path.write_text(json.dumps(manifest))
+    cfg = OmegaConf.create(dict(manifest_path=str(path), epoch_alignment=256,
+                               color_jitter={'enabled': False},
+                               patchwam_augmentation={'enabled': True, 'p': 1.0}))
+    data = PiperArchiveDataset.from_config(cfg)
+    sample = data[255]
+    assert len(data) == 256 and data._patchwam is not None
+    assert sample['embodiment'] == 'robotwin_piper'
+    assert sample['proprio_mask'][0, :10].all() and sample['proprio_mask'][0, 34:44].all()
+    assert sample['action_mask'][:25, :10].all() and sample['action_mask'][:25, 34:44].all()
+    assert ManiSkillArchiveDataset.source_group == 'maniskill_franka'
+
+
+def test_archive_baseline_does_not_read_or_emit_auxiliary_targets(tmp_path):
+    from openwam.dataloader.multisim_sidecar import PreparedSimDataset
+    path = make_release(tmp_path)
+    numeric = tmp_path/'maniskill_franka.npz'
+    with np.load(numeric) as archive:
+        values = {key: archive[key].copy() for key in archive.files if key != 'targets'}
+    np.savez_compressed(numeric, **values)
+    manifest = json.loads(path.read_text())
+    record = next(r for r in manifest['episodes'] if r['group']=='maniskill_franka')
+    record['numeric_sha256'] = hashlib.sha256(numeric.read_bytes()).hexdigest()
+    path.write_text(json.dumps(manifest))
+    dataset = PreparedSimDataset(path,'maniskill_franka',allow_smoke=True,auxiliary=False,
+                                 color_jitter={'enabled': True})
+    sample = dataset[0]
+    assert not any(k.startswith('ea_') for k in sample)
+    assert sample['action'].shape == (32,80)
+    assert dataset._color_jitter is not None and dataset._patchwam is None
+
+
 def test_smoke_release_rejected_and_media_mutation_detected(tmp_path):
     from openwam.dataloader.multisim_sidecar import PreparedSimDataset
     path = make_release(tmp_path)

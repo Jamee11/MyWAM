@@ -127,6 +127,9 @@ def main():
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--min-free-gib", type=float, default=35)
     p.add_argument("--max-memory-gib", type=float, default=34)
+    p.add_argument("--memory-headroom-gib", type=float, default=None, help="Override allocator headroom for a capacity-checked deployment")
+    p.add_argument("--wait-for-capacity", action="store_true", help="Keep CPU-loaded weights while waiting for the selected GPU")
+    p.add_argument("--split-text-encoder", action="store_true", help="Temporary eval-style split: policy cuda:0, T5 cuda:1")
     args = p.parse_args()
     import torch
     from omegaconf import OmegaConf
@@ -147,15 +150,30 @@ def main():
         or list(cfg.dataloader.camera_layout) != ["front_camera", "hand_camera", None]
     ):
         raise ValueError("Checkpoint is not the expected single-arm absolute ManiSkill EEF10 contract")
-    if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
-        raise ValueError("Expose exactly one selected GPU with CUDA_VISIBLE_DEVICES")
+    expected_gpus = 2 if args.split_text_encoder else 1
+    if not torch.cuda.is_available() or torch.cuda.device_count() != expected_gpus:
+        raise ValueError(f"Expose exactly {expected_gpus} selected GPU(s) with CUDA_VISIBLE_DEVICES")
+    if args.split_text_encoder or args.wait_for_capacity:
+        from benchmarks.real_robot.maniskill_split_placement import wait_for_capacity
+
+        wait_for_capacity(args.min_free_gib, 11 if args.split_text_encoder else None)
     free, total = torch.cuda.mem_get_info(0)
     if free < args.min_free_gib * 2**30:
         raise RuntimeError(f"Insufficient free memory: {free / 2**30:.1f}GiB; do not stop unrelated jobs")
-    cap = min(args.max_memory_gib * 2**30, free - 4 * 2**30)
+    headroom_gib = args.memory_headroom_gib
+    if headroom_gib is None:
+        headroom_gib = 1 if args.split_text_encoder else 4
+    cap = min(args.max_memory_gib * 2**30, free - headroom_gib * 2**30)
     if cap <= 0:
         raise ValueError("Invalid allocator memory budget")
     torch.cuda.set_per_process_memory_fraction(cap / total, device=0)
+    text_cap = None
+    if args.split_text_encoder:
+        text_free, text_total = torch.cuda.mem_get_info(1)
+        if text_free < 11 * 2**30:
+            raise RuntimeError("T5 GPU needs at least 11GiB free; do not stop unrelated jobs")
+        text_cap = min(12.5 * 2**30, text_free - .25 * 2**30)
+        torch.cuda.set_per_process_memory_fraction(text_cap / text_total, device=1)
     deploy = OmegaConf.load(ROOT / "configs/deploy.yaml")
     deploy.optimization.compile.enabled = False
     deploy.optimization.dit_cache.enabled = False
@@ -164,9 +182,20 @@ def main():
     deploy.inference.inference_horizon = 32
     model = build_server_from_config(deploy, str(checkpoint.parent), device="cpu", ckpt_name=checkpoint.name)
     # Recheck after slow CPU loading; do not consume another job's newly allocated memory.
+    if args.split_text_encoder or args.wait_for_capacity:
+        wait_for_capacity(args.min_free_gib, 11 if args.split_text_encoder else None)
     if torch.cuda.mem_get_info(0)[0] < args.min_free_gib * 2**30:
         raise RuntimeError("GPU capacity changed while loading; restart when space is available")
-    model.engine.architecture.set_dtype_device(model.engine.architecture.dtype, torch.device("cuda:0"))
+    placement = {}
+    if args.split_text_encoder:
+        if torch.cuda.mem_get_info(1)[0] < 11 * 2**30:
+            raise RuntimeError("T5 GPU capacity changed while loading; restart when space is available")
+        from benchmarks.real_robot.maniskill_split_placement import place_architecture
+
+        placement = place_architecture(model.engine.architecture)
+        logging.info("SPLIT_PLACEMENT %s", placement)
+    else:
+        model.engine.architecture.set_dtype_device(model.engine.architecture.dtype, torch.device("cuda:0"))
     model._init_policy()
     arch = model.engine.architecture
     if bool(getattr(arch, "sidecar_enabled", False)) != (args.policy == "sidecar"):
@@ -182,6 +211,7 @@ def main():
         cfg_scale=1,
         compile=False,
         dit_cache=False,
+        **placement,
     )
 
     def infer(front, wrist, state, task):
@@ -206,6 +236,7 @@ def main():
                 host=args.host,
                 port=args.port,
                 allocator_cap_gib=cap / 2**30,
+                **({"text_allocator_cap_gib": text_cap / 2**30} if text_cap is not None else {}),
             ),
             indent=2,
         )

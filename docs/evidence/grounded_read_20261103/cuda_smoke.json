@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "scope": "Single-GPU tiny Wan/ActionDiT BF16; two warmup updates and three fresh-optimizer guided updates; not Foundation/Slurm throughput",
+  "warmup_backbone_bitwise_unchanged": true,
+  "strict_weights_reload": true,
+  "device": "NVIDIA A100-SXM4-80GB",
+  "peak_allocated_bytes": 21136384,
+  "updates": [
+    {
+      "completed_updates_for_ramp": 0,
+      "strength": 0.0,
+      "loss": 2.655616283416748
+    },
+    {
+      "completed_updates_for_ramp": 500,
+      "strength": 0.25,
+      "loss": 5.797855854034424
+    },
+    {
+      "completed_updates_for_ramp": 1000,
+      "strength": 0.5,
+      "loss": 2.74955415725708
+    }
+  ]
+}

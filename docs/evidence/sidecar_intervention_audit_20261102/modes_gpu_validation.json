@@ -1,0 +1,245 @@
+{
+  "passed": true,
+  "checkpoint_sha256": "b141060b4ab33b0a2542effad452203b2ee5a5d287e5fd38ef092abe7326de7e",
+  "replicas": 2,
+  "sessions": 24,
+  "modes": [
+    "full",
+    "write_off",
+    "grounding_reset",
+    "relation_reset",
+    "summary_reset",
+    "plan_reset",
+    "all_tokens_reset",
+    "visual_read_off",
+    "refine_off",
+    "sidecar_text_off",
+    "sidecar_proprio_off",
+    "write_tap7_off",
+    "write_tap15_off",
+    "write_tap23_off",
+    "role_embedding_off",
+    "ffn_off",
+    "position_off",
+    "stage_context_off"
+  ],
+  "checks": [
+    {
+      "gpu": 1,
+      "mode": "full",
+      "max_abs_vs_full": 0.0,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "write_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "grounding_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "relation_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "summary_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "plan_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "all_tokens_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "visual_read_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "refine_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "sidecar_text_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "sidecar_proprio_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "write_tap7_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "write_tap15_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "write_tap23_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "role_embedding_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "ffn_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "position_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 1,
+      "mode": "stage_context_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "full",
+      "max_abs_vs_full": 0.0,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "write_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "grounding_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "relation_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "summary_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "plan_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "all_tokens_reset",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "visual_read_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "refine_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "sidecar_text_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "sidecar_proprio_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "write_tap7_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "write_tap15_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "write_tap23_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "role_embedding_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "ffn_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "position_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    },
+    {
+      "gpu": 2,
+      "mode": "stage_context_off",
+      "max_abs_vs_full": 0.0078125,
+      "full_restored_exact": true
+    }
+  ],
+  "cross_replica_exact": true
+}

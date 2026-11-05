@@ -79,3 +79,25 @@ Student与teacher前向BF16，特征归一化/loss和EMA shadow累计FP32，EMA�
 新XA launcher为standalone自动空闲端口、local-addr127.0.0.1；controller只使用节点内lo通信并禁IB，避免已遇到的主机名/固定端口故障，不改系统配置。模型/优化器/数据逻辑仍为本地已测试的增量版本；未宣称生产首步已通过。
 
 本地旧warmup2K基线120/120诊断已完成；观察器PID444798复用该结果，等待新XA5K间隔权重回传，不占额外H100。原aigc14等待控制器已撤，不会晚些时候再启动第二个8卡XA。
+
+
+## 2026-10-31T00:54:17.815254+00:00：正式XA已运行3782更新；C2R归档完成
+
+只读现场：8rank均3782/21480（17.6%），epoch字段1即第2epoch，GPU利用率71–96%，占用68694–69614MiB；allocated峰值62.38GiB，reserved约64.75GiB。最近60micro均值换算5.988s/optimizer update，剩余约29.44h。已解决正式首步/生产batch启动与这一运行范围的显存未验事项；不据此保证后续所有样本峰值或策略收益。第一个5000保存点尚未到，观察器PID444798仍活，SSH master仍活，待5K后本地A100配对诊断。
+
+当步EA .050879，XA raw .008920、weighted .004460，weight .5已达上限；XA/EA约8.7%，低于目标80%。原始cosine loss下降不等于动作鲁棒性提升，也不能只为追求标量相同而自动把系数从.5提高到约4.5；先保留运行证据、结合5K诊断和梯度贡献判断。此项loss贡献目标尚未达成，不能写成已平衡。
+
+C2R归档42文件于2026-10-30T19:52:39Z双端SHA256全部通过，2229tensor header与tokenizer离线加载通过；最终SHA b27cbb15180e35ccdc43748914f5f9f9adcd5d1c4eaa468eaf19f25a47a3a7fb。实际rsync记录Literal24862363126、Matched0、network received19892983913，说明本次未实现预期差分块复用，而是全量压缩回传；不影响最终完整文件与上游逐字节一致。先前基于冻结块复用的估算应以此实际统计更正。证据本地归档transfer/verification.json和rsync.log。
+
+
+## 2026-10-31T07:19:49.637131+00:00：7676更新及首个5K离线诊断
+
+八rank均7676/21480，epoch3（第4epoch），近期约6.019s/update，剩余约23.08h；未见failed标记。5K权重已保存、回传并完成120/120配对生成，观察器等待10K。当前加权XA .002440、EA .049244，约5%，系数.5封顶；标量80%目标仍未达到，不据此自动放大。
+
+同一12相关窗口、6episode、3任务/两域，Full相对原图漂移mm（起点旧warmup2K→XA5000）：温和22.428→2.249、强光49.598→11.029、sensor32.183→14.321、PatchWAM37.754→8.160；原图对GT位置误差54.312→18.829mm。该比较包含5000更新的主任务联合训练和增强变化，不能归因为alignment本身，不能替代相同增强/同预算无alignment对照或闭环SR。也不能把早期5K与旧10epoch final直接作匹配预算比较。证据outputs/sidecar/xa_setup_20261030/checkpoint_diagnostics/comparison.json及diagnostics/optimizer_05000/complete.json/results.json/summary.json。
+
+### 2026-10-31T18:57Z：最终归档回传已挂接
+
+用户指定本地`/remote-home/jinminghao/OpenWAM/outputs/1101-XA-10epoch`，只回传最终ckpt及评测配套文件，明确排除optimizer/state大文件。已复用C2R归档流程建立独立本地worker PID566862，每15秒等待XA控制器complete与8rank21480及最终权重完成标记；就绪即SFTP回传config/normalization/contract/tokenizer/完整八rank日志和launch，再rsync直传最终checkpoint_step_21480，断线partial保留并重试，双端SHA与离线tokenizer检查通过才原子改名并写verification.json。不传任何中间checkpoint或accel_state；不占GPU，不作为下一三阶段监督训练的启动依赖。
+
+路径拒绝、自检、完成前等待/完成后就绪、白名单仅最终权重且排除中间/optimizer、实际XA2233张量含4个projector的schema复核通过；worker实查waiting_for_xa_completion，八rank14695，尚无最终ckpt已回传的结论。SSH使用现有持续主连接，不保存凭证；丢失后保留进度等待恢复。具体清单、监控、配置见本地归档README.md与transfer/{launch.json,status.json,download.log,fetch_after_xa.py}。

@@ -45,7 +45,8 @@ def make(monkeypatch):
 
     def build(stage="joint", enabled=True, conditioning=True, cls=RelationalSidecarArchitecture, dtype=torch.float32,
               isolation_updates=0, aux_loss_scale=1.0, backbone_updates=0, heads_only=False,
-              shared_gradient_scale=1.0, gradient_anneal_updates=0, main_task_gain=1.0):
+              shared_gradient_scale=1.0, gradient_anneal_updates=0, main_task_gain=1.0,
+              stage_supervision_weights=None, grounding_guided_read=None):
         cfg = dict(
             dim=32,
             ffn_dim=64,
@@ -71,6 +72,8 @@ def make(monkeypatch):
                 aux_shared_gradient_scale=shared_gradient_scale,
                 aux_gradient_anneal_updates=gradient_anneal_updates,
                 main_task_gradient_gain=main_task_gain,
+                stage_supervision_weights=stage_supervision_weights,
+                grounding_guided_read=grounding_guided_read or {},
             ),
         )
         model = cls(cfg)

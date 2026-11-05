@@ -1694,3 +1694,135 @@ heads于06:06:24完成100条件3000条2111成功70.3667%，Clean1351/1500=90.066
 ### 2026-10-30T01:49:43.382510+00:00：PatchWAM ramp100 step20000快速评测完成
 
 100条件各30条、3000条全部原生复验通过，2093成功69.77%，Clean84.20%/Randomized55.33%；32k原30条71.10%/89.00%/53.20%，新变化−1.33/−4.80/+2.13pp。官方69.04%/89.36%/48.72%。训练预算不同和确切语言未冻结，不单独归因增强；无视频、2模型/9sim、完整Sidecar/eager+cache/chunk32。详见docs/ROBOTWIN_PATCHWAM_RAMP100_20000_FINAL_20261030.md；后续分析Clean回撤/Randomized收益，未自动切其它权重。
+
+## 2026-11-02：Sidecar实现与训练/诊断完整留存
+
+详见[完整说明](OPENWAM_SIDECAR_IMPLEMENTATION_EXPERIMENTS_AND_DIAGNOSTICS_20261102.md)，快照2026-11-02T15:13:07.306011+00:00。含原始32k起全任务/子集结果、最近完整10epoch与XA/三阶段配置、最高完整速测C2R5epoch75.13%和最佳额外10epoch21480的74.83%精确配方、18组训练离线及19组配对闭环、AllReset/WriteOff/AllOff机制区别、后续计划与论文证据边界。机器数据outputs/analysis/sidecar_full_training_summary_20261102/snapshot.json，附训练表CSV和380行诊断矩阵。
+
+本次只读复核R10/R11/XA三组各100完成日志，前两组明确渲染错误0，XA的move_stapler_pad/Randomized1条件有OIDN标记（原13/30）待复测，历史72.60%保留为原始记录。无训练/模型/评估改动，不补造缺失结果；完整10条诊断尚未完成，所有阶段表分母明确。
+
+
+2026-11-02：新增[19组干预源码审计](ROBOTWIN_19ARM_IMPLEMENTATION_AUDIT_20261102.md)。真实21480三个Write beta均非零；All-Reset固定隐空间残差L2约0.07830/0.04243/0.05642（CPU FP32公式与MHA验证），非动作米数。确认每tap ReadRefine后Write前reset；EA head输出仍在reset前计算。Off/WOff路径不同，既有2fixture动作exact0；cache近似可与干预交互，最终闭环机制结论仍待完整配对/复核。未修改在跑实验。
+
+
+2026-11-03：两个评估均完成，详见[最终结果](ROBOTWIN_DIAGNOSTICS_AND_MANISKILL_FINAL_20261103.md)。RoboTwin19组3800有效条审计通过，Full77%、RelationReset81.5%、AllReset78.5%、SidecarOff77.5%，WriteOff80%与Off差5/200待同输入诊断；不作显著因果宣称。ManiSkill1600条1170成功73.125%，Clean73.625%/HardRandom72.625%，最弱place_sphere38.5%。
+
+
+2026-11-03：用户授权Refine-Off完整50任务双域各30条及XA move_stapler_pad/Randomized30条修复，已按原cache/eager/no-video/native协议启动25路4090仿真；详见[启动记录](ROBOTWIN_REFINEOFF21480_FULL50_30EP_20261103.md)。原Full模型复用2份/XA新增1份，渲染错误attempt重试不计分，旧XA13/30保留，修正汇总单独生成。尚无完整30条条件成绩，不把partial当最终结果。
+
+
+2026-11-03：用户授权PatchWAM ramp100最终42960完整50任务双域各30条速测，完整Sidecar，沿用cache/eager/no-video/native30配置，与Refine-Off收尾共存。后台已启动权重RAM拷贝/双端SHA阶段，计划首份GPU2/T5 GPU4，第二份仅复用已完成XA服务腾出的GPU0/T5 GPU3。详见ROBOTWIN_PATCHWAM_RAMP100_FINAL42960_30EP_20261103.md；当前尚不能把staging当真实仿真运行。
+
+
+2026-11-03研究决策：[Sidecar与DiT4DiT v1/v2/v3对照及下一步](SIDECAR_NEXT_STEPS_DIT4DIT_V1_V2_V3_EVIDENCE_20261103.md)。已重算原始六任务summary：v1 Full80K234/300、Plan-only80K286/300、v2 Full299/300/no-plan292/300；v3对应同问题解决证据不足。Refine-Off98条件比同subsetFull+0.95pp，原10任务扩30条后+1pp，并非诊断+4pp稳定延续。主张保留已运行Grounding-guided Read，最多提案单因素Refine-Off短续训（未改core/未开训）；不重复实现已有结构、不承诺固定收益。新最终42960一份split/16路真实启动，配置查明2K冻结计入总10epoch，与1030额外10epoch预算不同。
+
+
+2026-11-03T08:52:51.465494+00:00：已按用户要求安排Refine-Off完整结束后自动追加1–2份PatchWAM最终42960模型，现有1份之外目标总3份，复用T5分卡。新增服务ready后控制器接管已有仿真（不重置在跑episode），动态最多40独立会话；若仅1份成功则28。CPU退出状态/端口覆盖检查通过，实际扩容仍待Refine收尾。详见ROBOTWIN_PATCHWAM_RAMP100_FINAL42960_30EP_20261103.md。
+
+
+2026-11-03T09:34:09.734681+00:00：Refine-Off完整速测2271/3000=75.70%，Clean89.40%、Randomized62%，比旧Full74.83%高0.87pp；final_native_render_audit_20261103.json复核101条件通过（含XA30）。新PatchWAM最终42960已扩3模型/40会话，当前27sim，14条件322/420=76.67%；早期子集不可与整套排名。扩容controller failed重试变量遗漏已修复，两条无效attempt重新排队，正常在跑sim无重置。
+
+
+2026-11-03T14:06:42.837751+00:00：用户授权新PatchWAM42960补70条至每条件100。已创建独立队列并在4090启动16路初始化中，复用三模型/40会话；保留原native30，按末accepted seed+1继续官方专家筛70，合并要求100unique。根据旧队列仅8未完成/first-free端口顺序，补测使用后缀排除旧live端口，原30正常收尾不停止。端口隔离/seed唯一/原adapter覆盖CPU检查通过，实际首条70结果尚待；分段语言RNG/pool cap不等价单次native100已明确。详见ROBOTWIN_PATCHWAM_FINAL42960_SUPPLEMENT70_20261103.md。
+
+
+2026-11-03T14:28:17.719593+00:00：[原21480补68条件与当前42960比较](ROBOTWIN_FULL21480_68_VS_PATCH42960_20261103.md)。68条件原30率82.99→100条83.15%；替换回原全套100条件等权混合估计74.83→74.94%，+0.11pp（尚非全套100条）。当前共同66条件新42960/30条83.89%，旧21480/30条84.55%，差-0.66pp；旧同66/100条84.82%，不能混预算作强结论。
+
+
+2026-11-03 17:43 UTC：PatchWAM ramp100最终42960完整速测2286/3000=76.20%，C87.87/R64.53；比原Full74.83%高1.37pp（Clean-0.80/Rand+3.53），比Refine-Off75.70%高0.50pp。100条件native/log复核通过。补70完成14条件/980新增条，合并100条14条件83.64%（同subset原30为85.48%），25sim活动。部分subset不得当全套成绩。
+
+
+2026-11-04：新增[19组诊断与近期5组完整速测/baseline汇总](ROBOTWIN_DIAG19_RECENT_RAPID_BASELINE_SUMMARY_20261104.md)，原始snapshot/3张CSV在outputs/analysis/sidecar19_and_recent_rapid_summary_20261104。官方Issue46在线复核89.36/48.72/69.04；新42960全套76.20%，Refine-Off75.70%，XA渲染修正72.53%。本地无Sidecar baseline只10任务67.70%，同任务原Full/新42960均72.83%、Refine-Off71.67%；不混任务覆盖/条数/训练预算作结构因果。新42960补100完成71条件77.70%对同subset30条77.70%基本持平，非全套最终。
+
+
+2026-11-04T02:22:18.706205+00:00：按用户澄清新增[仅完整50任务速测与100条汇总](ROBOTWIN_COMPLETE50_RAPID_AND_100EP_SUMMARY_20261104.md)，排除19组诊断、10任务baseline与68/71条件补测部分结果。近期5组速测+FB32k30条参考，已完成100条含Original Sidecar32k66.48%、FB32k70.19%、官方69.04%。同FB32k SHA的30→100从71.10→70.19，−0.91pp；不将阶段补测当全套。
+
+
+2026-11-04T04:12:48.588619+00:00：用户授权恢复原Full21480剩32Randomized条件×70（2240新增条）。已核对原68完整条件和136日志无渲染标记、32前30seed与原速测一致，独立新根full21480_remaining32_supp70_20261104，旧数据/partial不覆盖。首份split主GPU1/T5 GPU4正在加载，旧Full canonical通过后启动；当新42960完整100条结束后自动追加第二份3/6，原32调度动态端口扩容。详见ROBOTWIN_ORIGINAL21480_REMAINING32_RECOVERY_20261104.md；当前未声称真实仿真已启动。
+
+
+2026-11-04T04:14:19.304917+00:00：原Full21480剩32×70恢复实际启动：1/4 split通过原canonical动作验证，远端9路仿真已派发，无controller异常，继续自动补位；当前42960同时14路，未停止。最终报告将用旧68+新32完整100条件/10000条，第二份模型待42960完整审计完成后接续。
+
+2026-11-04：新增[Piper21952独立标准评测框架](ROBOTWIN_PIPER21952_EVAL_FRAMEWORK_20261104.md)。从真实归档manifest选择35任务；双Piper间距.6、20D实际EEF/80D mask与checkpoint统计契约核对通过，原生专家筛seed/RT/成功/预算不改，默认无视频，复用现有cache/eager/chunk加速。修复archive手工三视图与部署默认single-view不匹配，仅在Piper专用配置显式multiview/layout；两真实首帧与训练reader逐像素一致，8项CPU回归及35×2×30 plan通过。GPU2/T53固定输入有限32×20/重复动作一致；GPU5原生click_bell Clean1/1(40步)、Randomized1/1(34步)，原生/渲染/分母/无视频审计通过。Aloha默认SHA未变；模型两会话保留，未启动35任务全量，2/2不外推总体SR。历史mplib采集与当前official curobo差异仍保留。
+
+2026-11-04追加：Piper首轮GPU服务发现saved config缺multiview字段导致错误single-view，0有效闭环条，已排除并停止该Piper试验。专用deploy显式multiview=true/reader同款三视图layout；两真实episode的实际ObsPreprocessor对PreparedSimDataset首帧像素maxabs0，证据multiview_canvas_check.json及专用手册。没有修改共享server/模型/Aloha；正确multiview小试重新加载中，尚未形成Piper成功率。
+
+
+2026-11-04T08:26:59.726141+00:00：保存[Aloha补70速度诊断](ROBOTWIN_ALOHA_SUPPLEMENT_SLOWDOWN_AUDIT_20261104.md)。五样本动作执行占约72–80%，RPC约5–8%；Patch累计失败尝试内已记录4108条、Full535条未计分，重复重跑是实质损耗；有68/70遇OIDN OOM整组重跑实证。当前全部未完条件均已启动。只读审计，不改协议或正在运行的任务；失败根因/episode级严格恢复仍未解决。
+
+
+2026-11-04T09:01:19.408176+00:00：Aloha按episode恢复已上线，真实Original21480 place_a2b_left保留68、只补2，native70=36/70、exit0/原始分母/100唯一seed/源前缀SHA独立通过；新journal仅2条。四次接管避免约101条额外重复，其他正常在跑任务/已完成结果不改。新增日志保存指令与Python RNG；历史legacy边界保持，不宣称旧语言逐字连续。详见ROBOTWIN_ALOHA_EPISODE_RESUME_20261104.md和outputs/analysis/aloha_episode_resume_20261104/live_recovery_acceptance.json。
+
+
+2026-11-04T09:40:47.026106+00:00：用户授权Patch42960完整100验收后接Piper21952全35任务×双域×100=7000。已挂queue_piper_after_patch100，计划2份L20模型/32独立会话、4090目标24路按8192MiB余量启动，不提前停Aloha；取消未执行的Full第二副本等待项但保留其现有评估。Piper显式三视图/无视频/官方协议，新增可选100条episode恢复与RNG记录，默认70恢复不变。当前仍等待Patch，不宣称新评测已开始；部署与完整7000结果待实际验证。见ROBOTWIN_PIPER21952_FULL100_AFTER_PATCH_20261104.md。
+
+
+### 2026-11-04T09:43:12.121061+00:00：单臂ManiSkill20872真机HTTP临时分卡部署验收
+
+按用户最终要求GPU6加载主体、GPU2加载T5，5901服务PID4157435保持运行；原模型/训练/接口和token保持，新增可选容量放置。真实archive push_cube/pick_cube/push重复三请求均32×10有限、重复maxabs0、原始输入输出记录核对通过，首次8.183s、后两次1.144/1.075s；25旧回归通过。结论仅为本次服务推理/记录可用，不是任务SR/硬件运动/稳态峰值。下一步沿用现场已验证client进行观测与预测核对。完整设置、分析、证据与重启命令见[MANISKILL20872_REAL_ROBOT_GPU26_DEPLOYMENT_20261104.md](MANISKILL20872_REAL_ROBOT_GPU26_DEPLOYMENT_20261104.md)。
+
+
+2026-11-04T12:35:40.446865+00:00：两组Aloha各100条件/10000条已完整完成并独立审计通过：Patch42960 Clean88.02/Randomized64.02/综合76.02%，Original21480 Clean88.78/Randomized61.86/综合75.32%。相对各自30条速测为-0.18pp与+0.4867pp；Patch相对Full综合+0.70pp。Piper于10:40 UTC自动接续，两模型/23路仿真实际活跃；当前7/70条件700条完整验收，663成功=94.7143%，仅早期子集不可当35任务最终成功率。在跑批次另约1189条未最终验收。记录见piper21952_full100_after_patch_20261104/progress_snapshot_latest.json。
+
+
+2026-11-04T12:49:19.503270+00:00：20872真机/仿真固定输入诊断完成，原服务保持。15次HTTP不执行机器人；同指令同EEF只换图像，32步位置RMS差23.69/25.70mm、末步35.98/41.56mm；训练同episode六窗口多数位置RMSE2.67–3.91mm，抓取附近80帧16.88mm/夹爪MAE.220，不能泛化为全训练拟合或SR。real0前下探已在预测中，重复一致；语言/视觉均有作用。视觉空间域差与抽样初始EEF偏离为候选，实际TCP/坐标/执行时序及command_estimate问题未解决，未更改模型/训练/client。详情docs/MANISKILL20872_REAL_VS_SIM_ACTION_DIAGNOSIS_20261104.md。
+
+
+### 2026-11-04T13:32:51.597577+00:00：单臂action统一排查与闭环前缀诊断
+
+用户要求将全部候选问题集中记录。新增docs/MANISKILL_REAL_ROBOT_ISSUE_CHECKLIST_20261104.md共20项，每项含优先级、证据程度、验证方法和未决状态；参考RobotWorkspace只读，未改现场或共享模型/训练/部署代码。全量16000轨迹/2687589状态确认real0超出place_sphere全部训练轨迹x/z范围且偏离初态；与全部训练初始朝向最近70.56°，但未归一化越界。真实训练复位EEF/四元数已保留，必须先确认真实base/TCP再使用。
+
+同一训练scene的原生专家200步成功，front初始像素MAE0；当前HTTP模型按20Hz虚拟控制、300步预算，prefix1/4/8未抓住，16在228步、32在220步成功。单scene、训练集、仿真等待HTTP时暂停，不能外推真机或全任务SR。说明不能只归因sim-to-real环境差异，短前缀与模型闭环阶段推进也是直接候选。参考时序每点1s+sleep1.2s、夹爪后发；参考FK/IK可能混用arm-base和mobile-base（.2127,-.0021,.7766m偏移），现场版本未核验；IK失败回退/姿态误差漏检等仍未解决。TCP变换代数及203帧同q FK初检通过（约2mm位置差），不代表真实标定通过。详情docs/MANISKILL20872_POSE_CHUNK_ACTION_AUDIT_20261104.md和专用输出experiment_audit.json。原服务PID4157435仍ready，GPU5仿真已退出，无真机动作。
+
+
+2026-11-04T14:35:17.659031+00:00：干净客户端离线验证：6新控制测试+7旧HTTP回归通过，参考FR3 URDF复位数值IK误差约1.96e-7m/5.65e-8rad。测试覆盖非identity底盘根帧、完整32点时间/夹爪事件、IK失败无部分发送、纯旋转误差、速度重定时/hold。限定软件与参考URDF，未驱动机器人；下一步将单文件复制到现场原Infer旁验证真实TF/TCP/控制器，见docs/MANISKILL_CLEAN_CLIENT_20261104.md。
+
+
+2026-11-04T15:22:06.575759+00:00：用户最新0.1s/action真实严重抖动/绿色任务抓空。分析本地红/绿记录：绿组20chunk方向反转中位20次、路径92.67mm/净7.44mm，闭合/抬升预测存在；终点2–5mm不证明中途平滑。确认当前client仅positions、平均限速未保证速度连续，新增R21–R24；没有修改客户端/server。GPU5原生单训练scene七组视频：专家200步、正确模型20Hz220步/10Hz439步、错色438步、二值445步、命令估计445步、慢爪代理470步均成功；全部按20Hz物理采样，0.1s按笛卡尔目标保持两步，不是ROS effort/JTC复现。模型实际TCP二阶差分中位1.008mm vs专家.136mm，固有粗糙度存在。仅该scene，不外推SR；真实球3D/TCP/连续关节反馈仍缺，不能唯一归因外参/控制器。视频帧/SHA/日志/模型身份验收见outputs/analysis/maniskill20872_jitter_20261104/final_audit.json及docs/MANISKILL20872_JITTER_AND_VIDEO_DIAGNOSIS_20261104.md，仿真均已退出，模型服务仍ready。
+
+
+## 2026-11-05T05:03:22+00:00：ReLAC论文叙事与已有结果冻结（只读分析，无新模型实验）
+
+用户要求研究现有实现/数据/经验并按指定CVPR2027模板写首版论文。新增 `docs/RELAC_PAPER_STORY_AND_EVIDENCE_20261105_CN.md` 和 `papers/relac_cvpr2027/`，包含正文/补充材料、实际结果矢量图、图表设计、逐条件CSV与来源SHA。原模板12文件完整保留，活动cvpr.sty/BST逐字节一致。
+
+直接重算：旧Full21480全100条件10000条7532成功=75.32%（Clean88.78/Random61.86）；最终appearance+ramp42960为7602/10000=76.02%（88.02/64.02）。ManiSkill四worker1600唯一ID重算1170成功=73.125%（589/800 Clean、581/800 HardRandom），与summary各任务一致。旧68/71条件阶段高分不再代表全套。
+
+最终42960 Refine-Off的100个最终有效attempt已独立检查run exit0、原生30条分母/成功率、seed唯一及渲染错误日志，2264/3000=75.4667%（Clean88.6667/Random62.2667）；相对同权重Full30的76.20%，综合-.7333pp、Random-2.2667pp。旧21480 Refine-Off则+.8667pp，不能普遍主张关Refine改善。该文件审计不补回历史语言/RNG严格配对；小差值无多训练seed显著性保证。
+
+当前Summary无显式progress，Plan仅8/16/32的moving+局部单位方向；Grounding角色为每臂Object/Goal。Guided Read已实现但没有本次冻结的闭环分数，不能归属76.02%。最新抖动/精度记录、legacy midtrain缺失槽增强、achieved/commanded差别及near-plane问题均保留边界。未修改模型/训练/数据/部署、未启停作业或操作硬件。
+
+下一步：完成相同增强/预算的Vanilla、同容量无EA、EA-only和guided对照；独立manifest确认，再做目标真机0/5/10/20示范成对评估。真实任务SR/Piper完整套/显式progress等未取得证据处保留TBD。详细分析与源路径以上述新文档及 `evidence/results_snapshot.json` 为准。
+
+
+### 2026-11-05T05:22:17.998328+00:00：ManiSkill20872去噪/数值精度/训练阶段抖动归因完成
+
+同原录像场景、同7原观测/5真机快照、八任务96 train+48 test窗口，10/20/30步×BF16/FP32动作累积936配对及52局部探针完成；16k/20k/20872同48窗口×10/20步288比较完成。16000条/2671589训练动作全部扫描，144训练/部署拼图/状态/提示词/帧与mask契约一致。原始同批GT粗糙度均值train.3104/test.3035mm；预测10/20/30步train5.7004/4.2764/4.7949、test5.7929/4.2192/4.7754mm。20步高频改善约25/27%，整体位置RMSE变化区间跨1，30未再改善。
+
+确认全局stats+BF16绝对action的x/z格点2.707/2.919mm；末步FP32在此前状态/网络预测完全相同时使8 train探针粗糙度均值6.1046→4.4906mm，同scene实际TCP1.1221→.8985mm且成功。纯专家量化对照.5069→.7006mm，两组成功，证明精度因素但不宣称根治。训练16000→20872时默认10步train定位10.3543→7.2091mm、test17.6180→16.4574mm；粗糙度6.1782→5.8076、5.9265→5.9261mm，区间均跨1。20步训练推进有6.4/10.2%粗糙度收益；不能称继续训练无效，也未证明额外epoch可根治。25个闭合变化窗口中位误差1action、部分3–8步；RoboTwin已有静止右臂预测也有回摆，成功不等于无噪声。
+
+final_audit全14项通过、11视频完整、原12基线/最终96动作逐元素复现。原5901服务PID118631/GPU6+2/10步BF16已恢复、token文件和原落盘逻辑保持，恢复2输入逐元素一致；未改共享模型/训练/server源码、未训练新epoch/未执行真机。下一步独立可选末步精度+连续轨迹验收，再明确恢复点/LR做+1epoch受控对照；抓空仍需物体3D/TCP及中途反馈。完整报告[MANISKILL20872_DENOISE_TRAINING_JITTER_DIAGNOSIS_20261105.md](MANISKILL20872_DENOISE_TRAINING_JITTER_DIAGNOSIS_20261105.md)，证据outputs/analysis/maniskill20872_denoise_precision_20261105/。
+
+
+### 2026-11-05 Piper21952评估按用户要求结束
+
+67/70完整条件6700条，Clean87.3824%、Randomized86.7879%、综合87.0896%。stack_bowls_three两域专家规划筛seed过慢（Clean8/10、Randomized45/63），put_bottles_dustbin Randomized初始化066_vinegar不稳定（0条）；三个缺失条件不补零、部分73条不混入完整平均。专用调度、两仿真及两模型已停止，日志和36段可解码录像保留，Sidecar-Off继续。停止快照及原因见docs/ROBOTWIN_PIPER21952_FULL100_AFTER_PATCH_20261104.md用户结束章节。后续不再自动补测。
+
+
+### 2026-11-05T08:37:54.748489+00:00：Piper21952/Aloha42960训练输入动作诊断完成
+
+按用户要求对齐ManiSkill指标，各10条实际训练轨迹、每轨迹8窗口、10/20/30步、seed42/BF16/Full/cache关闭，共480次32×20生成、960臂窗口。Piper读archive，Aloha回到实际Clean-50 EARSIGLite reader；160输入状态/指令/标签与三模式一致检查通过，62视频验收。原Piper4失败case目录无逐步action/状态轨迹，新视频明确离线专家图像+预测/GT曲线、8窗口拼接，不是闭环rollout或新SR。
+
+全物理臂均值：Piper10/20/30位置误差8.569/8.374/8.524mm、高频误差1.761/1.490/1.542mm；Aloha4.257/4.235/4.376mm与1.090/.856/.957mm。ManiSkill对应HF1.890/1.403/1.548mm。三者20步更平稳、30未再改善。近静止GT窗口Piper60/Aloha68个，20步目标粗糙度3.565/2.256mm，RoboTwin同样有残余回摆；反转次数不可单独排序，Aloha幅度小但反转更多。训练源/归一化/任务与budget不同，不把差异唯一归因epoch；阶段optimizer更新10436/10976/21480，不是epoch1/2/10倍计算。
+
+仅outputs/analysis独立脚本和文档，原模型/训练/数据/server未改，5901不操作。GPU1余量变化后仅退出自有CPU预加载，Piper/Aloha顺序复用GPU3/4，最终两模型正常退出；其他作业保持。旧失败归因仍需带观测/action/执行反馈重跑；ManiSkill追加epoch收益需受控续训。完整报告docs/ROBOTWIN_TWO_CHECKPOINT_ACTION_JITTER_20261105.md，全部数据outputs/analysis/robotwin_two_ckpt_jitter_20261105/。
+
+
+### 2026-11-05T09:38:28.114546+00:00：官方发布Alpha10740完整动作/接口诊断完成
+
+用户指定assets/OpenWAM-Alpha-Sim-RoboTwin-Clean2Random，实际文件checkpoint_step_10740.safetensors，SHA2cab63b550ff45a52fbde4adc40ee2bdb7d4bafe5fa0dd6879e41e22ca2ff95f与发布验收一致。原版joint_self_attn、无Sidecar，复用上轮Aloha同10轨迹/80窗口、BF16/seed42/CFG1/cache/compile关闭、32点、10/20/30步。因2026-10-16已记载官方默认xyzw数组解释与本地wxyz重排区别，分别保留两种接口：共480生成、960臂窗口、66视频完整验收，160输入合同/同源图像与XYZ/夹爪/文本一致检查通过。
+
+原版配套数组解释下10/20/30位置误差5.963/5.812/5.906mm、旋转.866/.844/.857度、高频1.136/.838/.921mm；20步更平稳、30未再改善。同Aloha20步4.235mm/.523度/.856mm高频比较，官方拟合稍差、高频同量级；不能纯归因模块或epoch。官方68近静止GT臂窗口20步粗糙度2.101mm、HF.689mm，说明原版也有残余回摆。
+
+直接套本地物理重排的官方探针20步为26.744mm/29.545度，不能当默认官方成绩；此对照定位的是检查点与接口配套差异，不是证明官方训练错，也不是本地三套训练错。本地Aloha Lite重排、Piper离线准备6D、Mani独立pose转换当前均未发现该顺序混用。min/max完全一致也不证明旋转编码一致（旋转stats固定±1）。官方实际原训练数据逐条来源仍未提供，不将兼容性结果冒充原生成功率/真实TCP验收。
+
+新脚本仅outputs/analysis/official_alpha_jitter_20261105；原默认部署/训练/数据不改，GPU3/4顺序复用，两个自有临时worker均已退出，其他作业不动。主结果summary_legacy.json；summary.json明确为物理重排探针；final_audit通过。完整报告docs/OFFICIAL_ALPHA10740_ACTION_JITTER_20261105.md与VIDEO_INDEX_ALL.md。后续本地方案保持已核验的配套链路，训练充分性仍需受控续训，执行/near-plane/实际接触问题继续未决。

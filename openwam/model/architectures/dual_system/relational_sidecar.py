@@ -41,6 +41,22 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             raise ValueError("Need three increasing, valid zero-based tap blocks")
         self.foundation_warmstart = bool(ea.get("foundation_warmstart", False))
         self.deep_supervision = float(ea.get("deep_supervision", 0.1))
+        guided = ea.get("grounding_guided_read", {})
+        self.guided_read_enabled = bool(guided.get("enabled", False))
+        self.guided_read_strength = float(guided.get("strength", 0.5))
+        self.guided_read_ramp_updates = int(guided.get("ramp_updates", 1000))
+        self.guided_read_uniform_mix = float(guided.get("uniform_mix", 0.5))
+        if (not math.isfinite(self.guided_read_strength) or not 0 <= self.guided_read_strength <= 1
+                or not math.isfinite(self.guided_read_uniform_mix) or not 0 < self.guided_read_uniform_mix <= 1
+                or self.guided_read_ramp_updates < 0):
+            raise ValueError("Invalid grounding-guided read strength, uniform mix or ramp")
+        self.stage_supervision_weights = ea.get("stage_supervision_weights")
+        if self.stage_supervision_weights is not None:
+            self.stage_supervision_weights = tuple(float(v) for v in self.stage_supervision_weights)
+            if (len(self.stage_supervision_weights) != 3
+                    or not all(math.isfinite(v) and v > 0 for v in self.stage_supervision_weights)
+                    or not math.isclose(sum(self.stage_supervision_weights), 1.0, abs_tol=1e-6)):
+                raise ValueError("Stage supervision requires three positive finite weights summing to one")
         self.aux_loss_scale = float(ea.get("aux_loss_scale", 1.0))
         self.isolation_warmup_updates = int(ea.get("isolation_warmup_updates", 0))
         self.backbone_warmup_updates = int(ea.get("backbone_warmup_updates", 0))
@@ -149,6 +165,14 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
         if hasattr(self, 'xa_projector'):
             self.xa_projector.to(device=device,dtype=dtype)
 
+    @property
+    def grounding_guidance_strength(self):
+        if not self.guided_read_enabled:
+            return 0.0
+        ramp = self.guided_read_ramp_updates
+        fraction = min(self.completed_optimizer_updates / ramp, 1.0) if self.training and ramp else 1.0
+        return self.guided_read_strength * fraction
+
     def apply_compile_optimizations(self, compile_cfg):
         # The official compiled loop contains no sidecar; never silently use it at deployment.
         self._compiled_mot_run_joint_loop = None
@@ -252,6 +276,7 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             device=vs.hidden_states.device,
         )
         aux = []
+        previous_grounding = None
         action_hidden = None
         checkpointed = use_gradient_checkpointing and torch.is_grad_enabled() and not torch.is_inference_mode_enabled()
         for layer in range(vb.num_layers):
@@ -267,11 +292,19 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
                 index = self.tap_blocks.index(layer)
                 h, w = vs.grid_height, vs.grid_width
                 current = vs.hidden_states[:, : h * w]
+                guided_kwargs = {}
+                if self.guided_read_enabled:
+                    guided_kwargs = dict(grounding_output=previous_grounding,
+                                         guidance_strength=self.grounding_guidance_strength,
+                                         uniform_mix=self.guided_read_uniform_mix)
                 z, output = self.sidecar.read_refine(
                     index, z, current.detach() if isolated else current, context, valid, arms, h, w,
                     detach_head_inputs=self.aux_heads_only_active,
                     head_gradient_scale=self.aux_head_input_gradient_scale,
+                    **guided_kwargs,
                 )
+                if self.guided_read_enabled:
+                    previous_grounding = output
                 if not isolated:
                     write_tokens = z
                     if self.training and not self.backbone_warmup_active and self.main_task_gradient_gain != 1:
@@ -322,14 +355,29 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             return video, action
 
         result = super().compute_loss(forward_fn=predict, noise_context=noise_context, **inputs)
-        parts = self.sidecar.heads.losses(captured[-1], ea_targets)
+        stage_parts = [self.sidecar.heads.losses(output, ea_targets) for output in captured]
+        parts = stage_parts[-1]
         deep = (
-            self.loss_weights["ground"] * self.sidecar.heads.losses(captured[0], ea_targets)["ground"]
-            + self.loss_weights["relation"] * self.sidecar.heads.losses(captured[1], ea_targets)["relation"]
+            self.loss_weights["ground"] * stage_parts[0]["ground"]
+            + self.loss_weights["relation"] * stage_parts[1]["relation"]
         )
-        extra = self.aux_loss_scale * (
-            sum(self.loss_weights[k] * v for k, v in parts.items()) + self.deep_supervision * deep
-        )
+        if self.stage_supervision_weights is None:
+            extra = self.aux_loss_scale * (
+                sum(self.loss_weights[k] * v for k, v in parts.items()) + self.deep_supervision * deep
+            )
+        else:
+            # Redistribute the old per-task coefficient budgets; do not add deep supervision twice.
+            contributions = [
+                self.aux_loss_scale * weight * sum(
+                    self.loss_weights[k] * (1 + self.deep_supervision if k in ("ground", "relation") else 1) * v
+                    for k, v in values.items()
+                )
+                for weight, values in zip(self.stage_supervision_weights, stage_parts)
+            ]
+            extra = sum(contributions)
+            for i, values in enumerate(stage_parts):
+                result[f"loss_ea_stage_{i}"] = contributions[i].detach()
+                result.update({f"loss_ea_stage_{i}_{k}": v.detach() for k, v in values.items()})
         result["loss"] = result["loss"] + extra
         result.update(
             loss_ea=extra.detach(), loss_ea_deep=deep.detach(), **{f"loss_ea_{k}": v.detach() for k, v in parts.items()}
@@ -338,6 +386,8 @@ class RelationalSidecarArchitecture(DualSystemSelfAttnArchitecture):
             weighted,metrics = self._xa_state.objective(aligned[0],extra,self.completed_optimizer_updates)
             result['loss'] = result['loss']+weighted
             result.update(metrics)
+        if self.guided_read_enabled:
+            result["ea_grounding_guidance_strength"] = extra.new_tensor(self.grounding_guidance_strength)
         if self.isolation_warmup_updates:
             result["ea_isolation_warmup"] = extra.new_tensor(float(self.isolation_warmup_active))
         if self.backbone_warmup_updates:

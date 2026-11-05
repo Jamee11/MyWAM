@@ -37,6 +37,25 @@ def canvas_bbox_targets(boxes, valid, height, width):
     return density / density.sum((-3, -2, -1), keepdim=True).clamp_min(1e-8)
 
 
+def grounding_read_bias(output, heads, dtype, strength, uniform_mix):
+    """Route each arm's Relation/Plan queries with the previous tap's predicted Object/Goal maps."""
+    attention = output["grounding"]["attention"].float()
+    b, _, patches = attention.shape
+    maps = attention.reshape(b, 2, 2, patches)
+    confidence = output["grounding"]["presence_logits"].float().sigmoid().reshape(b, 2, 2)
+    confidence = confidence * output["track_valid_logits"].float().sigmoid()[..., None]
+    confidence = confidence * output["arm_present"].float()[..., None]
+    # Missing/uncertain roles fall back to uniform visual context, never simulator labels.
+    maps = confidence[..., None] * maps + (1 - confidence[..., None]) / patches
+    object_prior, pair_prior = maps[:, :, 0], maps.mean(2)
+    relation_prior = torch.stack((object_prior, pair_prior), 2).reshape(b, 4, patches)
+    prior = torch.cat((relation_prior, pair_prior.repeat(1, 3, 1)), 1)
+    log_prior = ((1 - uniform_mix) * prior * patches + uniform_mix).log() * strength
+    bias = log_prior.new_zeros(b, 15, patches)
+    bias[:, 4:8], bias[:, 9:15] = log_prior[:, :4], log_prior[:, 4:]
+    return bias[:, None].expand(-1, heads, -1, -1).reshape(b * heads, 15, patches).to(dtype)
+
+
 class ActionWriteAdapter(nn.Module):
     def __init__(self, action_dim, dim, heads, gate_init):
         super().__init__()
@@ -67,11 +86,12 @@ class SidecarStage(nn.Module):
         self.context = nn.Linear(dim, dim)
         self.write = ActionWriteAdapter(action_dim, dim, heads, write_gate_init)
 
-    def forward(self, tokens, current, context, valid, height, width):
+    def forward(self, tokens, current, context, valid, height, width, read_bias=None):
         x, y, view = canvas_geometry(height, width, current.device)
         position = torch.cat((torch.stack((x, y), -1), F.one_hot(view, 3)), -1)
         features = self.projector(current) + self.position(position.flatten(0, 1).to(current.dtype))[None]
-        read = self.read(self.read_norm(tokens), features, features, need_weights=False)[0]
+        read_kwargs = {} if read_bias is None else {"attn_mask": read_bias}
+        read = self.read(self.read_norm(tokens), features, features, need_weights=False, **read_kwargs)[0]
         tokens = tokens + self.alpha.to(tokens.dtype) * read
         q = self.refine_norm(tokens + self.context(context)[:, None])
         tokens = tokens + self.refine(q, q, q, key_padding_mask=~valid, need_weights=False)[0]
@@ -189,10 +209,16 @@ class RelationalSidecar(nn.Module):
     def read_refine(
         self, index, tokens, current, context, valid, arms, height, width, *,
         detach_head_inputs=False, head_gradient_scale=1.0,
+        grounding_output=None, guidance_strength=0.0, uniform_mix=0.5,
     ):
         if current.shape[1] != height * width:
             raise ValueError("Sidecar must read exactly the runtime first-frame grid")
-        tokens, features = self.stages[index](tokens, current, context, valid, height, width)
+        bias = None
+        if grounding_output is not None and guidance_strength > 0:
+            bias = grounding_read_bias(
+                grounding_output, self.stages[index].read.num_heads, current.dtype, guidance_strength, uniform_mix
+            )
+        tokens, features = self.stages[index](tokens, current, context, valid, height, width, bias)
         # Keep the original token graph for later stages and Action Write.
         head_tokens = tokens.detach() if detach_head_inputs else tokens
         head_features = features.detach() if detach_head_inputs else features

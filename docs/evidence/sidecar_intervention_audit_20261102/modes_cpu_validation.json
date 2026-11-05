@@ -1,0 +1,1 @@
+{"passed": true, "modes": ["full", "write_off", "grounding_reset", "relation_reset", "summary_reset", "plan_reset", "all_tokens_reset", "visual_read_off", "refine_off", "sidecar_text_off", "sidecar_proprio_off", "write_tap7_off", "write_tap15_off", "write_tap23_off", "role_embedding_off", "ffn_off", "position_off", "stage_context_off"], "full_exact": true, "scope_restores": true}

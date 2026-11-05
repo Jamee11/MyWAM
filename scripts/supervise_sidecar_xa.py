@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Queue the authorized XA run after C2R; optional legacy preflight stays opt-in."""
+"""Queue an eight-GPU Sidecar run after a completed predecessor."""
 import argparse
 from datetime import datetime, timezone
 import json
@@ -45,10 +45,18 @@ def main():
     p.add_argument('--node',default='aigc14')
     p.add_argument('--wait-for-stage',type=Path)
     p.add_argument('--skip-preflight',action='store_true')
+    p.add_argument('--launcher',default='train_sidecar_xa_warmup2k_8gpu.sh')
+    p.add_argument('--wait-for-updates',type=int,default=10740)
+    p.add_argument('--lock-port',type=int,default=29544)
     args=p.parse_args()
     project=args.project.resolve();out=args.output.resolve();out.mkdir(parents=True,exist_ok=True)
+    launcher=(project/'scripts'/args.launcher).resolve()
+    if launcher.parent != (project/'scripts').resolve() or not launcher.is_file():
+        raise ValueError('Launcher must be an existing project scripts file')
+    if args.launcher!='train_sidecar_xa_warmup2k_8gpu.sh' and not args.skip_preflight:
+        raise ValueError('The legacy XA preflight is only valid for the XA launcher')
     if socket.gethostname().split('.')[0]!=args.node:raise RuntimeError('Wrong training node')
-    lock=socket.socket();lock.bind(('127.0.0.1',29544));lock.listen(1)
+    lock=socket.socket();lock.bind(('127.0.0.1',args.lock_port));lock.listen(1)
     if (out/'production_launch.json').exists():raise RuntimeError('A production run was already launched here')
     state=dict(node=args.node,project=str(project),output=str(out),started=datetime.now(timezone.utc).isoformat())
     env=os.environ.copy();env.update(CUDA_VISIBLE_DEVICES='0,1,2,3,4,5,6,7',OPENWAM_VENV=str(project/'.venv'))
@@ -58,12 +66,12 @@ def main():
         from scripts.supervise_sidecar_c2r_two_stage import completed
         while True:
             try:
-                predecessor=completed(args.wait_for_stage,10740)
+                predecessor=completed(args.wait_for_stage,args.wait_for_updates)
                 save(out/'predecessor_completed.json',dict(checkpoint=str(predecessor),
-                    note='Launch dependency only; XA still initializes from original warmup2K'))
+                    note='Launch dependency only; next run initializes from original warmup2K'))
                 break
             except (RuntimeError,FileNotFoundError) as error:
-                save(out/'state.json',dict(state,status='waiting_for_c2r_final_checkpoint',detail=str(error)))
+                save(out/'state.json',dict(state,status='waiting_for_predecessor_final_checkpoint',detail=str(error)))
                 time.sleep(30)
 
     def wait_capacity():
@@ -76,7 +84,7 @@ def main():
     def run(phase,extra):
         root=out/phase;root.mkdir()
         phase_env=dict(env,OPENWAM_OUTPUT=str(root/'runs'))
-        command=['bash',str(project/'scripts/train_sidecar_xa_warmup2k_8gpu.sh'),*extra]
+        command=['bash',str(launcher),*extra]
         with (root/'launch.log').open('x') as log:
             proc=subprocess.Popen(command,cwd=project,env=phase_env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
         info=dict(pid=proc.pid,command=command,output=str(root),started=datetime.now(timezone.utc).isoformat())

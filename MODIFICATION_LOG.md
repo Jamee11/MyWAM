@@ -723,3 +723,153 @@ E于08:43:14Z正常结束且完整3K已保存，原离线诊断继续。A在0–
 2026-10-30T18:02:00.409017+00:00用户最终要求串行接C2R：XA launcher改用torchrun standalone+loopback local-addr自动分配端口，消除10步退出后的固定端口EADDRINUSE；新增可选C2R完成依赖（8rank10740、final保存日志和safetensors完整验收，仅作为启动条件，不作XA初始化）。16×acc2若仅OOM则降8×acc4，global256保持；通过10updates后自动正式10epoch。增加CPU-only八rank通信连续两次自检，默认旧版训练launcher未改。
 
 2026-10-30T18:02:54.460933+00:00用户最终覆盖指令：取消10步调试/验收，C2R完成并释放8卡后直接XA正式10epoch。controller显式--skip-preflight，production不传任何stop_after_optimizer_updates/max_steps截断；普通finite日志与报错检查保留。之前八H10010步未成功完成，不宣称已通过。
+
+
+### 2026-10-31T18:40:41.937858+00:00：midtrain最终权重→ManiSkill archive完整train split，PatchWAM 1epoch
+
+用户明确授权实现并在本地四卡启动。复用既有PreparedSimDataset与ManiSkill baseline日志/标准Sidecar trainer；新增独立ManiSkillArchiveDataset，仅选maniskill_franka/train，不使用多源混采epoch。16000 episodes/2671589 windows，末批补27窗口至2671616；4×32×acc2/global256，1epoch=10436 optimizer updates/20872 microsteps。载入midtrain checkpoint_step_56892，fresh optimizer/scheduler/counters，不重复WAM延迟更新；正常Action/Video/EA梯度，WAM1e-4、Sidecar5e-5、标准5%LR warmup/cosine，不叠加XA/梯度退火/Write放大。复用完整PatchWAM，禁旧ColorJitter，真实front+hand增强、缺失视角保黑；绝对controller-target EEF、80D与未出现手臂mask、原统计保持。
+
+改动：openwam/dataloader/multisim_sidecar.py仅新增默认关闭的PatchWAM可选支持；新增maniskill_archive.py、独立config/入口/四卡脚本及现有测试中的子集/末批/动作与黑区域回归。原六任务ManiSkill/多源midtrain/Aloha流程保留。每4000micro（2000更新）存完整state，保留最近2份与最终weights。无需zero-warmup screening hook，sidecar_lr_screen=null。真实首批GPU前后向与吞吐、最终保存、闭环收益待启动实测；不把CPU检查当SR。
+
+
+## 2026-10-31T18:43:47.891178+00:00: 原始warmup2K→完整PatchWAM，三阶段完整监督
+
+用户明确批准在XA之后同一8卡串行启动。新增默认关闭的stage_supervision_weights，配置[.2,.3,.5]，三阶段均监督Ground/Relation/Plan；Ground/Relation预算乘1+旧deep_supervision，Plan保持1，避免重复累加旧deep项。保留旧默认loss、3tap、全部参数和推理路径。新增独立10epoch配置，8×32acc1/global256，旧LR/增强、每5000更新weights-only保存；不加XA、不重做2K、不从XA最终权重续训。复用已有standalone入口与队列，队列新增可选launcher/前序目标更新数/独立控制端口，等待XA21480最终保存并8卡释放后才启动。新增系数/梯度/权重兼容/配置/串行调度CPU回归。部署使用独立快照，不混入当前工作区其他ManiSkill改动。验证与部署结果后续记录专用实验文档。
+
+
+### 2026-11-02T08:53:05.303482+00:00：archive ManiSkill八任务held-out评估适配（用户授权）
+
+用户要求当前微调最新checkpoint，每任务100 Clean/100 Random，共1600；明确允许Clean从未参与训练的val+test取样。核查midtrain launch/saved contract与finetune source_snapshot/preflight manifest SHA完全一致，均为a96d7f13...4a07aa；训练入口显式split=train，历史/微调loader都过滤split。全部16000 ManiSkill train与4000 val/test的ID/family/numeric/media/physical seed无交集；归一化来源train_only_present_arm_state_and_command，prepare脚本仅split=train进入统计。证据outputs/maniskill_eval/archive_suite_20261102/training_exclusion_audit.json和四份读取代码。
+
+新archive_protocol选Clean test优先62/63+val38/37各100，HardRandom仅test每任务D25/M75；保存1600原生env ID/domain/hard_index/reset_kwargs/seed/600步预算，不复用旧六任务ColorDistractors协议。新archive_eval复用原native_action/robot_state/相机与WebSocket，增加原生delta vs绝对EEF专家回放及独立rollout；新run_archive_eval复用已有共享引擎隔离端口，保留失败日志和单次分片重试、严格覆盖后才汇总SR。
+
+必要部署适配：当前20D原生双臂统一契约只出现一只臂；派生部署副本仅取原stats前10维、scatter/gather槽0:10，让另70维保持inactive，与训练mask一致；80D模型结构/权重不改，原config/stats副本保留。serve_sidecar仅增加archive类型与当前原生fixture支持，旧六任务默认分支保留，必须通过同cache/eager与FFN验证才开放端口。未改训练/数据/标签。
+
+新archive原生无RenderSystem模式在URDF RenderMaterial构建处发生segfault，两次日志保留，不算策略失败；已改为即便纯物理回放也初始化SAPIEN渲染上下文，使用已有gpucomp预加载与单卡可见性，待实测。GPU模型容量/新八任务完整expert gate/1600闭环仍未验，不能称评测已完成或有SR。Clean为held-out val+test不冒称纯test，HardRandom含物理clutter和相机/外观扰动，跨域并非逐scene配对。
+
+
+2026-11-02T08:56:29.205605+00:00: 17项回归通过，含部署原生10D→模型80D归一化往返及缺失手臂inactive mask。新增显式front+hand/None multiview配置，避免原multisim训练手工拼接但部署默认单视角导致的错配。render_backend=sapien_cuda（即便obs_mode=none）解决先前URDF材质无RenderSystem崩溃；Clean/hard D/hard M首三场景原delta与绝对EEF回放均成功，最大TCP差2.21–4.47e-6m。仅是控制桥接，不是模型SR。
+
+固定当前最新checkpoint_step_20000（10000参数更新），完整safetensors头2229张量及数据长度一致。后台协调器PID 704658，输出`/remote-home/jinminghao/OpenWAM/outputs/maniskill_eval/archive_step20000_100clean100hard_20261102T085552Z`，先执行八任务三域共24场景控制回放，再加载完整Sidecar并等GPU0至少33GiB空闲；当前训练/未知GPU作业不停止。模型数值/FFN门槛和1600policy rollout未验；GPU1最多四路，实际首批显存需监测。
+
+
+### 2026-11-02T10:12:45.432907+00:00：用户授权ManiSkill完成后接一次Piper微调（连续2epochs）
+
+用户明确先暂停评估，Piper用midtrain最终56892权重初始化，不用ManiSkill微调权重；fresh optimizer/scheduler/step0，一次运行2epochs，不是两次微调。复用ManiSkill已验证的绝对EEF archive子集读取、完整PatchWAM、联合梯度、WAM1e-4/Sidecar5e-5、bs32×4×acc2/global256、常规5%LR warmup/cosine，不重复WAM2K延迟更新。
+
+Piper实际train9566 episodes/35tasks，Clean1988+Random7578，1404781窗口/epoch，补147至1404928；每epoch5488更新，共10976更新/21952 micro。val1172/test1262不训练；保留双臂20D→80D、三视角、源数据next-achieved绝对EEF robotwin_endpose_reference，继续使用原midtrain统计，不改动作或标签。每4000micro=2000更新保存，最近2完整state及final weights；独立输出/remote-home/jinminghao/OpenWAM/outputs/piper_sidecar/midtrain_patchwam_2epochs_20261102T101245Z。
+
+最小改动：ManiSkillArchiveDataset新增可覆写source_group默认原ManiSkill；Piper子类只换group；独立配置/入口/启动脚本复用现有formal CPU preload handover与已有completion_errors/same_process保存验收；formal只补单subset PatchWAM实际开启的日志识别。新监督器提前CPU加载，等ManiSkill四rank20872、final保存标记/完整safetensors头长度、原torchrun身份退出，才写release marker；GPU0–3各>=70000MiB后交给DeepSpeed，不结束当前训练。20旧/数据检查+2新接续模拟通过，真实Clean/DR/Fresh各1条已读通，两臂mask/3相机/归一化一致。真实GPU接续及完整Piper训练仍待验。
+
+评估PGID704658及其模型进程已按用户要求SIGSTOP并记录pause.json，未删除1600清单/权重/回放结果，暂停期间不自动恢复。未来恢复须先恢复模型子进程并等端口ready，再恢复协调器，避免其24h readiness计时把暂停时间当超时；不能直接盲目SIGCONT整个组。
+
+
+### 2026-11-02T12:49:26.101059+00:00：用户授权ManiSkill迁机评估入口与手册
+
+新增scripts/eval_maniskill_archive.sh统一目标机路径/模型Python/仿真Python/物理GPU/并发配置，默认100条每任务每条件=1600，双卡默认4路、同卡默认1路；CHECK_ONLY仅路径与本机plan生成，不动GPU/已有任务。使用最终ManiSkill20872与配套config/stats/tokenizer，不自动恢复当前暂停评估。新增docs/MANISKILL_ARCHIVE_EVAL_PORTABLE_GUIDE_20261102.md，含环境、最小数据清单、迁机路径、正式/小规模/同卡/双卡命令及结果。
+
+必要可移植性适配：archive_eval.prepare跨文件系统硬链接EXDEV时只复制，不动原权重；runner允许MANISKILL_GPUCOMP_LIBRARY指定目标驱动自有库，显式错路径报错。按已有真实RoboTwin渲染错误风险，新增worker日志OIDN/ErrorDeviceLost/VK_ERROR_DEVICE_LOST/非法CUDA内存拒绝计分门槛，exit0也重试一次，第二次仍错则无最终SR。仅新启动进程采用此代码，现有暂停队列的内存代码不会自动更新，不冒称所有旧评估已修复。训练/数据/模型计算/1600协议不改。
+
+22项评估回归通过；最终20872真实路径生成1600 plan的CHECK_ONLY通过，同卡默认workers1。未执行目标机pip安装或GPU FFN/闭环，不声称同卡峰值与目标驱动全程验证。24原生专家控制回放仍只证明本机控制桥接；全流程目标机依赖闭合与1600 SR仍须实跑。环境实测版本已记录docs/evidence/maniskill_archive_eval_portable_20261102/environment_versions.json。
+
+
+## 2026-11-03T04:14:37.213175+00:00: Grounding-guided Read与4A100单作业两阶段训练
+
+用户批准实现跨stage预测Grounding先验，只偏置Relation/Plan视觉Read，Ground/Summary及原WAM/Write不变。默认关闭，无新参数，旧权重严格兼容；目标/参考物按两臂对应，predicted presence/track置信度与现有arm mask控制低置信/缺失回退均匀；prior混50%均匀，strength前1000更新0→.5，eval使用.5。增加两独立配置，先Foundation起点全反传但主干不更新预热2000参数更新（4000micro；保留十epoch scheduler horizon），保存后重建optimizer/scheduler/counters，进行完整10epoch21480更新。4×batch32/acc2/global256，完整PatchWAM、原EA/三tap，XA关闭。单个mhan0035 Slurm作业顺序运行，阶段交接检查4rank目标步数、完成marker和safetensors头/长度。变更集中于module Read mask、architecture局部prior传递/配置、独立启动与测试，不替换默认入口。CPU两批63/28项通过（有重叠），单A100 BF16 tiny warmup冻结/严格重载/0-.25-.5强度反传通过；完整模型Slurm正式运行与性能未验。目标路径经用户确认/home/mingfeihangroup/xiaoming，mhan0035为分区。
+
+
+### 2026-11-03T04:53:10.919000+00:00：用户授权ManiSkill八任务实物打印道具（P2SC按P2S Combo）
+
+只新增独立制造文件/生成器/检查，不改训练模型、动作、仿真或原始数据。按归档Franka20K/Hard10K源码与八任务真实test HDF5交叉核查几何：40mm cube、50×30×36mm cuboid、D40sphere、240×50×50mm双色方peg、50×50×15mm槽（40方口/5底/5壁/10深）；保留灰色stack底块。13封闭STL/14geometry3MF（明确毫米、双色peg部件）、两种平面marker、外观PDF/PNG和打印说明。四种hard障碍从实际seed/index重建并核对HDF5 extents一致。
+
+STL逐个重载单连通/封闭/绕向/正体积/尺寸(.002mm)通过；14个3MF由trimesh重新读入维度通过；4项槽截面/球体体积/3MF单位组装检查通过。生成器assert与证据留在assets/printable_maniskill_p2s_20261103；交付ZIP /remote-home/jinminghao/OpenWAM/assets/ManiSkill_P2S_Props_20261103.zip，SHA256 e108b98f73bfb812420f5f451016f1d82b7166f2fef914ced2a7b9b6668f4ae6。
+
+新实物边界：P2S机型/256成型及0.4默认来自官方规格，用户未确认耗材/是否改喷嘴，PLA仅暂定；未实际Bambu Studio切片或打印，球体支撑/分半胶缝、peg高件/双色与接头强度仍需制造验收。仿真cube64g/cuboid54g/球33.51g/peg600g与PLA填充不同，摩擦.3也不能保证；不声称实物动力学/真机控制成功。Push/Pull目标用薄平面SVG而非厚盘，Pick空中无碰撞goal不可用物理支架/球直接替代，peg立起不添加插孔。暂不改几何做配重孔/装配销，避免叠加未验证接触变化。
+
+
+### 2026-11-03T07:27:28.640605+00:00：绿色目标改为可夹持中空口＋PushCube打印标记（用户授权）
+
+用户确认36mm开口候选：D50球面/1.6法向壁厚/内球D46.8，上方截去球冠，口内36mm/外40.072mm，成品H39.952mm；保留球心z25而非包围盒中心。正放与口朝下打印几何STL/3MF、绿色；无凸把手/支架，口背向相机减少显示改变但腕相机/姿态仍不等价。Push/Pull按原radius100mm提供D200H.6齐平红白5环3MF、同尺寸单片STL及内径200/外210/H1.2可移除画圈模板；原SVG/所有旧制造文件保留。未修改仿真/训练。
+
+6项口径/解析壳体体积/薄盘环区分解/模板截面检查通过，逐STL与3MF重载通过，preview已目视；交付/remote-home/jinminghao/OpenWAM/assets/ManiSkill_HollowGreenGoal_PushTarget_v2_20261103.zip。尚未Bambu Studio切片/实物/夹爪适配，名义孔径与真实孔差、薄壳强度、支撑清理未决；原目标无碰撞，实体球不可占机器人最终goal空间；.6mm薄片仍改变推拉台阶/摩擦，优先控制动力学时用画圈后移除模板或薄贴纸，不冒称打印物理等价。
+
+
+## 2026-11-03T08:01:43.643655+00:00：原版WAM+PatchWAM十epoch四卡消融
+
+用户明确要求再提交原版OpenWAM、不使用完整Sidecar的10epoch PatchWAM训练，mhan0035分区等待新增节点、不要绑定gnode06。只新增train_alpha_patchwam_baseline_10epoch_4gpu.yaml与baseline_patchwam_clean50.sbatch和配对配置/原版反传测试；继承现有完整PatchWAM配方，模型选原joint_self_attn、relational_sidecar=null、auxiliary=false，不新增模型/损失/数据逻辑。Foundation154000起点、新optimizer/scheduler/counter，无Sidecar-only预热；bs32×acc2×4/global256、1e-4/5%warmup/cosine、10ep21480更新、save5000/final、weights-only保留5份。独立baseline代码快照固定当前Grounded归档的共同代码，不改运行中1310504或旧默认baseline。只申请分区/GPU4/CPU32，不设节点、依赖、reservation或优先级。与Sidecar的主干更新预算一致，但Sidecar另有2K辅助预热计算，不能称总计算完全相同；需相同闭环协议评测。文档docs/PATCHWAM_BASELINE_10EPOCH_CLUSTER_20261103.md。
+
+
+### 2026-11-03T09:58:02.216498+00:00：Piper完成后串接原版OpenWAM→ManiSkill baseline 2epochs（用户授权）
+
+用户明确baseline直接微调、每卡bs64/acc1、普通ColorJitter且不启用PatchWAM、同midtrain ManiSkill train。沿用历史baseline官方Foundation154000初始化，不使用Sidecar midtrain/Piper权重；模型joint_self_attn，真正不创建Sidecar/EA模块。Action+Video FM原权重1，LR1e-4、cosine+5%LR预热，全局256，2epochs共20872参数更新/20872micro，常规2000更新保存完整state、保留最近2与最终权重。数据仍16000train/2671589窗口，补27至2671616/epoch，val/test不训练，归一化/80D左臂mask/绝对controller target/图像布局保持。
+
+PreparedSimDataset新增默认True的auxiliary开关，baseline=False不从npz解码targets/不输出EA字段，旧Sidecar/Piper默认True不变；ManiSkill子集from_config透传。普通ColorJitter brightness/contrast/saturation .2/hue0，PatchWAM显式false。新独立config/entry/四卡shell复用原版模型与已有formal CPU handover；supervise_piper_after_maniskill只新增spec可选launcher/输出变量/label/launch_args/延迟预加载阈值，旧默认与正在运行的Piper进程不改。
+
+独立输出 /remote-home/jinminghao/OpenWAM/outputs/maniskill_baseline/archive_cj_bs64_2epochs_20261103T095701Z，冻结完整解析config，队列在Piper达到10896/10976更新时才提前CPU加载，等四rank21952/final保存标记与safetensors完整长度、原进程退出、GPU0–3各>=70000MiB才放行。按用户要求不自动恢复暂停评估，不结束任何旧训练。23旧/数据/交接回归+2新baseline配置/延迟预加载检查通过；真实base/hard两窗口80D/mask/无EA字段通过，Foundation2089张量头无Sidecar且长度完整，冻结启动解析通过。bs64虽旧六任务baseline验证过，新archive数据实际GPU峰值/首更新与长期吞吐仍待正式接续，不能称已通过。
+
+解释边界：此baseline Foundation直训2epoch+ColorJitter vs 当前Sidecar midtrain后1epoch+PatchWAM有初始化、预算、增强多因素差异，不能单独归因为Sidecar结构；如果需要结构归因，后续另做matched protocol。保留已有near/EEF、真机坐标、held-out评估与渲染完整性未决，不改数据来规避问题。
+
+
+2026-11-04T08:48:11.323767+00:00：按用户明确要求修复Aloha补70整组重跑粒度。新增opt-in native_episode_resume，仅接入两个当前实验的私有run_native/report，不改官方checkout、共享默认评测、模型或训练。按首次renderer错误前完整累积记录保留成功和失败，原生test_num/指令池仍70，恢复episode/seed/计数/清缓存位置；新增每episode指令与Python RNG日志、来源字节哈希与递归验收。真实官方eval函数68+2 CPU测试与连续70的seed/指令/计数一致，3项通过；历史无RNG日志标legacy边界，剩余仍官方unseen生成，不宣称逐字复现旧不中断轨迹。已完成条件保持原结果；实际GPU接续尚待启动验收，不能把CPU测试当已补完。
+
+
+## 2026-11-04T09:06Z：单臂ManiSkill20872真机服务临时T5分卡（用户明确授权）
+
+原因：GPU5/6分别约11.4/16.3GiB空闲，无法沿用单卡35GiB准入。只新增Flask部署opt-in --split-text-encoder及独立run_maniskill_flask_split.sh；默认单卡启动、原launcher、模型/训练/数据/权重/client/归一化/完整Sidecar/eager无cache/10 denoise/CFG1/32×10接口保持。分卡helper复用现有eval serve_split.py的直接CPU→T5卡放置与输入/输出设备转移，作用于本次模型实例，避免T5经主体卡暂存；CUDA_VISIBLE_DEVICES=6,5表示主体6、T5 5。分卡模式按实际余量设置两卡allocator预算并在CPU加载后复查，未知作业不停止。单臂部署副本按既有archive_eval.prepare生成，原config/stats/权重不写入。依据docs/思考与隐患.md保留真机几何/工具点/网络/磁盘增长等未决；GPU加载与真实HTTP推理验收待完成后记入专用部署文档。
+
+2026-11-04T09:16:06.954513+00:00: 首次CPU载入20872成功，但GPU6动态余量降至约14GiB触发原复查退出；未放置GPU、未干预其他作业，失败日志保留。仅临时split模式增加加载前后15秒轮询等待容量，避免CPU完成后因瞬时余量变化丢弃模型重读；原单卡fail-fast与35GiB默认不变。第二次启动身份见outputs/real_robot/maniskill20872_flask/process.json。
+
+2026-11-04T09:28:53.912954+00:00: 用户最新明确改为GPU2完整单卡部署；仅TERM本轮split PID4149625，保留日志/manifest及临时opt-in代码，不再使用分卡。现有同权重27GiB单卡评估已有验收，当前GPU2约27GiB空闲；新增可选--memory-headroom-gib覆盖allocator保留量，原单卡默认4GiB/35GiB门槛不改。本次显式26GiB准入、1GiB allocator余量、上限26GiB，推理/模型/权重/HTTP协议保持。为避免共享文件系统反复慢读，将部署副本配套和权重只读复制到独立RAM目录，复制流SHA/大小记录gpu2_ram_checkpoint.json；token复用10月原token。真实单卡推理待验。
+
+2026-11-04T09:29:27.895695+00:00: GPU2单卡启动4154999；使用既有Flask入口、不传split标志。显式--wait-for-capacity允许容量变化时保留CPU模型等待，不改变旧默认退出行为；仅容量helper允许不检查第二卡。实际命令/唯一进程身份/log记process.json。
+
+2026-11-04T09:31:28.137971+00:00: 用户最新改为GPU2加GPU5/6两卡。按实测余量选择主体GPU2/T5GPU6，仅停止本轮等待中的单卡PID4154999，沿用已验证split helper/同一RAM权重SHA，CUDA_VISIBLE_DEVICES=2,6，主体min16GiB/cap18GiB，T5 cap12.5GiB。无模型/训练/数据/推理数学/接口变化，token原值与完整输入输出记录继续。当前唯一服务进程见process.json，其他作业不操作。
+
+2026-11-04T09:35:43.665784+00:00: 所选GPU2/6实时余量约14/16GiB；仅调整这两卡的职责为主体GPU6、T5GPU2（CUDA_VISIBLE_DEVICES=6,2），避免主体GPU2的16GiB准入持续等待。旧等待进程4155785尚未构建模型，已按身份TERM；复用同一启动脚本和RAM权重，主体min15/cap15.25GiB、T5 cap12.5GiB，与先前GPU6主体已加载路径相同，无模型数学变更。
+
+
+2026-11-04T09:40:47.026106+00:00：用户授权Patch42960完整100验收后接Piper21952全35任务×双域×100=7000。已挂queue_piper_after_patch100，计划2份L20模型/32独立会话、4090目标24路按8192MiB余量启动，不提前停Aloha；取消未执行的Full第二副本等待项但保留其现有评估。Piper显式三视图/无视频/官方协议，新增可选100条episode恢复与RNG记录，默认70恢复不变。当前仍等待Patch，不宣称新评测已开始；部署与完整7000结果待实际验证。见ROBOTWIN_PIPER21952_FULL100_AFTER_PATCH_20261104.md。
+
+
+2026-11-04T09:43:12.121061+00:00: 最终部署验收通过：GPU6主体/T5GPU2、5901、PID4157435；三次原生归档HTTP请求均有限32×10，push重复逐元素一致，原始请求/双图/响应保留一致，旧token不变，原配置/统计不变。服务持续运行，无机器人执行；源码/状态证据与实验结论已记录docs/MANISKILL20872_REAL_ROBOT_GPU26_DEPLOYMENT_20261104.md，并更新原启动文档、思考与隐患和实验分析。
+
+
+2026-11-04T14:35:17.659031+00:00：按用户明确授权新增独立benchmarks/real_robot/infer_openwam_clean.py，交付OpenWAM内单文件给机械臂平台复制。复用原Infer相机话题/ROS控制/convert，严格8任务菜单、仅Reset/轮数/任务交互，移除EXECUTE/逐轮回车；用户最新指定默认32步，可改16。训练slot0016真实TCP复位，IK/FK显式fr3_link0、从URDF推导工具点；完整前缀预求IK后一次连续轨迹，累计50ms名义时轴+0.5rad/s重定时、夹爪同轴触发，IK失败/姿态到达检查与中断保持。参考infer.py/convert.py原样；共享infer_openwam曾写回后按用户改交付路径恢复原版，备份与哈希留outputs/real_robot/clean_client_20261104/delivery.json。无模型/权重/server/训练修改，无硬件执行。13项离线测试和参考FR3复位数值IK验证，说明docs/MANISKILL_CLEAN_CLIENT_20261104.md。
+
+
+2026-11-04T14:43:19.443672+00:00：用户反馈新版真机动作过快并抖动，明确要求0.5s/action；仅把干净客户端ACTION_DT从.05改为.5，保持32步、帧/TCP转换、复位和速度上限。名义整chunk16s，夹爪事件随累计时间同步。更新6项控制回归的时轴/重定时验收；未操作硬件，现场抖动与控制器响应仍待用户复测，不宣称已根治抖动。
+
+
+2026-11-05T04:35:02.165885+00:00：按用户明确要求进行ManiSkill20872抖动归因：原视频场景10/20/30 denoise、同权重BF16 vs独立FP32动作ODE累积（网络仍BF16）、完整train GT统计及96train/48test配对，保留原输入/seed42。新脚本仅outputs/analysis/maniskill20872_denoise_precision_20261105，未改共享model/training/server源码。因显存不足，仅身份核验后退休本轮5901进程4157435，临时同权重诊断进程接5901（常规请求仍10步），其他作业不动；FP32探针首次因inactive70槽dtype报错，失败日志保留，v2改同BF16随机样本的FP32容器/前向边界cast，不能算实验结果。所有模式记录权重版本不变、固定基线必须与旧动作逐元素一致。后续独立checkpoint阶段仅加载已有16000/20000/20872比较，不是训练；该阶段普通机器人请求会503，结束恢复原服务启动路径。当前仍在分析，不预先归因训练不足或宣称改善。
+
+
+## 2026-11-05T05:03:22+00:00 — ReLAC论文说明与CVPR2027初稿（文档/论文配套文件）
+
+原因：用户要求串联现有理论动机、数据生成、ManiSkill/RoboTwin实验与真机部署，并严格按 `outputs/author-kit-CVPR2027-v1-latex (1).zip` 写可审阅初稿。
+
+改动：新增中文论文说明 `docs/RELAC_PAPER_STORY_AND_EVIDENCE_20261105_CN.md`；新增 `papers/relac_cvpr2027` 的正文、独立补充、Bib、TikZ/PGFPlots图、图表设计、模板原件、证据导出/文稿校验工具和CSV/JSON。append更新实验分析与隐患清单的限定文件审计范围。官方样式/BST未改；没有修改任何模型架构、训练策略、数据构造、已有评测或部署核心，也未启停GPU实验/操作真机。原工作区其他改动保留。
+
+证据：已有结果重算、原生日志独立审计及模板/PDF检查见论文 `evidence/`；完整方法/局部空间引导/未来progress和扩展plan与待补实验均分别标注，未知数保留TBD。输出正文/补充PDF与源码交付包，不提交或发布到外部。
+
+
+2026-11-05T05:22:17.998328+00:00：完成用户授权的ManiSkill20872抖动归因。所有新探针/回放/分析脚本仅outputs/analysis/maniskill20872_denoise_precision_20261105/，共享模型、训练策略、训练数据、原部署源码和client未改。936去噪/精度配对+52局部探针、288既有权重比较、全量训练标签与输入契约检查、10同scene回放完成；14项最终验收通过。确认BF16 action末步数值问题与剩余生成高频，20步有收益，训练推进的定位收益不等于抖动根治；未启动新训练。原5901 launcher恢复PID118631/GPU6+2/10步BF16、原token文件和落盘逻辑，2原输入逐元素复现；最终96权重恢复输出一致。专用结果与下一步docs/MANISKILL20872_DENOISE_TRAINING_JITTER_DIAGNOSIS_20261105.md，同步更新实验记忆、风险及R21/R24排查记录。
+
+
+### 2026-11-05T08:37:54.748489+00:00：Piper21952/Aloha42960训练输入动作诊断完成
+
+按用户要求对齐ManiSkill指标，各10条实际训练轨迹、每轨迹8窗口、10/20/30步、seed42/BF16/Full/cache关闭，共480次32×20生成、960臂窗口。Piper读archive，Aloha回到实际Clean-50 EARSIGLite reader；160输入状态/指令/标签与三模式一致检查通过，62视频验收。原Piper4失败case目录无逐步action/状态轨迹，新视频明确离线专家图像+预测/GT曲线、8窗口拼接，不是闭环rollout或新SR。
+
+全物理臂均值：Piper10/20/30位置误差8.569/8.374/8.524mm、高频误差1.761/1.490/1.542mm；Aloha4.257/4.235/4.376mm与1.090/.856/.957mm。ManiSkill对应HF1.890/1.403/1.548mm。三者20步更平稳、30未再改善。近静止GT窗口Piper60/Aloha68个，20步目标粗糙度3.565/2.256mm，RoboTwin同样有残余回摆；反转次数不可单独排序，Aloha幅度小但反转更多。训练源/归一化/任务与budget不同，不把差异唯一归因epoch；阶段optimizer更新10436/10976/21480，不是epoch1/2/10倍计算。
+
+仅outputs/analysis独立脚本和文档，原模型/训练/数据/server未改，5901不操作。GPU1余量变化后仅退出自有CPU预加载，Piper/Aloha顺序复用GPU3/4，最终两模型正常退出；其他作业保持。旧失败归因仍需带观测/action/执行反馈重跑；ManiSkill追加epoch收益需受控续训。完整报告docs/ROBOTWIN_TWO_CHECKPOINT_ACTION_JITTER_20261105.md，全部数据outputs/analysis/robotwin_two_ckpt_jitter_20261105/。
+
+
+### 2026-11-05T09:38:28.114546+00:00：官方发布Alpha10740完整动作/接口诊断完成
+
+用户指定assets/OpenWAM-Alpha-Sim-RoboTwin-Clean2Random，实际文件checkpoint_step_10740.safetensors，SHA2cab63b550ff45a52fbde4adc40ee2bdb7d4bafe5fa0dd6879e41e22ca2ff95f与发布验收一致。原版joint_self_attn、无Sidecar，复用上轮Aloha同10轨迹/80窗口、BF16/seed42/CFG1/cache/compile关闭、32点、10/20/30步。因2026-10-16已记载官方默认xyzw数组解释与本地wxyz重排区别，分别保留两种接口：共480生成、960臂窗口、66视频完整验收，160输入合同/同源图像与XYZ/夹爪/文本一致检查通过。
+
+原版配套数组解释下10/20/30位置误差5.963/5.812/5.906mm、旋转.866/.844/.857度、高频1.136/.838/.921mm；20步更平稳、30未再改善。同Aloha20步4.235mm/.523度/.856mm高频比较，官方拟合稍差、高频同量级；不能纯归因模块或epoch。官方68近静止GT臂窗口20步粗糙度2.101mm、HF.689mm，说明原版也有残余回摆。
+
+直接套本地物理重排的官方探针20步为26.744mm/29.545度，不能当默认官方成绩；此对照定位的是检查点与接口配套差异，不是证明官方训练错，也不是本地三套训练错。本地Aloha Lite重排、Piper离线准备6D、Mani独立pose转换当前均未发现该顺序混用。min/max完全一致也不证明旋转编码一致（旋转stats固定±1）。官方实际原训练数据逐条来源仍未提供，不将兼容性结果冒充原生成功率/真实TCP验收。
+
+新脚本仅outputs/analysis/official_alpha_jitter_20261105；原默认部署/训练/数据不改，GPU3/4顺序复用，两个自有临时worker均已退出，其他作业不动。主结果summary_legacy.json；summary.json明确为物理重排探针；final_audit通过。完整报告docs/OFFICIAL_ALPHA10740_ACTION_JITTER_20261105.md与VIDEO_INDEX_ALL.md。后续本地方案保持已核验的配套链路，训练充分性仍需受控续训，执行/near-plane/实际接触问题继续未决。

@@ -1,0 +1,17 @@
+# Same original warmup2K and full PatchWAM; only auxiliary stage allocation changes.
+defaults:
+  - train_sidecar_patchwam_warmstart_8gpu_10epochs
+  - _self_
+
+model:
+  architecture:
+    relational_sidecar:
+      stage_supervision_weights: [0.2, 0.3, 0.5]
+
+training:
+  sidecar_lr_screen: null
+  save_optimizer_steps: 5000
+  save_full_states_for_resume: false
+  keep_final_resume_state: false
+  keep_last_k_ckpts: 5
+  output_path: outputs/sidecar/allstage_original_warmup2k_10epochs

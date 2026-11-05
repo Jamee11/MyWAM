@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "scope": "portable same-GPU CHECK_ONLY; no GPU/model allocation",
+  "checkpoint": "checkpoint_step_20872.safetensors",
+  "episodes": 1600,
+  "tasks": 8,
+  "workers_default_same_gpu": 1,
+  "unit_tests": "22 passed",
+  "plan_path": "/remote-home/jinminghao/OpenWAM/outputs/maniskill_eval/archive_20261102T124107Z/plan.json"
+}

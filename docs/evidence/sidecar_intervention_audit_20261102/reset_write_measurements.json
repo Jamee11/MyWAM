@@ -1,0 +1,44 @@
+{
+  "checkpoint": "/remote-home/jinminghao/OpenWAM/outputs/1030-warmup2k-to-full10epoch/checkpoint_step_21480.safetensors",
+  "method": "checkpoint BF16 tensors cast to CPU FP32; formula plus real MHA with two random-query batches; not a GPU action/rollout equivalence test",
+  "write_gate_initial": 0.0,
+  "read_gate_initial": 0.01,
+  "rows": [
+    {
+      "tap": 7,
+      "trained_beta": -0.0026397705078125,
+      "layernorm_bias_l2": 0.31671321392059326,
+      "mha_value_bias_l2": 0.35120689868927,
+      "mha_output_bias_l2": 0.20038890838623047,
+      "constant_hidden_residual_l2": 0.07829705625772476,
+      "constant_hidden_residual_max_abs": 0.017097879201173782,
+      "random_query_formula_max_error": 4.6566128730773926e-09,
+      "all_zero_tokens": true,
+      "all_15_tokens_valid": true
+    },
+    {
+      "tap": 15,
+      "trained_beta": -0.0025177001953125,
+      "layernorm_bias_l2": 0.22994129359722137,
+      "mha_value_bias_l2": 0.25317975878715515,
+      "mha_output_bias_l2": 0.18046122789382935,
+      "constant_hidden_residual_l2": 0.04242531955242157,
+      "constant_hidden_residual_max_abs": 0.007148302625864744,
+      "random_query_formula_max_error": 1.862645149230957e-09,
+      "all_zero_tokens": true,
+      "all_15_tokens_valid": true
+    },
+    {
+      "tap": 23,
+      "trained_beta": 0.00372314453125,
+      "layernorm_bias_l2": 0.26129382848739624,
+      "mha_value_bias_l2": 0.2739424705505371,
+      "mha_output_bias_l2": 0.1901722401380539,
+      "constant_hidden_residual_l2": 0.05642018839716911,
+      "constant_hidden_residual_max_abs": 0.006894277408719063,
+      "random_query_formula_max_error": 2.7939677238464355e-09,
+      "all_zero_tokens": true,
+      "all_15_tokens_valid": true
+    }
+  ]
+}

@@ -23,7 +23,8 @@ from openwam.multisim_sidecar_contract import ACTION_SLOTS, CONTRACT, SOURCE_GRO
 class PreparedSimDataset(BaseDataset):
     action_dim = 80
 
-    def __init__(self, manifest_path, group, split='train', color_jitter=None, allow_smoke=False):
+    def __init__(self, manifest_path, group, split='train', color_jitter=None, allow_smoke=False,
+                 patchwam_augmentation=None, auxiliary=True):
         self.manifest_path = str(Path(manifest_path).resolve())
         self.root = Path(self.manifest_path).parent
         manifest = json.loads(Path(self.manifest_path).read_text())
@@ -47,7 +48,14 @@ class PreparedSimDataset(BaseDataset):
             raise ValueError('Rot6D normalization must be identity')
         self.ends = np.cumsum([x['steps'] for x in self.records]).tolist()
         self._handles, self._pid = OrderedDict(), os.getpid()
+        self.auxiliary = bool(auxiliary)
         self._color_jitter = None
+        self._patchwam = None
+        if patchwam_augmentation and patchwam_augmentation.get('enabled', False):
+            if color_jitter_enabled(color_jitter):
+                raise ValueError('Use PatchWAM or ColorJitter, not both')
+            from openwam.dataloader.transforms.patchwam_video import PatchWAMVideoAugment
+            self._patchwam = PatchWAMVideoAugment(patchwam_augmentation)
         if color_jitter_enabled(color_jitter):
             self._color_jitter = VideoColorJitter(**{k: float(color_jitter.get(k, v)) for k, v in
                 [('brightness', .2), ('contrast', .2), ('saturation', .2), ('hue', 0)]})
@@ -65,7 +73,7 @@ class PreparedSimDataset(BaseDataset):
         with np.load(io.BytesIO(content), allow_pickle=False) as data:
             state = apply_normalization(data['state'], self.stats, 'min-max').astype(np.float32)
             action = apply_normalization(data['action'], self.stats, 'min-max').astype(np.float32)
-            targets = data['targets']
+            targets = data['targets'] if self.auxiliary else None
         return state, action, targets
 
     def _file(self, record):
@@ -107,6 +115,8 @@ class PreparedSimDataset(BaseDataset):
         video = [assemble_multiview_layout({key: value[t] for key, value in views.items()}, layout, 384, 320) for t in range(9)]
         if self._color_jitter is not None:
             video = self._color_jitter.apply({'video': video})['video']
+        if self._patchwam is not None:
+            video = self._patchwam({'video': video}, [True, True, len(views) == 3])['video']
         present = np.repeat(np.asarray(record['arm_present'], bool), 10)
         actions, proprio = np.zeros((32, 80), np.float32), np.zeros((1, 80), np.float32)
         amask, pmask = np.zeros((32, 80), bool), np.zeros((1, 80), bool)
@@ -117,16 +127,18 @@ class PreparedSimDataset(BaseDataset):
         actions[:, ACTION_SLOTS], proprio[0, ACTION_SLOTS] = native, current
         amask[:, ACTION_SLOTS] = (start + np.arange(32) < length)[:, None] & present[None]
         pmask[0, ACTION_SLOTS] = present
-        return dict(video=video, first_frame_image=[video[0]], vace_video=None,
+        sample = dict(video=video, first_frame_image=[video[0]], vace_video=None,
                     action=torch.from_numpy(actions), proprio=torch.from_numpy(proprio),
                     action_mask=torch.from_numpy(amask), proprio_mask=torch.from_numpy(pmask),
                     video_mask=torch.from_numpy(start + offsets <= length),
-                    ea_targets=torch.from_numpy(targets[start:start + 1].copy()),
-                    ea_plan_steps=[8, 16, 32], ea_video_anchors=list(VIDEO_ANCHORS),
                     prompt=format_prompt_for_inference(record['prompt']), task_name=record['task'],
                     episode_index=episode, episode_path=record['media'], start_frame=start,
                     end_frame=min(start + 33, length + 1), episode_length=length + 1,
                     embodiment=record['group'], source_collection=record['collection'], domain=record['domain'])
+        if self.auxiliary:
+            sample.update(ea_targets=torch.from_numpy(targets[start:start + 1].copy()),
+                          ea_plan_steps=[8,16,32], ea_video_anchors=list(VIDEO_ANCHORS))
+        return sample
 
 
 class MultiSimSidecarDataset(MixtureDataset):
